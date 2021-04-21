@@ -163,13 +163,13 @@
                         <ColumnDefinition/>
                     </Grid.ColumnDefinitions>
                     <Button Content="保存" ToolTip="保存模组配置" FontSize="14" Width="80" Grid.Column="0" 
-                        BorderThickness="0,1,0,1" BorderBrush="Black"
+                        BorderThickness="0,1,0,0" BorderBrush="Black"
                         Click="SaveToFile_Click"/>
                     <Button Content="重新读取" ToolTip="重新读取模组包配置" FontSize="14" Width="80" Grid.Column="1" 
-                        BorderBrush="Black"
+                        BorderThickness="1,1,1,0" BorderBrush="Black"
                         Click="LoadFromFile_Click"/>
                     <Button Content="加载并启动" ToolTip="加载并启动模组" FontSize="14" Grid.Column="2" 
-                        BorderThickness="0,1,0,1" BorderBrush="Black"
+                        BorderThickness="0,1,0,0" BorderBrush="Black"
                         Click="LaunchMod_Click"/>
                 </Grid>
             </Grid>
