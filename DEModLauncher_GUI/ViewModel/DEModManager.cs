@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Runtime.Serialization.Json;
+using System.Diagnostics;
 
 namespace DEModLauncher_GUI.ViewModel {
     using DEModPacks = ObservableCollection<DEModPack>;
@@ -17,7 +18,7 @@ namespace DEModLauncher_GUI.ViewModel {
         }
 
         private static readonly DataContractJsonSerializer _serializer = new DataContractJsonSerializer(typeof(Model.DEModManager));
-
+        private static readonly string _gameMainExecutor = "DOOMEternalx64vk.exe";
         private string _gameDirectory;
         private bool _isLaunching;
         private DEModPack _currentMod;
@@ -86,6 +87,11 @@ namespace DEModLauncher_GUI.ViewModel {
             }
             _currentMod.GameDirectroy = _gameDirectory;
             return _currentMod.Launch();
+        }
+        public void LaunchDirectly() {
+            Process p = new Process();
+            p.StartInfo.FileName = $@"{_gameDirectory}\{_gameMainExecutor}";
+            p.Start();
         }
         public void MoveUpMod(DEModPack modPack) {
             int currentIndex = _dEModPacks.IndexOf(modPack);

@@ -55,7 +55,7 @@ namespace DEModLauncher_GUI {
             }
             await Task.Run(async () => {
                 while (!reader.EndOfStream) {
-                    await Task.Delay(TimeSpan.FromMilliseconds(200));
+                    await Task.Delay(TimeSpan.FromMilliseconds(100));
                     Application.Current.Dispatcher.Invoke(() => {
                         StandardOutPutHandler.Text += $"{reader.ReadLine()}\n";
                         StandardOutPutHandlerArea.ScrollToBottom();
@@ -63,6 +63,10 @@ namespace DEModLauncher_GUI {
                 }
             });
             _dEModMananger.IsLaunching = false;
+            Application.Current.Shutdown();
+        }
+        private void LaunchGame_Click(object sender, RoutedEventArgs e) {
+            _dEModMananger.LaunchDirectly();
             Application.Current.Shutdown();
         }
         private void SaveToFile_Click(object sender, RoutedEventArgs e) {
