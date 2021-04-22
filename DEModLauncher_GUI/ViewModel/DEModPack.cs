@@ -71,6 +71,7 @@ namespace DEModLauncher_GUI.ViewModel {
         }
 
         public StreamReader Launch() {
+            LaunchCheck();
             ClearResources();
             SetResources();
             Process p = GenerateProcess();
@@ -122,6 +123,13 @@ namespace DEModLauncher_GUI.ViewModel {
             return $"{_packName}({resourceCount}个模组)";
         }
 
+        private void LaunchCheck() {
+            foreach (var resource in _resources) {
+                if (!File.Exists($@"{ModPacksDirectory}\{resource}")) {
+                    throw new FileNotFoundException($"无法找到模组包{resource}\n请检查{ModPacksDirectory}\\{resource}");
+                }
+            }
+        }
         private void ClearResources() {
             var fileList = Directory.GetFiles(ModDirectory);
             foreach (var file in fileList) {

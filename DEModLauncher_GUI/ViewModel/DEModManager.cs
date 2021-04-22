@@ -137,6 +137,17 @@ namespace DEModLauncher_GUI.ViewModel {
                 CurrentMod = dmp;
             }
         }
+        public void RenameMod(DEModPack targetModPack, string newName, string description) {
+            if (targetModPack.PackName != newName) {
+                foreach (var modPack in _dEModPacks) {
+                    if (modPack.PackName == newName) {
+                        throw new ArgumentException($"模组配置名[{newName}]已存在");
+                    }
+                }
+            }
+            targetModPack.PackName = newName;
+            targetModPack.Description = description;
+        }
         public void DeleteMod(DEModPack modPack) {
             _dEModPacks.Remove(modPack);
         }

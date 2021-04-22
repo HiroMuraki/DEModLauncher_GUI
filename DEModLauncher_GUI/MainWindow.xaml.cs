@@ -161,8 +161,12 @@ namespace DEModLauncher_GUI {
             textInput.TextA = modPack.PackName;
             textInput.TextB = modPack.Description;
             if (textInput.ShowDialog() == true) {
-                modPack.PackName = textInput.TextA;
-                modPack.Description = textInput.TextB;
+                try {
+                    _dEModMananger.RenameMod(modPack, textInput.TextA, textInput.TextB);
+                }
+                catch (Exception exp) {
+                    MessageBox.Show(exp.Message, "修改模组配置错误", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
             }
         }
         #endregion
