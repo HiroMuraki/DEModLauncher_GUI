@@ -203,7 +203,12 @@ namespace DEModLauncher_GUI.ViewModel {
                 }
             }
         }
-
+        public void OpenGameDirectory() {
+            Process p = new Process();
+            p.StartInfo.FileName = "explorer.exe";
+            p.StartInfo.Arguments = $@"/e, {_gameDirectory}";
+            p.Start();
+        }
         private void ClearResources() {
             var fileList = Directory.GetFiles(ModsDirectory);
             foreach (var file in fileList) {

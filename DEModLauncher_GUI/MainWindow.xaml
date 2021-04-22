@@ -173,7 +173,8 @@
                                Background="{StaticResource MainColor}" Foreground="{StaticResource TextColor}"/>
                         <TextBox Grid.Column="1" Text="{Binding GameDirectory,Mode=OneWay}" ToolTip="{Binding GameDirectory}" IsReadOnly="True" 
                                  VerticalContentAlignment="Center" BorderThickness="0,1,0,0" BorderBrush="{StaticResource BorderColor}"  
-                                 Background="{StaticResource MainColor}" Foreground="{StaticResource TextColor}">
+                                 Background="{StaticResource MainColor}" Foreground="{StaticResource TextColor}"
+                                 MouseDoubleClick="OpenGameDirectory_Click">
                             <TextBox.Style>
                                 <Style TargetType="TextBox">
                                     <Setter Property="Template">

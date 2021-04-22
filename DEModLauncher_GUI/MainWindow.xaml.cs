@@ -123,6 +123,9 @@ namespace DEModLauncher_GUI {
                 _dEModMananger.GameDirectory = fbd.SelectedPath;
             }
         }
+        private void OpenGameDirectory_Click(object sender, MouseButtonEventArgs e) {
+            _dEModMananger.OpenGameDirectory();
+        }
         #endregion
 
         #region 模组操作
