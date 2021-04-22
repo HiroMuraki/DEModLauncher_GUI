@@ -12,35 +12,6 @@
     <WindowChrome.WindowChrome>
         <WindowChrome UseAeroCaptionButtons="False" CaptionHeight="0"/>
     </WindowChrome.WindowChrome>
-    <Window.Resources>
-        <SolidColorBrush x:Key="AccentColor">#ca3030</SolidColorBrush>
-        <SolidColorBrush x:Key="MainColor">#222222</SolidColorBrush>
-        <SolidColorBrush x:Key="BorderColor">#000000</SolidColorBrush>
-        <SolidColorBrush x:Key="TextColor">#ffffff</SolidColorBrush>
-        <Style x:Key="GButton" TargetType="Button">
-            <Setter Property="Background" Value="{StaticResource AccentColor}" />
-            <Setter Property="Foreground" Value="{StaticResource TextColor}" />
-            <Setter Property="BorderBrush" Value="{StaticResource BorderColor}" />
-            <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate TargetType="Button">
-                        <Border Background="{TemplateBinding Background}"
-                                BorderBrush="{TemplateBinding BorderBrush}"
-                                BorderThickness="{TemplateBinding BorderThickness}">
-                            <ContentPresenter VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
-                                              HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"/>
-                        </Border>
-                        <ControlTemplate.Triggers>
-                            <Trigger Property="IsMouseOver" Value="True">
-                                <Setter Property="Foreground" Value="{StaticResource MainColor}" />
-                                <Setter Property="Background" Value="Gold" />
-                            </Trigger>
-                        </ControlTemplate.Triggers>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
-        </Style>
-    </Window.Resources>
     <Border BorderBrush="{StaticResource BorderColor}" Background="{StaticResource MainColor}" BorderThickness="2">
         <Grid>
             <Grid.RowDefinitions>
@@ -69,7 +40,7 @@
                                     <DataTemplate DataType="{x:Type ViewModel:DEModPack}">
                                         <Grid Height="30">
                                             <Grid.ContextMenu>
-                                                <ContextMenu>
+                                                <ContextMenu BorderThickness="0" Padding="0" Background="Transparent">
                                                     <MenuItem Tag="{Binding}" Header="重命名" Click="RenameMod_Click"/>
                                                     <MenuItem Tag="{Binding}" Header="上移" Click="MoveUpMod_Click"/>
                                                     <MenuItem Tag="{Binding}" Header="下移" Click="MoveDownMod_Click"/>
@@ -78,35 +49,8 @@
                                                 </ContextMenu>
                                             </Grid.ContextMenu>
                                             <Button Content="{Binding PackName}" ToolTip="{Binding PackName}"
-                                                    Tag="{Binding}"  Click="SelectMod_Click">
-                                                <Button.Style>
-                                                    <Style TargetType="Button">
-                                                        <Setter Property="Background" Value="{StaticResource AccentColor}" />
-                                                        <Setter Property="Foreground" Value="{StaticResource TextColor}" />
-                                                        <Setter Property="BorderBrush" Value="{StaticResource BorderColor}" />
-                                                        <Setter Property="BorderThickness" Value="0,0,0,1" />
-                                                        <Setter Property="FontSize" Value="14" />
-                                                        <Setter Property="Template">
-                                                            <Setter.Value>
-                                                                <ControlTemplate TargetType="Button">
-                                                                    <Border Background="{TemplateBinding Background}"
-                                                                            BorderBrush="{TemplateBinding BorderBrush}"
-                                                                            BorderThickness="{TemplateBinding BorderThickness}">
-                                                                        <ContentPresenter VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
-                                                                                          HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"/>
-                                                                    </Border>
-                                                                    <ControlTemplate.Triggers>
-                                                                        <Trigger Property="IsMouseOver" Value="True">
-                                                                            <Setter Property="Foreground" Value="{StaticResource MainColor}" />
-                                                                            <Setter Property="Background" Value="Gold" />
-                                                                        </Trigger>
-                                                                    </ControlTemplate.Triggers>
-                                                                </ControlTemplate>
-                                                            </Setter.Value>
-                                                        </Setter>
-                                                    </Style>
-                                                </Button.Style>
-                                            </Button>
+                                                    BorderThickness="0,0,0,1"
+                                                    Tag="{Binding}"  Click="SelectMod_Click" Style="{StaticResource GButton}"/>
                                         </Grid>
                                     </DataTemplate>
                                 </ItemsControl.ItemTemplate>
@@ -151,7 +95,7 @@
                                     <DataTemplate DataType="{x:Type ViewModel:DEModPack}">
                                         <Grid Height="25">
                                             <Grid.ContextMenu>
-                                                <ContextMenu>
+                                                <ContextMenu BorderThickness="0" Padding="0" Background="Transparent">
                                                     <MenuItem Tag="{Binding}" Header="上移" Click="MoveUpResource_Click"/>
                                                     <MenuItem Tag="{Binding}" Header="下移" Click="MoveDownResource_Click"/>
                                                     <MenuItem Tag="{Binding}" Header="删除" Click="DeleteResource_Click"/>
@@ -166,7 +110,7 @@
                                                         <Style.Triggers>
                                                             <Trigger Property="IsMouseOver" Value="True">
                                                                 <Setter Property="Foreground" Value="{StaticResource MainColor}"/>
-                                                                <Setter Property="Background" Value="Gold" />
+                                                                <Setter Property="Background" Value="{StaticResource FocusColor}" />
                                                             </Trigger>
                                                         </Style.Triggers>
                                                     </Style>
@@ -205,7 +149,7 @@
                             <ColumnDefinition/>
                             <ColumnDefinition Width="Auto"/>
                         </Grid.ColumnDefinitions>
-                        <Label Grid.Column="0" Content="游戏文件夹" Width="80" VerticalContentAlignment="Center" HorizontalContentAlignment="Center"
+                        <Label Grid.Column="0" Content="游戏文件夹：" Width="80" VerticalContentAlignment="Center" HorizontalContentAlignment="Center"
                                BorderThickness="0,1,0,0" BorderBrush="{StaticResource BorderColor}" 
                                Background="{StaticResource MainColor}" Foreground="{StaticResource TextColor}"/>
                         <TextBox Grid.Column="1" Text="{Binding GameDirectory,Mode=OneWay}" ToolTip="{Binding GameDirectory}" IsReadOnly="True" 
@@ -227,7 +171,7 @@
                                 </Style>
                             </TextBox.Style>
                         </TextBox>
-                        <Button Grid.Column="2" Content="选择文件夹" ToolTip="手动设置游戏文件夹" Width="80" Click="SelectGameDirectory_Click"
+                        <Button Grid.Column="2" Content="选择" ToolTip="手动设置游戏文件夹" Width="40" Click="SelectGameDirectory_Click"
                                 BorderThickness="1,1,0,0" Style="{StaticResource GButton}"/>
                     </Grid>
                 </Grid>

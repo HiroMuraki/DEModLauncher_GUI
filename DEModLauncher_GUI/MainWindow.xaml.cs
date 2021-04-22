@@ -49,15 +49,19 @@ namespace DEModLauncher_GUI {
                 reader = _dEModMananger.Launch();
             }
             catch (Exception exp) {
-                MessageBox.Show(exp.Message);
+                MessageBox.Show(exp.Message, "模组启动错误", MessageBoxButton.OK, MessageBoxImage.Error);
                 _dEModMananger.IsLaunching = false;
                 return;
             }
+            StringBuilder sb = new StringBuilder(256);
             await Task.Run(async () => {
                 while (!reader.EndOfStream) {
                     await Task.Delay(TimeSpan.FromMilliseconds(100));
+                    for (int i = 0; i < 5; i++) {
+                        sb.Append($"{reader.ReadLine()}\n");
+                    }
                     Application.Current.Dispatcher.Invoke(() => {
-                        StandardOutPutHandler.Text += $"{reader.ReadLine()}\n";
+                        StandardOutPutHandler.Text = sb.ToString();
                         StandardOutPutHandlerArea.ScrollToBottom();
                     });
                 }
@@ -106,7 +110,7 @@ namespace DEModLauncher_GUI {
                 }
             }
             catch (Exception exp) {
-                MessageBox.Show(exp.Message, "添加模组配置错误", MessageBoxButton.OK, MessageBoxImage.Warning);
+                MessageBox.Show(exp.Message, "添加模组配置错误", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
         private void DeleteMod_Click(object sender, RoutedEventArgs e) {
@@ -143,7 +147,7 @@ namespace DEModLauncher_GUI {
                 }
             }
             catch (Exception exp) {
-                MessageBox.Show(exp.Message, "添加模组文件错误", MessageBoxButton.OK, MessageBoxImage.Warning);
+                MessageBox.Show(exp.Message, "添加模组文件错误", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
         private void DeleteResource_Click(object sender, RoutedEventArgs e) {
