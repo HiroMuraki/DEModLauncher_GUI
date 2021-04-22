@@ -21,6 +21,8 @@ namespace DEModLauncher_GUI {
     /// Interaction logic for MainWindow.xaml
     /// </summary>
     public partial class MainWindow : Window {
+        private static readonly string _defaultGameDirectory = @"C:\Program Files (x86)\Steam\steamapps\common\DOOMEternal";
+
         private string _launcherProfileFile {
             get {
                 if (string.IsNullOrEmpty(_dEModMananger.GameDirectory)) {
@@ -49,6 +51,13 @@ namespace DEModLauncher_GUI {
 
         #region 启动与保存
         private async void LaunchMod_Click(object sender, RoutedEventArgs e) {
+            var result = MessageBox.Show($"加载模组将需要一定时间，在此期间请勿关闭本程序。是否继续?",
+                                         $"加载模组：{_dEModMananger.CurrentMod.PackName}",
+                                         MessageBoxButton.YesNo,
+                                         MessageBoxImage.Question);
+            if (result != MessageBoxResult.Yes) {
+                return;
+            }
             _dEModMananger.IsLaunching = true;
             StandardOutPutHandler.Text = string.Empty;
             StreamReader reader;
@@ -108,6 +117,8 @@ namespace DEModLauncher_GUI {
         }
         private void SelectGameDirectory_Click(object sender, RoutedEventArgs e) {
             System.Windows.Forms.FolderBrowserDialog fbd = new System.Windows.Forms.FolderBrowserDialog();
+            fbd.SelectedPath = _defaultGameDirectory;
+            fbd.Description = "选择游戏文件夹";
             if (fbd.ShowDialog() == System.Windows.Forms.DialogResult.OK) {
                 _dEModMananger.GameDirectory = fbd.SelectedPath;
             }
@@ -164,6 +175,7 @@ namespace DEModLauncher_GUI {
         private void AddResource_Click(object sender, RoutedEventArgs e) {
             try {
                 System.Windows.Forms.OpenFileDialog ofd = new System.Windows.Forms.OpenFileDialog();
+                ofd.Title = "选择模组包文件";
                 ofd.Filter = "zip压缩包|*.zip";
                 ofd.InitialDirectory = _dEModMananger.ModPacksDirectory;
                 ofd.Multiselect = true;
@@ -182,13 +194,6 @@ namespace DEModLauncher_GUI {
         }
         #endregion
 
-        private static string GetResourceFromControl(object sender) {
-            return (sender as FrameworkElement).Tag as string;
-        }
-        private static DEModPack GetDEModPackFromControl(object sender) {
-            return (sender as FrameworkElement).Tag as DEModPack;
-        }
-
         #region 窗口操作
         private void Window_Move(object sender, MouseButtonEventArgs e) {
             DragMove();
@@ -200,5 +205,12 @@ namespace DEModLauncher_GUI {
             WindowState = WindowState.Minimized;
         }
         #endregion
+
+        private static string GetResourceFromControl(object sender) {
+            return (sender as FrameworkElement).Tag as string;
+        }
+        private static DEModPack GetDEModPackFromControl(object sender) {
+            return (sender as FrameworkElement).Tag as DEModPack;
+        }
     }
 }

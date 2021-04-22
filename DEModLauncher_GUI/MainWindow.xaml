@@ -16,7 +16,7 @@
         <Grid>
             <Grid.RowDefinitions>
                 <RowDefinition/>
-                <RowDefinition Height="80"/>
+                <RowDefinition Height="75"/>
             </Grid.RowDefinitions>
             <Grid Grid.Row="0">
                 <Grid.ColumnDefinitions>
@@ -48,7 +48,7 @@
                                                     <MenuItem Tag="{Binding}" Header="删除" Click="DeleteMod_Click"/>
                                                 </ContextMenu>
                                             </Grid.ContextMenu>
-                                            <Button Content="{Binding PackName}" ToolTip="{Binding PackName}"
+                                            <Button Content="{Binding PackName}" ToolTip="{Binding}"
                                                     BorderThickness="0,0,0,1"
                                                     Tag="{Binding}"  Click="SelectMod_Click" Style="{StaticResource GButton}"/>
                                         </Grid>
@@ -84,7 +84,7 @@
                             <ColumnDefinition/>
                         </Grid.ColumnDefinitions>
                         <Label Grid.Column="0" Content="{Binding CurrentMod.PackName}" ToolTip="当前选定模组"
-                               FontSize="20" BorderThickness="0" BorderBrush="{StaticResource BorderColor}"
+                               FontSize="18" FontWeight="Bold" BorderThickness="0" BorderBrush="{StaticResource BorderColor}"
                                VerticalContentAlignment="Center" HorizontalContentAlignment="Center" 
                                Background="{StaticResource AccentColor}" Foreground="{StaticResource TextColor}"
                                MouseLeftButtonDown="Window_Move"/>
@@ -146,7 +146,7 @@
                         <Button Content="+" Height="25" Width="25" Padding="0" 
                             VerticalAlignment="Bottom" HorizontalAlignment="Left"
                             BorderThickness="0,1,1,0" Style="{StaticResource GButton}"
-                            FontSize="14" ToolTip="添加文件" Click="AddResource_Click"/>
+                            FontSize="14" ToolTip="添加模组包" Click="AddResource_Click"/>
                     </Grid>
                 </Grid>
             </Grid>
@@ -184,7 +184,7 @@
                                 </Style>
                             </TextBox.Style>
                         </TextBox>
-                        <Button Grid.Column="2" Content="选择" ToolTip="手动设置游戏文件夹" Width="40" Click="SelectGameDirectory_Click"
+                        <Button Grid.Column="2" Content="选择" ToolTip="手动设置游戏文件夹" Width="50" Click="SelectGameDirectory_Click"
                                 BorderThickness="1,1,0,0" Style="{StaticResource GButton}"/>
                     </Grid>
                 </Grid>
@@ -198,13 +198,13 @@
                     <Button Content="保存" ToolTip="保存模组配置" FontSize="14" Width="80" Grid.Column="0"
                             Style="{StaticResource GButton}" BorderThickness="0,1,0,0"
                             Click="SaveToFile_Click"/>
-                    <Button Content="重新读取" ToolTip="重新读取模组包配置" FontSize="14" Width="80" Grid.Column="1" 
+                    <Button Content="重新读取" ToolTip="重新读取模组配置" FontSize="14" Width="80" Grid.Column="1" 
                             Style="{StaticResource GButton}" BorderThickness="1,1,1,0"
                             Click="LoadFromFile_Click"/>
-                    <Button Content="加载并启动" ToolTip="加载并启动模组" FontSize="14" Grid.Column="2" 
+                    <Button Content="加载后启动" ToolTip="加载模组后启动" FontSize="14" Grid.Column="2" 
                             Style="{StaticResource GButton}" BorderThickness="0,1,1,0" 
                             Click="LaunchMod_Click"/>
-                    <Button Content="仅启动" ToolTip="直接启动游戏" FontSize="14" Width="80" Grid.Column="3"
+                    <Button Content="启动" ToolTip="直接启动游戏" FontSize="14" Width="80" Grid.Column="3"
                             Style="{StaticResource GButton}" BorderThickness="0,1,0,0"
                             Click="LaunchGame_Click"/>
                 </Grid>

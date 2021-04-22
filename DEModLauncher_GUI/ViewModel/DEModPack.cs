@@ -93,7 +93,7 @@ namespace DEModLauncher_GUI.ViewModel {
         public void AddResource(string resourcePath) {
             string resourceName = Path.GetFileName(resourcePath);
             if (_resources.Contains(resourceName)) {
-                throw new ArgumentException("不可添加重复文件");
+                throw new ArgumentException($"模组包[{resourceName}]已添加，不可重复添加");
             }
             if (_gameDirectory == null) {
                 throw new ArgumentException("请先选择游戏文件夹");
@@ -108,7 +108,8 @@ namespace DEModLauncher_GUI.ViewModel {
             _resources.Remove(resourcePath);
         }
         public override string ToString() {
-            return $"PackName = {_packName}    [{string.Join(", ", _resources)}]";
+            int resourceCount = _resources.Count;
+            return $"{_packName}({resourceCount}个模组)";
         }
 
         private void ClearResources() {

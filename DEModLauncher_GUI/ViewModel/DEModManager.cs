@@ -126,7 +126,7 @@ namespace DEModLauncher_GUI.ViewModel {
             }
             foreach (var modPack in _dEModPacks) {
                 if (modPack.PackName == modName) {
-                    throw new ArgumentException("不可添加同名模组配置");
+                    throw new ArgumentException($"模组配置[{modName}]已存在，不可重复添加");
                 }
             }
             DEModPack dmp = new DEModPack();
