@@ -23,6 +23,9 @@ namespace DEModLauncher_GUI {
     public partial class MainWindow : Window {
         private string _launcherProfileFile {
             get {
+                if (string.IsNullOrEmpty(_dEModMananger.GameDirectory)) {
+                    return $@"Mods\ModPacks\DEModProfiles.json";
+                }
                 return $@"{_dEModMananger.GameDirectory}\Mods\ModPacks\DEModProfiles.json";
             }
         }
@@ -36,7 +39,7 @@ namespace DEModLauncher_GUI {
         public MainWindow() {
             _dEModMananger = new DEModManager();
             if (File.Exists(_launcherProfileFile)) {
-                LoadFromFile_Click(null, null);
+                _dEModMananger.LoadFromFile(_launcherProfileFile);
             }
             if (_dEModMananger.GameDirectory == null) {
                 _dEModMananger.GameDirectory = Environment.CurrentDirectory;
