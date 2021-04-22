@@ -144,7 +144,7 @@ namespace DEModLauncher_GUI {
                 View.TextInputWindow textInput = new View.TextInputWindow();
                 textInput.Owner = this;
                 if (textInput.ShowDialog() == true) {
-                    _dEModMananger.AddMod(textInput.Text);
+                    _dEModMananger.AddMod(textInput.TextA);
                 }
             }
             catch (Exception exp) {
@@ -158,9 +158,11 @@ namespace DEModLauncher_GUI {
             DEModPack modPack = GetDEModPackFromControl(sender);
             View.TextInputWindow textInput = new View.TextInputWindow();
             textInput.Owner = this;
-            textInput.Text = modPack.PackName;
+            textInput.TextA = modPack.PackName;
+            textInput.TextB = modPack.Description;
             if (textInput.ShowDialog() == true) {
-                modPack.PackName = textInput.Text;
+                modPack.PackName = textInput.TextA;
+                modPack.Description = textInput.TextB;
             }
         }
         #endregion

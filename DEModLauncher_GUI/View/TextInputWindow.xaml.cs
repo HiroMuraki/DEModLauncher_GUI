@@ -17,12 +17,20 @@ namespace DEModLauncher_GUI.View {
     /// TextInputWindow.xaml 的交互逻辑
     /// </summary>
     public partial class TextInputWindow : Window {
-        public string Text {
+        public string TextA {
             get {
-                return _inputText.Text;
+                return _inputTextA.Text;
             }
             set {
-                _inputText.Text = value;
+                _inputTextA.Text = value;
+            }
+        }
+        public string TextB {
+            get {
+                return _inputTextB.Text;
+            }
+            set {
+                _inputTextB.Text = value;
             }
         }
         public TextInputWindow() {
@@ -31,6 +39,9 @@ namespace DEModLauncher_GUI.View {
 
         private void Ok_Click(object sender, RoutedEventArgs e) {
             DialogResult = true;
+        }
+        private void Cancel_Click(object sender, RoutedEventArgs e) {
+            DialogResult = false;
         }
     }
 }

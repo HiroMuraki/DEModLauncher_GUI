@@ -156,6 +156,7 @@ namespace DEModLauncher_GUI.ViewModel {
             foreach (var modPack in _dEModPacks) {
                 Model.DEModPack dp = new Model.DEModPack();
                 dp.PackName = modPack.PackName;
+                dp.Description = modPack.Description;
                 dp.Resources = new List<string>();
                 dp.Resources.AddRange(modPack.Resources);
                 dm.ModPacks.Add(dp);
@@ -179,6 +180,7 @@ namespace DEModLauncher_GUI.ViewModel {
             foreach (var modPack in dm.ModPacks) {
                 DEModPack dp = new DEModPack();
                 dp.PackName = modPack.PackName;
+                dp.Description = modPack.Description;
                 dp.GameDirectroy = dm.GameDirectory;
                 foreach (var res in modPack.Resources) {
                     dp.Resources.Add(res);

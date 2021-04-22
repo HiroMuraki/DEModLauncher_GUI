@@ -48,9 +48,15 @@
                                                     <MenuItem Tag="{Binding}" Header="删除" Click="DeleteMod_Click"/>
                                                 </ContextMenu>
                                             </Grid.ContextMenu>
-                                            <Button Content="{Binding PackName}" ToolTip="{Binding}"
+                                            <Button Content="{Binding PackName}" ToolTip="{Binding Description}"
                                                     BorderThickness="0,0,0,1"
-                                                    Tag="{Binding}"  Click="SelectMod_Click" Style="{StaticResource GButton}"/>
+                                                    Tag="{Binding}"  Click="SelectMod_Click">
+                                                <Button.Style>
+                                                    <Style TargetType="Button" BasedOn="{StaticResource GButton}">
+                                                        <Setter Property="Background" Value="{StaticResource MainColor}" />
+                                                    </Style>
+                                                </Button.Style>
+                                            </Button>
                                         </Grid>
                                     </DataTemplate>
                                 </ItemsControl.ItemTemplate>
@@ -83,7 +89,7 @@
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition/>
                         </Grid.ColumnDefinitions>
-                        <Label Grid.Column="0" Content="{Binding CurrentMod.PackName}" ToolTip="当前选定模组"
+                        <Label Grid.Column="0" Content="{Binding CurrentMod.PackName}" ToolTip="{Binding CurrentMod.Description}"
                                FontSize="18" FontWeight="Bold" BorderThickness="0" BorderBrush="{StaticResource BorderColor}"
                                VerticalContentAlignment="Center" HorizontalContentAlignment="Center" 
                                Background="{StaticResource AccentColor}" Foreground="{StaticResource TextColor}"

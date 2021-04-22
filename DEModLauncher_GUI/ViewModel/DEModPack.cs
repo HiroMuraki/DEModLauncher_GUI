@@ -15,6 +15,7 @@ namespace DEModLauncher_GUI.ViewModel {
         }
 
         private string _packName;
+        private string _description;
         private readonly Resources _resources;
         private readonly string _modLoadder = "EternalModInjector.bat";
         private string _gameDirectory;
@@ -26,6 +27,15 @@ namespace DEModLauncher_GUI.ViewModel {
             set {
                 _packName = value;
                 OnPropertyChanged(nameof(PackName));
+            }
+        }
+        public string Description {
+            get {
+                return _description;
+            }
+            set {
+                _description = value;
+                OnPropertyChanged(nameof(Description));
             }
         }
         public Resources Resources {

@@ -13,6 +13,8 @@ namespace DEModLauncher_GUI.Model {
         [DataMember]
         public string PackName;
         [DataMember]
+        public string Description;
+        [DataMember]
         public Resources Resources;
     }
 }
