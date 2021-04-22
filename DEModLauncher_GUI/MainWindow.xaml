@@ -6,8 +6,8 @@
         xmlns:ViewModel="clr-namespace:DEModLauncher_GUI.ViewModel"
         mc:Ignorable="d" x:Name="Self"
         DataContext="{Binding ElementName=Self,Path=DEModManager}"
-        WindowStyle="None"
-        WindowStartupLocation="CenterScreen" ResizeMode="CanMinimize"
+        WindowStyle="None" FontFamily="Microsoft YaHei UI"
+        WindowStartupLocation="CenterScreen" ResizeMode="NoResize"
         Title="MainWindow" Height="400" Width="640">
     <WindowChrome.WindowChrome>
         <WindowChrome UseAeroCaptionButtons="False" CaptionHeight="0"/>
@@ -80,13 +80,26 @@
                         <RowDefinition/>
                     </Grid.RowDefinitions>
                     <Grid Grid.Row="0">
-                        <Label Content="{Binding CurrentMod.PackName}" FontSize="20" BorderThickness="0,0,0,1" BorderBrush="{StaticResource BorderColor}"
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition/>
+                        </Grid.ColumnDefinitions>
+                        <Label Grid.Column="0" Content="{Binding CurrentMod.PackName}" ToolTip="当前选定模组"
+                               FontSize="20" BorderThickness="0" BorderBrush="{StaticResource BorderColor}"
                                VerticalContentAlignment="Center" HorizontalContentAlignment="Center" 
                                Background="{StaticResource AccentColor}" Foreground="{StaticResource TextColor}"
                                MouseLeftButtonDown="Window_Move"/>
-                        <Button Content="X" FontSize="18" Width="40" Height="40" HorizontalAlignment="Right"
-                                Style="{StaticResource GButton}" BorderThickness="0,0,0,1"
-                                Click="Window_Close"/>
+                        <Grid HorizontalAlignment="Right" VerticalAlignment="Center" Width="80" Height="40">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition/>
+                                <ColumnDefinition/>
+                            </Grid.ColumnDefinitions>
+                            <Button Grid.Column="0" Content="━" FontSize="18"
+                                    Style="{StaticResource GButton}" BorderThickness="0"
+                                    Click="Window_Minimum"/>
+                            <Button Grid.Column="1" Content="&#x2573;" FontSize="18"
+                                    Style="{StaticResource GButton}" BorderThickness="0"
+                                    Click="Window_Close"/>
+                        </Grid>
                     </Grid>
                     <Grid Grid.Row="1">
                         <ScrollViewer VerticalScrollBarVisibility="Auto">

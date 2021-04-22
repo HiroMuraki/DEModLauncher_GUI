@@ -21,7 +21,11 @@ namespace DEModLauncher_GUI {
     /// Interaction logic for MainWindow.xaml
     /// </summary>
     public partial class MainWindow : Window {
-        private static readonly string _launcherProfileFile = @"Mods\ModPacks\DEModProfiles.json";
+        private string _launcherProfileFile {
+            get {
+                return $@"{_dEModMananger.GameDirectory}\Mods\ModPacks\DEModProfiles.json";
+            }
+        }
         private DEModManager _dEModMananger;
         public DEModManager DEModManager {
             get {
@@ -74,10 +78,30 @@ namespace DEModLauncher_GUI {
             Application.Current.Shutdown();
         }
         private void SaveToFile_Click(object sender, RoutedEventArgs e) {
-            _dEModMananger.SaveToFile(_launcherProfileFile);
+            var result = MessageBox.Show("是否保存当前模组配置？", "保存配置", MessageBoxButton.YesNo, MessageBoxImage.Question);
+            if (result != MessageBoxResult.Yes) {
+                return;
+            }
+            try {
+                _dEModMananger.SaveToFile(_launcherProfileFile);
+            }
+            catch (Exception exp) {
+                MessageBox.Show(exp.Message, "保存配置文件出错", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
         }
         private void LoadFromFile_Click(object sender, RoutedEventArgs e) {
-            _dEModMananger.LoadFromFile(_launcherProfileFile);
+            var result = MessageBox.Show("此操作将会重新读取模组配置文件，并丢弃当前设置，是否继续？", "重新读取", MessageBoxButton.YesNo, MessageBoxImage.Warning);
+            if (result != MessageBoxResult.Yes) {
+                return;
+            }
+            try {
+
+                _dEModMananger.LoadFromFile(_launcherProfileFile);
+            }
+            catch (Exception exp) {
+
+                MessageBox.Show(exp.Message, "读取配置文件出错", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
         }
         private void SelectGameDirectory_Click(object sender, RoutedEventArgs e) {
             System.Windows.Forms.FolderBrowserDialog fbd = new System.Windows.Forms.FolderBrowserDialog();
@@ -162,11 +186,16 @@ namespace DEModLauncher_GUI {
             return (sender as FrameworkElement).Tag as DEModPack;
         }
 
+        #region 窗口操作
         private void Window_Move(object sender, MouseButtonEventArgs e) {
             DragMove();
         }
         private void Window_Close(object sender, RoutedEventArgs e) {
             Application.Current.Shutdown();
         }
+        private void Window_Minimum(object sender, RoutedEventArgs e) {
+            WindowState = WindowState.Minimized;
+        }
+        #endregion
     }
 }
