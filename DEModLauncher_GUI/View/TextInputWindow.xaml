@@ -19,7 +19,7 @@
                      VerticalContentAlignment="Center" HorizontalContentAlignment="Center"
                      BorderThickness="0,0,0,1" FontSize="14"/>
             <TextBox Grid.Row="1" x:Name="_inputTextB" x:FieldModifier="private" Grid.Column="0"
-                     FontSize="12"/>
+                     FontSize="12" AcceptsReturn="True"/>
             <Grid Grid.Row="2">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition/>
