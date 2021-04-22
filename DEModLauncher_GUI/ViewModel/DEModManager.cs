@@ -143,6 +143,7 @@ namespace DEModLauncher_GUI.ViewModel {
         public void DuplicateMod(DEModPack modPack) {
             DEModPack ddp = new DEModPack();
             ddp.PackName = modPack.PackName;
+            ddp.Description = modPack.Description;
             foreach (var res in modPack.Resources) {
                 ddp.Resources.Add(res);
             }

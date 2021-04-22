@@ -38,7 +38,7 @@
                             <ItemsControl ItemsSource="{Binding DEModPacks}">
                                 <ItemsControl.ItemTemplate>
                                     <DataTemplate DataType="{x:Type ViewModel:DEModPack}">
-                                        <Grid Height="30">
+                                        <Grid Height="35">
                                             <Grid.ContextMenu>
                                                 <ContextMenu BorderThickness="0" Padding="0" Background="Transparent">
                                                     <MenuItem Tag="{Binding}" Header="重命名" Click="RenameMod_Click"/>
@@ -49,7 +49,7 @@
                                                 </ContextMenu>
                                             </Grid.ContextMenu>
                                             <Button Content="{Binding PackName}" ToolTip="{Binding Description}"
-                                                    BorderThickness="0,0,0,1"
+                                                    BorderThickness="0,0,0,1" FontSize="14"
                                                     Tag="{Binding}"  Click="SelectMod_Click">
                                                 <Button.Style>
                                                     <Style TargetType="Button" BasedOn="{StaticResource GButton}">
@@ -90,7 +90,7 @@
                             <ColumnDefinition/>
                         </Grid.ColumnDefinitions>
                         <Label Grid.Column="0" Content="{Binding CurrentMod.PackName}" ToolTip="{Binding CurrentMod.Description}"
-                               FontSize="18" FontWeight="Bold" BorderThickness="0" BorderBrush="{StaticResource BorderColor}"
+                               FontSize="14" FontWeight="Bold" BorderThickness="0" BorderBrush="{StaticResource BorderColor}"
                                VerticalContentAlignment="Center" HorizontalContentAlignment="Center" 
                                Background="{StaticResource AccentColor}" Foreground="{StaticResource TextColor}"
                                MouseLeftButtonDown="Window_Move"/>
