@@ -117,6 +117,7 @@
                         <ScrollViewer VerticalScrollBarVisibility="Hidden">
                             <ScrollViewer.ContextMenu>
                                 <ContextMenu BorderThickness="0" Padding="0" Background="Transparent">
+                                    <MenuItem Tag="{Binding CurrentMod}" Header="{StaticResource ADD_MOD_RESOURCE_TOOLTIP}" Click="AddResource_Click"/>
                                     <MenuItem Tag="{Binding CurrentMod}" Header="{StaticResource EDIT_MOD_PACK}" Click="RenameMod_Click"/>
                                     <MenuItem Tag="{Binding CurrentMod}" Header="{StaticResource CHECK_MOD_PACK_CONFLICT}" Click="CheckConflict_Click"/>
                                 </ContextMenu>

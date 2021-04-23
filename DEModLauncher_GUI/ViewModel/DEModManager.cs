@@ -116,7 +116,7 @@ namespace DEModLauncher_GUI.ViewModel {
             _dEModPacks[currentIndex] = _dEModPacks[newIndex];
             _dEModPacks[newIndex] = t;
         }
-        public void AddMod(string modName) {
+        public void AddMod(string modName, string description) {
             if (_gameDirectory == null) {
                 throw new ArgumentException("请先选择游戏文件夹");
             }
@@ -130,6 +130,7 @@ namespace DEModLauncher_GUI.ViewModel {
             }
             DEModPack dmp = new DEModPack();
             dmp.PackName = modName;
+            dmp.Description = description;
             dmp.GameDirectroy = _gameDirectory;
             _dEModPacks.Add(dmp);
             if (_currentMod == null) {

@@ -155,7 +155,7 @@ namespace DEModLauncher_GUI {
                 View.TextInputWindow textInput = new View.TextInputWindow();
                 textInput.Owner = this;
                 if (textInput.ShowDialog() == true) {
-                    _dEModMananger.AddMod(textInput.TextA);
+                    _dEModMananger.AddMod(textInput.TextA, textInput.TextB);
                 }
             }
             catch (Exception exp) {
