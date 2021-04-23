@@ -126,6 +126,14 @@ namespace DEModLauncher_GUI {
         private void OpenGameDirectory_Click(object sender, MouseButtonEventArgs e) {
             _dEModMananger.OpenGameDirectory();
         }
+        private void OpenResourceFile_Click(object sender, RoutedEventArgs e) {
+            try {
+                _dEModMananger.OpenResourceFile(GetResourceFromControl(sender));
+            }
+            catch (Exception exp) {
+                MessageBox.Show(exp.Message, "打开错误", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
         #endregion
 
         #region 模组操作
@@ -155,7 +163,12 @@ namespace DEModLauncher_GUI {
             }
         }
         private void DeleteMod_Click(object sender, RoutedEventArgs e) {
-            _dEModMananger.DeleteMod(GetDEModPackFromControl(sender));
+            var dmp = GetDEModPackFromControl(sender);
+            var result = MessageBox.Show($"是否删除模组配置：{dmp.PackName}", "警告", MessageBoxButton.YesNo, MessageBoxImage.Warning);
+            if (result != MessageBoxResult.Yes) {
+                return;
+            }
+            _dEModMananger.DeleteMod(dmp);
         }
         private void RenameMod_Click(object sender, RoutedEventArgs e) {
             DEModPack modPack = GetDEModPackFromControl(sender);
@@ -175,30 +188,34 @@ namespace DEModLauncher_GUI {
         private void CheckConflict_Click(object sender, RoutedEventArgs e) {
             DEModPack dmp = GetDEModPackFromControl(sender);
             StringBuilder sb = new StringBuilder();
-            var checkResult = dmp.GetConflictInformation();
-            int totalCount = checkResult.Item1;
-            int validCount = checkResult.Item2;
-            int conflictedCount = checkResult.Item3;
-            var conflictedFiles = checkResult.Item4;
-            string title = "";
-            sb.Append($"总文件数: {totalCount}, 有效文件数: {validCount}, 冲突文件数: {conflictedCount}\n");
-            if (conflictedCount <= 0) {
-                title = "检查结果 - 无冲突";
-            }
-            else {
-                title = "检查结果 - 以下文件存在冲突";
-                int conflictID = 1;
-                foreach (var conflictedFile in conflictedFiles.Keys) {
-                    sb.Append($"[{conflictID}]{conflictedFile}\n");
-                    foreach (var relatedFile in conflictedFiles[conflictedFile]) {
-                        sb.Append($"   > {relatedFile}\n");
-                    }
-                    sb.Append('\n');
-                    conflictID += 1;
+            try {
+                var checkResult = dmp.GetConflictInformation();
+                int totalCount = checkResult.Item1;
+                int validCount = checkResult.Item2;
+                int conflictedCount = checkResult.Item3;
+                var conflictedFiles = checkResult.Item4;
+                string title = "";
+                sb.Append($"总文件数: {totalCount}, 无冲突文件数: {validCount}, 冲突文件数: {conflictedCount}\n");
+                if (conflictedCount <= 0) {
+                    title = "检查结果 - 无冲突";
                 }
+                else {
+                    title = "检查结果 - 以下文件存在冲突";
+                    int conflictID = 1;
+                    foreach (var conflictedFile in conflictedFiles.Keys) {
+                        sb.Append($"[{conflictID}]{conflictedFile}\n");
+                        foreach (var relatedFile in conflictedFiles[conflictedFile]) {
+                            sb.Append($"   > {relatedFile}\n");
+                        }
+                        sb.Append('\n');
+                        conflictID += 1;
+                    }
+                }
+                View.InformationWindow.Show(sb.ToString(), title, this);
             }
-            View.InformationWindow.Show(sb.ToString(), title, this);
-            return;
+            catch (Exception exp) {
+                MessageBox.Show($"冲突检查出错，原因：{exp.Message}", "错误", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
         }
         #endregion
 

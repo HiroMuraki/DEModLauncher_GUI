@@ -6,11 +6,11 @@
         xmlns:ViewModel="clr-namespace:DEModLauncher_GUI.ViewModel"
         mc:Ignorable="d" x:Name="Self"
         DataContext="{Binding ElementName=Self,Path=DEModManager}"
-        WindowStyle="None" FontFamily="Microsoft YaHei UI"
+        FontFamily="Microsoft YaHei UI"
         WindowStartupLocation="CenterScreen" ResizeMode="NoResize"
-        Title="MainWindow" Height="400" Width="640">
+        Title="MainWindow" Height="500" Width="800">
     <WindowChrome.WindowChrome>
-        <WindowChrome UseAeroCaptionButtons="False" CaptionHeight="0"/>
+        <WindowChrome UseAeroCaptionButtons="False" CaptionHeight="0" ResizeBorderThickness="0"/>
     </WindowChrome.WindowChrome>
     <Border BorderBrush="{StaticResource BorderColor}" Background="{StaticResource MainColor}" BorderThickness="2">
         <Grid>
@@ -20,13 +20,13 @@
             </Grid.RowDefinitions>
             <Grid Grid.Row="0">
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="0.35*"/>
+                    <ColumnDefinition Width="0.3*"/>
                     <ColumnDefinition Width="1"/>
-                    <ColumnDefinition Width="0.65*"/>
+                    <ColumnDefinition Width="0.7*"/>
                 </Grid.ColumnDefinitions>
                 <Grid Grid.Column="0">
                     <Grid.RowDefinitions>
-                        <RowDefinition Height="80"/>
+                        <RowDefinition Height="90"/>
                         <RowDefinition/>
                     </Grid.RowDefinitions>
                     <Grid Grid.Row="0">
@@ -35,23 +35,28 @@
                     </Grid>
                     <Grid Grid.Row="2">
                         <ScrollViewer VerticalScrollBarVisibility="Hidden">
+                            <ScrollViewer.ContextMenu>
+                                <ContextMenu BorderThickness="0" Padding="0" Background="Transparent">
+                                    <MenuItem Tag="{Binding}" Header="添加模组配置" Click="AddMod_Click"/>
+                                </ContextMenu>
+                            </ScrollViewer.ContextMenu>
                             <ItemsControl ItemsSource="{Binding DEModPacks}">
                                 <ItemsControl.ItemTemplate>
                                     <DataTemplate DataType="{x:Type ViewModel:DEModPack}">
                                         <Grid Height="35">
                                             <Grid.ContextMenu>
                                                 <ContextMenu BorderThickness="0" Padding="0" Background="Transparent">
-                                                    <MenuItem Tag="{Binding}" Header="重命名" Click="RenameMod_Click"/>
+                                                    <MenuItem Tag="{Binding}" Header="编辑" Click="RenameMod_Click"/>
                                                     <MenuItem Tag="{Binding}" Header="上移" Click="MoveUpMod_Click"/>
                                                     <MenuItem Tag="{Binding}" Header="下移" Click="MoveDownMod_Click"/>
                                                     <MenuItem Tag="{Binding}" Header="删除" Click="DeleteMod_Click"/>
-                                                    <MenuItem Tag="{Binding}" Header="制作副本" Click="DuplicateMod_Click"/>
+                                                    <MenuItem Tag="{Binding}" Header="创建副本" Click="DuplicateMod_Click"/>
                                                     <MenuItem Tag="{Binding}" Header="冲突检查" Click="CheckConflict_Click"/>
                                                 </ContextMenu>
                                             </Grid.ContextMenu>
-                                            <Button Content="{Binding PackName}" ToolTip="{Binding Description}"
+                                            <Button Content="{Binding PackName}" ToolTip="{Binding Description}" Tag="{Binding}"
                                                     BorderThickness="0,0,0,1" FontSize="12"
-                                                    Tag="{Binding}"  Click="SelectMod_Click">
+                                                    Click="SelectMod_Click" MouseDoubleClick="RenameMod_Click">
                                                 <Button.Style>
                                                     <Style TargetType="Button" BasedOn="{StaticResource GButton}">
                                                         <Setter Property="Background" Value="{StaticResource MainColor}" />
@@ -110,20 +115,28 @@
                     </Grid>
                     <Grid Grid.Row="1">
                         <ScrollViewer VerticalScrollBarVisibility="Hidden">
+                            <ScrollViewer.ContextMenu>
+                                <ContextMenu BorderThickness="0" Padding="0" Background="Transparent">
+                                    <MenuItem Tag="{Binding CurrentMod}" Header="编辑" Click="RenameMod_Click"/>
+                                    <MenuItem Tag="{Binding CurrentMod}" Header="冲突检查" Click="CheckConflict_Click"/>
+                                </ContextMenu>
+                            </ScrollViewer.ContextMenu>
                             <ItemsControl ItemsSource="{Binding CurrentMod.Resources}">
                                 <ItemsControl.ItemTemplate>
                                     <DataTemplate DataType="{x:Type ViewModel:DEModPack}">
                                         <Grid Height="25">
                                             <Grid.ContextMenu>
                                                 <ContextMenu BorderThickness="0" Padding="0" Background="Transparent">
+                                                    <MenuItem Tag="{Binding}" Header="查看" Click="OpenResourceFile_Click"/>
                                                     <MenuItem Tag="{Binding}" Header="上移" Click="MoveUpResource_Click"/>
                                                     <MenuItem Tag="{Binding}" Header="下移" Click="MoveDownResource_Click"/>
                                                     <MenuItem Tag="{Binding}" Header="删除" Click="DeleteResource_Click"/>
                                                 </ContextMenu>
                                             </Grid.ContextMenu>
-                                            <Label Content="{Binding}" ToolTip="{Binding}" FontSize="12" Padding="20,0"
-                                                   BorderThickness="0,0,0,1"
-                                                   HorizontalContentAlignment="Left" VerticalContentAlignment="Center">
+                                            <Label Content="{Binding}" ToolTip="{Binding}" Tag="{Binding}"
+                                                   FontSize="12" Padding="30,0" BorderThickness="0,0,0,1" 
+                                                   HorizontalContentAlignment="Left" VerticalContentAlignment="Center"
+                                                   MouseDoubleClick="OpenResourceFile_Click">
                                                 <Label.Style>
                                                     <Style TargetType="Label">
                                                         <Setter Property="Foreground" Value="{StaticResource TextColor}" />
@@ -169,7 +182,7 @@
                             <ColumnDefinition/>
                             <ColumnDefinition Width="Auto"/>
                         </Grid.ColumnDefinitions>
-                        <Label Grid.Column="0" Content="游戏文件夹：" Width="80" VerticalContentAlignment="Center" HorizontalContentAlignment="Center"
+                        <Label Grid.Column="0" Content="游戏文件夹" ToolTip="游戏文件夹路径" Width="80" VerticalContentAlignment="Center" HorizontalContentAlignment="Center"
                                BorderThickness="0,1,0,0" BorderBrush="{StaticResource BorderColor}" 
                                Background="{StaticResource MainColor}" Foreground="{StaticResource TextColor}"/>
                         <TextBox Grid.Column="1" Text="{Binding GameDirectory,Mode=OneWay}" ToolTip="{Binding GameDirectory}" IsReadOnly="True" 

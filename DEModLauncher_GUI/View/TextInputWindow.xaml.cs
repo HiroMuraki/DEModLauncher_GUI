@@ -43,5 +43,9 @@ namespace DEModLauncher_GUI.View {
         private void Cancel_Click(object sender, RoutedEventArgs e) {
             DialogResult = false;
         }
+
+        private void Window_Move(object sender, MouseButtonEventArgs e) {
+            DragMove();
+        }
     }
 }

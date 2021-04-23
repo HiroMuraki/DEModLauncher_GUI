@@ -23,7 +23,6 @@ namespace DEModLauncher_GUI.ViewModel {
         private bool _isLaunching;
         private DEModPack _currentMod;
         private readonly DEModPacks _dEModPacks;
-
         public string GameDirectory {
             get {
                 return _gameDirectory;
@@ -153,7 +152,17 @@ namespace DEModLauncher_GUI.ViewModel {
         }
         public void DuplicateMod(DEModPack modPack) {
             DEModPack ddp = new DEModPack();
-            ddp.PackName = $"[副本]{modPack.PackName}";
+            List<string> usedPackNames = new List<string>();
+            foreach (var dmp in _dEModPacks) {
+                usedPackNames.Add(dmp.PackName);
+            }
+            int cpyID = 1;
+            string testName = $"{modPack.PackName}({cpyID})";
+            while (usedPackNames.Contains(testName)) {
+                testName = $"{modPack.PackName}({cpyID})";
+                ++cpyID;
+            }
+            ddp.PackName = testName;
             ddp.Description = modPack.Description;
             foreach (var res in modPack.Resources) {
                 ddp.Resources.Add(res);
@@ -209,6 +218,17 @@ namespace DEModLauncher_GUI.ViewModel {
             p.StartInfo.Arguments = $@"/e, {_gameDirectory}";
             p.Start();
         }
+        public void OpenResourceFile(string resourceName) {
+            Process p = new Process();
+            string filePath = $@"{ModPacksDirectory}\{resourceName}";
+            if (!File.Exists(filePath)) {
+                throw new FileNotFoundException($"无法找到文件：{filePath}");
+            }
+            p.StartInfo.FileName = "explorer.exe";
+            p.StartInfo.Arguments = $@"/select, {ModPacksDirectory}\{resourceName}";
+            p.Start();
+        }
+
         private void ClearResources() {
             var fileList = Directory.GetFiles(ModsDirectory);
             foreach (var file in fileList) {

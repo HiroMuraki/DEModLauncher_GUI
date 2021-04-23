@@ -5,30 +5,39 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:DEModLauncher_GUI.View"
         mc:Ignorable="d" ResizeMode="NoResize"
-        WindowStyle="None"
         WindowStartupLocation="CenterOwner"
-        Title="输入模组名" Height="200" Width="350">
+        Title="输入模组名" Height="350" Width="440">
+    <WindowChrome.WindowChrome>
+        <WindowChrome CaptionHeight="0" UseAeroCaptionButtons="False"/>
+    </WindowChrome.WindowChrome>
     <Border BorderBrush="{StaticResource BorderColor}" BorderThickness="1">
         <Grid>
             <Grid.RowDefinitions>
                 <RowDefinition Height="30"/>
                 <RowDefinition/>
-                <RowDefinition Height="30"/>
+                <RowDefinition Height="40"/>
             </Grid.RowDefinitions>
-            <TextBox Grid.Row="0" x:Name="_inputTextA" x:FieldModifier="private" Grid.Column="0"
-                     VerticalContentAlignment="Center" HorizontalContentAlignment="Center"
-                     BorderThickness="0,0,0,1" FontSize="14"/>
-            <TextBox Grid.Row="1" x:Name="_inputTextB" x:FieldModifier="private" Grid.Column="0"
-                     FontSize="12" AcceptsReturn="True"/>
+            <Grid Grid.Row="0">
+                <Label Content="{Binding ElementName=_inputTextA,Path=Text,Mode=OneTime}"
+                       VerticalContentAlignment="Center" Padding="13,0"
+                       Background="{StaticResource AccentColor}" Foreground="White" FontSize="13"
+                       BorderBrush="{StaticResource BorderColor}" BorderThickness="0,0,0,1"
+                       MouseLeftButtonDown="Window_Move"/>
+                <Button Style="{StaticResource GButton}" Content="&#x2573;" HorizontalAlignment="Right"
+                        Width="30" BorderThickness="0" Click="Cancel_Click"/>
+            </Grid>
+            <TextBox Grid.Row="1" x:Name="_inputTextB" ToolTip="模组简介" x:FieldModifier="private" Grid.Column="0"
+                     FontSize="13" AcceptsReturn="True" Padding="10" BorderThickness="0"/>
             <Grid Grid.Row="2">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition/>
-                    <ColumnDefinition/>
+                    <ColumnDefinition Width="80"/>
                 </Grid.ColumnDefinitions>
-                <Button Grid.Column="0" Content="确定" Style="{StaticResource GButton}" 
-                        BorderThickness="1" Click="Ok_Click"/>
-                <Button Grid.Column="1" Content="取消" Style="{StaticResource GButton}" 
-                        BorderThickness="1" Click="Cancel_Click"/>
+                <TextBox Grid.Column="0" x:Name="_inputTextA" ToolTip="模组名" x:FieldModifier="private"
+                         VerticalContentAlignment="Center" HorizontalContentAlignment="Center"
+                         BorderBrush="{StaticResource BorderColor}" BorderThickness="0,1,0,0" FontSize="18"/>
+                <Button Grid.Column="1" Content="保存" Style="{StaticResource GButton}" 
+                        Click="Ok_Click" BorderThickness="1,1,0,0"/>
             </Grid>
         </Grid>
     </Border>

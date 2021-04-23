@@ -6,12 +6,13 @@
         xmlns:local="clr-namespace:DEModLauncher_GUI.View"
         mc:Ignorable="d" x:Name="Self"
         DataContext="{Binding ElementName=Self}"
-        Title="{Binding Caption,Mode=OneWay}" Height="350" Width="600"
+        Title="{Binding Caption,Mode=OneWay}" Height="480" Width="700"
         WindowStartupLocation="CenterOwner">
     <Grid>
         <ScrollViewer VerticalScrollBarVisibility="Auto">
-            <TextBox x:Name="_message" FontSize="14" Padding="5" FontFamily="Consolas"
-                 x:FieldModifier="private" IsReadOnly="True">
+            <TextBox x:Name="_message" x:FieldModifier="private" 
+                     FontSize="14" Padding="10" FontFamily="Consolas"
+                     IsReadOnly="True" BorderThickness="0">
             </TextBox>
         </ScrollViewer>
     </Grid>
