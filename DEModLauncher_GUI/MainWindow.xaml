@@ -46,12 +46,12 @@
                                         <Grid Height="35">
                                             <Grid.ContextMenu>
                                                 <ContextMenu BorderThickness="0" Padding="0" Background="Transparent">
-                                                    <MenuItem Tag="{Binding}" Header="编辑" Click="RenameMod_Click"/>
-                                                    <MenuItem Tag="{Binding}" Header="上移" Click="MoveUpMod_Click"/>
-                                                    <MenuItem Tag="{Binding}" Header="下移" Click="MoveDownMod_Click"/>
-                                                    <MenuItem Tag="{Binding}" Header="删除" Click="DeleteMod_Click"/>
-                                                    <MenuItem Tag="{Binding}" Header="创建副本" Click="DuplicateMod_Click"/>
-                                                    <MenuItem Tag="{Binding}" Header="冲突检查" Click="CheckConflict_Click"/>
+                                                    <MenuItem Tag="{Binding}" Header="{StaticResource EDIT_MOD_PACK}" Click="RenameMod_Click"/>
+                                                    <MenuItem Tag="{Binding}" Header="{StaticResource MOVE_UP_MOD_PACK}" Click="MoveUpMod_Click"/>
+                                                    <MenuItem Tag="{Binding}" Header="{StaticResource MOVE_DOWN_MOD_PACK}" Click="MoveDownMod_Click"/>
+                                                    <MenuItem Tag="{Binding}" Header="{StaticResource REMOVE_MOD_PACK}" Click="DeleteMod_Click"/>
+                                                    <MenuItem Tag="{Binding}" Header="{StaticResource DUPLICATE_MOD_PACK}" Click="DuplicateMod_Click"/>
+                                                    <MenuItem Tag="{Binding}" Header="{StaticResource CHECK_MOD_PACK_CONFLICT}" Click="CheckConflict_Click"/>
                                                 </ContextMenu>
                                             </Grid.ContextMenu>
                                             <Button Content="{Binding PackName}" ToolTip="{Binding Description}" Tag="{Binding}"
@@ -77,7 +77,7 @@
                         </ScrollViewer>
                     </Grid>
                     <Grid Grid.Row="2">
-                        <Button Grid.Column="1" Content="+" FontSize="14" Padding="0" ToolTip="添加模组配置" 
+                        <Button Grid.Column="1" Content="+" FontSize="14" Padding="0" ToolTip="{StaticResource ADD_MOD_PACK_TOOLTIP}" 
                             Width="25" Height="25" HorizontalAlignment="Left" VerticalAlignment="Bottom"
                             BorderThickness="0,1,1,0" Style="{StaticResource GButton}"
                             Click="AddMod_Click"/>
@@ -117,8 +117,8 @@
                         <ScrollViewer VerticalScrollBarVisibility="Hidden">
                             <ScrollViewer.ContextMenu>
                                 <ContextMenu BorderThickness="0" Padding="0" Background="Transparent">
-                                    <MenuItem Tag="{Binding CurrentMod}" Header="编辑" Click="RenameMod_Click"/>
-                                    <MenuItem Tag="{Binding CurrentMod}" Header="冲突检查" Click="CheckConflict_Click"/>
+                                    <MenuItem Tag="{Binding CurrentMod}" Header="{StaticResource EDIT_MOD_PACK}" Click="RenameMod_Click"/>
+                                    <MenuItem Tag="{Binding CurrentMod}" Header="{StaticResource CHECK_MOD_PACK_CONFLICT}" Click="CheckConflict_Click"/>
                                 </ContextMenu>
                             </ScrollViewer.ContextMenu>
                             <ItemsControl ItemsSource="{Binding CurrentMod.Resources}">
@@ -127,10 +127,10 @@
                                         <Grid Height="25">
                                             <Grid.ContextMenu>
                                                 <ContextMenu BorderThickness="0" Padding="0" Background="Transparent">
-                                                    <MenuItem Tag="{Binding}" Header="查看" Click="OpenResourceFile_Click"/>
-                                                    <MenuItem Tag="{Binding}" Header="上移" Click="MoveUpResource_Click"/>
-                                                    <MenuItem Tag="{Binding}" Header="下移" Click="MoveDownResource_Click"/>
-                                                    <MenuItem Tag="{Binding}" Header="删除" Click="DeleteResource_Click"/>
+                                                    <MenuItem Tag="{Binding}" Header="{StaticResource VIEW_MOD_RESOURCE}" Click="OpenResourceFile_Click"/>
+                                                    <MenuItem Tag="{Binding}" Header="{StaticResource MOVE_UP_MOD_RESOURCE}" Click="MoveUpResource_Click"/>
+                                                    <MenuItem Tag="{Binding}" Header="{StaticResource MOVE_DOWN_MOD_RESOURCE}" Click="MoveDownResource_Click"/>
+                                                    <MenuItem Tag="{Binding}" Header="{StaticResource REMOVE_MOD_RESOURCE}" Click="DeleteResource_Click"/>
                                                 </ContextMenu>
                                             </Grid.ContextMenu>
                                             <Label Content="{Binding}" ToolTip="{Binding}" Tag="{Binding}"
@@ -166,7 +166,7 @@
                         <Button Content="+" Height="25" Width="25" Padding="0" 
                             VerticalAlignment="Bottom" HorizontalAlignment="Left"
                             BorderThickness="0,1,1,0" Style="{StaticResource GButton}"
-                            FontSize="14" ToolTip="添加模组包" Click="AddResource_Click"/>
+                            FontSize="14" ToolTip="{StaticResource ADD_MOD_RESOURCE_TOOLTIP}" Click="AddResource_Click"/>
                     </Grid>
                 </Grid>
             </Grid>
@@ -182,7 +182,8 @@
                             <ColumnDefinition/>
                             <ColumnDefinition Width="Auto"/>
                         </Grid.ColumnDefinitions>
-                        <Label Grid.Column="0" Content="游戏文件夹" ToolTip="游戏文件夹路径" Width="80" VerticalContentAlignment="Center" HorizontalContentAlignment="Center"
+                        <Label Grid.Column="0" Content="{StaticResource GAME_DIRECTORY}" 
+                               ToolTip="{StaticResource GAME_DIRECTORY_TOOLTIP}" Width="80" VerticalContentAlignment="Center" HorizontalContentAlignment="Center"
                                BorderThickness="0,1,0,0" BorderBrush="{StaticResource BorderColor}" 
                                Background="{StaticResource MainColor}" Foreground="{StaticResource TextColor}"/>
                         <TextBox Grid.Column="1" Text="{Binding GameDirectory,Mode=OneWay}" ToolTip="{Binding GameDirectory}" IsReadOnly="True" 
@@ -205,7 +206,9 @@
                                 </Style>
                             </TextBox.Style>
                         </TextBox>
-                        <Button Grid.Column="2" Content="选择" ToolTip="手动设置游戏文件夹" Width="50" Click="SelectGameDirectory_Click"
+                        <Button Grid.Column="2" Content="{StaticResource SELECT_GAME_FOLDER}" 
+                                ToolTip="{StaticResource SELECT_GAME_FOLDER_TOOLTIP}"
+                                Width="50" Click="SelectGameDirectory_Click"
                                 BorderThickness="1,1,0,0" Style="{StaticResource GButton}"/>
                     </Grid>
                 </Grid>
@@ -216,16 +219,20 @@
                         <ColumnDefinition/>
                         <ColumnDefinition Width="Auto"/>
                     </Grid.ColumnDefinitions>
-                    <Button Content="保存" ToolTip="保存模组配置" FontSize="14" Width="80" Grid.Column="0"
+                    <Button Content="{StaticResource SAVE_PROFILE_FILE}" 
+                            ToolTip="{StaticResource SAVE_PROFILE_FILE_TOOLTIP}" FontSize="14" Width="80" Grid.Column="0"
                             Style="{StaticResource GButton}" BorderThickness="0,1,0,0"
                             Click="SaveToFile_Click"/>
-                    <Button Content="重新读取" ToolTip="重新读取模组配置" FontSize="14" Width="80" Grid.Column="1" 
+                    <Button Content="{StaticResource RELOAD_PROFILE_FILE}" 
+                            ToolTip="{StaticResource RELOAD_PROFILE_FILE_TOOLTIP}" FontSize="14" Width="80" Grid.Column="1" 
                             Style="{StaticResource GButton}" BorderThickness="1,1,1,0"
                             Click="LoadFromFile_Click"/>
-                    <Button Content="加载后启动" ToolTip="加载模组后启动" FontSize="14" Grid.Column="2" 
+                    <Button Content="{StaticResource LAUNCH_AFTER_LOAD_MOD}" 
+                            ToolTip="{StaticResource LAUNCH_AFTER_LOAD_MOD_TOOLTIP}" FontSize="14" Grid.Column="2" 
                             Style="{StaticResource GButton}" BorderThickness="0,1,1,0" 
                             Click="LaunchMod_Click"/>
-                    <Button Content="启动" ToolTip="直接启动游戏" FontSize="14" Width="80" Grid.Column="3"
+                    <Button Content="{StaticResource LAUNCH_DIRECTLY}" 
+                            ToolTip="{StaticResource LAUNCH_DIRECTLY_TOOLTIP}" FontSize="14" Width="80" Grid.Column="3"
                             Style="{StaticResource GButton}" BorderThickness="0,1,0,0"
                             Click="LaunchGame_Click"/>
                 </Grid>

@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:DEModLauncher_GUI.View"
         mc:Ignorable="d" ResizeMode="NoResize"
         WindowStartupLocation="CenterOwner"
-        Title="输入模组名" Height="350" Width="440">
+        Title="{Binding ElementName=_inputTextA,Path=Text,Mode=OneTime}" Height="350" Width="440">
     <WindowChrome.WindowChrome>
         <WindowChrome CaptionHeight="0" UseAeroCaptionButtons="False"/>
     </WindowChrome.WindowChrome>
@@ -26,17 +26,19 @@
                 <Button Style="{StaticResource GButton}" Content="&#x2573;" HorizontalAlignment="Right"
                         Width="30" BorderThickness="0" Click="Cancel_Click"/>
             </Grid>
-            <TextBox Grid.Row="1" x:Name="_inputTextB" ToolTip="模组简介" x:FieldModifier="private" Grid.Column="0"
+            <TextBox Grid.Row="1" x:Name="_inputTextB" 
+                     ToolTip="{StaticResource TEXT_OF_MOD_PACK_DESCRIPTION}" x:FieldModifier="private" Grid.Column="0"
                      FontSize="13" AcceptsReturn="True" Padding="10" BorderThickness="0"/>
             <Grid Grid.Row="2">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition/>
                     <ColumnDefinition Width="80"/>
                 </Grid.ColumnDefinitions>
-                <TextBox Grid.Column="0" x:Name="_inputTextA" ToolTip="模组名" x:FieldModifier="private"
+                <TextBox Grid.Column="0" x:Name="_inputTextA" 
+                         ToolTip="{StaticResource TEXT_OF_MOD_PACK_NAME}" x:FieldModifier="private"
                          VerticalContentAlignment="Center" HorizontalContentAlignment="Center"
                          BorderBrush="{StaticResource BorderColor}" BorderThickness="0,1,0,0" FontSize="18"/>
-                <Button Grid.Column="1" Content="保存" Style="{StaticResource GButton}" 
+                <Button Grid.Column="1" Content="{StaticResource SAVE_MOD_PACK_MODIFY}" Style="{StaticResource GButton}" 
                         Click="Ok_Click" BorderThickness="1,1,0,0"/>
             </Grid>
         </Grid>

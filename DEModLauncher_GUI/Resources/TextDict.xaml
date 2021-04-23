@@ -1,0 +1,55 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:Sys="clr-namespace:System;assembly=mscorlib">
+    <!--保存配置文件-->
+    <Sys:String x:Key="SAVE_PROFILE_FILE">保存</Sys:String>
+    <Sys:String x:Key="SAVE_PROFILE_FILE_TOOLTIP">保存模组配置</Sys:String>
+    <!--重新加载配置文件-->
+    <Sys:String x:Key="RELOAD_PROFILE_FILE">重新读取</Sys:String>
+    <Sys:String x:Key="RELOAD_PROFILE_FILE_TOOLTIP">重新读取模组配置</Sys:String>
+    <!--加载模组后启动游戏-->
+    <Sys:String x:Key="LAUNCH_AFTER_LOAD_MOD">加载后启动</Sys:String>
+    <Sys:String x:Key="LAUNCH_AFTER_LOAD_MOD_TOOLTIP">加载模组后启动</Sys:String>
+    <!--直接启动游戏-->
+    <Sys:String x:Key="LAUNCH_DIRECTLY">启动</Sys:String>
+    <Sys:String x:Key="LAUNCH_DIRECTLY_TOOLTIP">直接启动游戏</Sys:String>
+    <!--游戏文件夹-->
+    <Sys:String x:Key="GAME_DIRECTORY">游戏文件夹</Sys:String>
+    <Sys:String x:Key="GAME_DIRECTORY_TOOLTIP">游戏文件夹路径</Sys:String>
+    <!--选择游戏文件夹-->
+    <Sys:String x:Key="SELECT_GAME_FOLDER">选择</Sys:String>
+    <Sys:String x:Key="SELECT_GAME_FOLDER_TOOLTIP">手动设置游戏文件夹</Sys:String>
+
+    <!--添加模组包ToolTip-->
+    <Sys:String x:Key="ADD_MOD_RESOURCE_TOOLTIP">添加模组包</Sys:String>
+    <!--在资源管理器中查看模组文件-->
+    <Sys:String x:Key="VIEW_MOD_RESOURCE">查看</Sys:String>
+    <!--向上移动模组文件-->
+    <Sys:String x:Key="MOVE_UP_MOD_RESOURCE">上移</Sys:String>
+    <!--向下移动模组文件-->
+    <Sys:String x:Key="MOVE_DOWN_MOD_RESOURCE">下移</Sys:String>
+    <!--删除模组文件-->
+    <Sys:String x:Key="REMOVE_MOD_RESOURCE">删除</Sys:String>
+
+    <!--添加模组配置ToolTip-->
+    <Sys:String x:Key="ADD_MOD_PACK_TOOLTIP">添加模组配置</Sys:String>
+    <!--编辑模组配置-->
+    <Sys:String x:Key="EDIT_MOD_PACK">编辑</Sys:String>
+    <!--向上移动模组配置-->
+    <Sys:String x:Key="MOVE_UP_MOD_PACK">上移</Sys:String>
+    <!--向下移动模组配置-->
+    <Sys:String x:Key="MOVE_DOWN_MOD_PACK">下移</Sys:String>
+    <!--删除模组配置-->
+    <Sys:String x:Key="REMOVE_MOD_PACK">删除</Sys:String>
+    <!--制作模组配置拷贝-->
+    <Sys:String x:Key="DUPLICATE_MOD_PACK">创建副本</Sys:String>
+    <!--检查模组配置是否存在文件冲突-->
+    <Sys:String x:Key="CHECK_MOD_PACK_CONFLICT">冲突检查</Sys:String>
+
+    <!--模组配置名_ToolTip-->
+    <Sys:String x:Key="TEXT_OF_MOD_PACK_NAME">模组配置名</Sys:String>
+    <!--模组配置描述-->
+    <Sys:String x:Key="TEXT_OF_MOD_PACK_DESCRIPTION">模组描述名</Sys:String>
+    <!--保存模组配置修改-->
+    <Sys:String x:Key="SAVE_MOD_PACK_MODIFY">保存</Sys:String>
+</ResourceDictionary>
