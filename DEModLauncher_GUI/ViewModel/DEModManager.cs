@@ -165,6 +165,7 @@ namespace DEModLauncher_GUI.ViewModel {
             }
             ddp.PackName = testName;
             ddp.Description = modPack.Description;
+            ddp.GameDirectroy = modPack.GameDirectroy;
             foreach (var res in modPack.Resources) {
                 ddp.Resources.Add(res);
             }
