@@ -4,6 +4,7 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
+using System.IO.Compression;
 using System.Threading.Tasks;
 
 namespace DEModLauncher_GUI.ViewModel {
@@ -17,7 +18,7 @@ namespace DEModLauncher_GUI.ViewModel {
         private string _packName;
         private string _description;
         private readonly Resources _resources;
-        private readonly string _modLoadder = "EternalModInjector.bat";
+        private static readonly string _modLoadder = "EternalModInjector.bat";
         private string _gameDirectory;
 
         public string PackName {
@@ -118,11 +119,48 @@ namespace DEModLauncher_GUI.ViewModel {
         public void DeleteResource(string resourcePath) {
             _resources.Remove(resourcePath);
         }
+        public Tuple<int, int, int, Dictionary<string, List<string>>> GetConflictInformation() {
+            Dictionary<string, List<string>> resourceDict = new Dictionary<string, List<string>>();
+            int totalCount = 0;
+            int validCount = 0;
+            foreach (var resourceFile in _resources) {
+                string fullFileName = $@"{ModPacksDirectory}\{resourceFile}";
+                foreach (var subFile in GetZippedFiles(fullFileName)) {
+                    if (!resourceDict.ContainsKey(subFile)) {
+                        resourceDict[subFile] = new List<string>();
+                        validCount += 1;
+                    }
+                    totalCount += 1;
+                    resourceDict[subFile].Add(resourceFile);
+                }
+            }
+            int conflictedCount = totalCount - validCount;
+            return Tuple.Create(totalCount, validCount, conflictedCount, GetConflictedFiles(resourceDict));
+        }
         public override string ToString() {
             int resourceCount = _resources.Count;
             return $"{_packName}({resourceCount}¸öÄ£×é)";
         }
 
+        private static Dictionary<string, List<string>> GetConflictedFiles(Dictionary<string, List<string>> fileDict) {
+            Dictionary<string, List<string>> conflictedFiles = new Dictionary<string, List<string>>();
+            foreach (var file in fileDict.Keys) {
+                if (fileDict[file].Count <= 1) {
+                    continue;
+                }
+                conflictedFiles[file] = new List<string>(fileDict[file]);
+            }
+            return conflictedFiles;
+        }
+        private static IEnumerable<string> GetZippedFiles(string fileName) {
+            ZipArchive zipFile = ZipFile.OpenRead(fileName);
+            foreach (var file in zipFile.Entries) {
+                if (file.FullName.EndsWith("\\") || file.FullName.EndsWith("/")) {
+                    continue;
+                }
+                yield return file.FullName;
+            }
+        }
         private void LaunchCheck() {
             foreach (var resource in _resources) {
                 if (!File.Exists($@"{ModPacksDirectory}\{resource}")) {

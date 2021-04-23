@@ -44,8 +44,9 @@
                                                     <MenuItem Tag="{Binding}" Header="重命名" Click="RenameMod_Click"/>
                                                     <MenuItem Tag="{Binding}" Header="上移" Click="MoveUpMod_Click"/>
                                                     <MenuItem Tag="{Binding}" Header="下移" Click="MoveDownMod_Click"/>
-                                                    <MenuItem Tag="{Binding}" Header="复制" Click="DuplicateMod_Click"/>
                                                     <MenuItem Tag="{Binding}" Header="删除" Click="DeleteMod_Click"/>
+                                                    <MenuItem Tag="{Binding}" Header="制作副本" Click="DuplicateMod_Click"/>
+                                                    <MenuItem Tag="{Binding}" Header="冲突检查" Click="CheckConflict_Click"/>
                                                 </ContextMenu>
                                             </Grid.ContextMenu>
                                             <Button Content="{Binding PackName}" ToolTip="{Binding Description}"
