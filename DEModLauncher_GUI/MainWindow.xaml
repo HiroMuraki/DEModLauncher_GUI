@@ -8,7 +8,7 @@
         DataContext="{Binding ElementName=Self,Path=DEModManager}"
         FontFamily="Microsoft YaHei UI"
         WindowStartupLocation="CenterScreen" ResizeMode="NoResize"
-        Title="MainWindow" Height="500" Width="800">
+        Title="DEMODLauncher" Height="500" Width="800">
     <WindowChrome.WindowChrome>
         <WindowChrome UseAeroCaptionButtons="False" CaptionHeight="0" ResizeBorderThickness="0"/>
     </WindowChrome.WindowChrome>
@@ -208,7 +208,7 @@
                         </TextBox>
                         <Button Grid.Column="2" Content="{StaticResource SELECT_GAME_FOLDER}" 
                                 ToolTip="{StaticResource SELECT_GAME_FOLDER_TOOLTIP}"
-                                Width="50" Click="SelectGameDirectory_Click"
+                                Width="60" Click="SelectGameDirectory_Click"
                                 BorderThickness="1,1,0,0" Style="{StaticResource GButton}"/>
                     </Grid>
                 </Grid>
@@ -232,7 +232,7 @@
                             Style="{StaticResource GButton}" BorderThickness="0,1,1,0" 
                             Click="LaunchMod_Click"/>
                     <Button Content="{StaticResource LAUNCH_DIRECTLY}" 
-                            ToolTip="{StaticResource LAUNCH_DIRECTLY_TOOLTIP}" FontSize="14" Width="80" Grid.Column="3"
+                            ToolTip="{StaticResource LAUNCH_DIRECTLY_TOOLTIP}" FontSize="14" Width="100" Grid.Column="3"
                             Style="{StaticResource GButton}" BorderThickness="0,1,0,0"
                             Click="LaunchGame_Click"/>
                 </Grid>
