@@ -13,7 +13,7 @@
                     <Border Background="{TemplateBinding Background}" 
                                 BorderBrush="{TemplateBinding BorderBrush}"
                                 BorderThickness="{TemplateBinding BorderThickness}"
-                                Height="25" MinWidth="60">
+                                Height="30" MinWidth="60">
                         <Label Content="{TemplateBinding Header}" 
                                    Foreground="{TemplateBinding Foreground}"
                                    VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}"

@@ -37,7 +37,7 @@
                         <ScrollViewer VerticalScrollBarVisibility="Hidden">
                             <ScrollViewer.ContextMenu>
                                 <ContextMenu BorderThickness="0" Padding="0" Background="Transparent">
-                                    <MenuItem Tag="{Binding}" Header="添加模组配置" Click="AddMod_Click"/>
+                                    <MenuItem Tag="{Binding}" Header="{StaticResource ADD_MOD_PACK_TOOLTIP}" Click="AddMod_Click"/>
                                 </ContextMenu>
                             </ScrollViewer.ContextMenu>
                             <ItemsControl ItemsSource="{Binding DEModPacks}">
