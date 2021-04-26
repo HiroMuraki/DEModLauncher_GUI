@@ -152,7 +152,7 @@ namespace DEModLauncher_GUI.ViewModel {
             _dEModPacks.Remove(modPack);
         }
         public void DuplicateMod(DEModPack modPack) {
-            DEModPack ddp = new DEModPack();
+            DEModPack copiedPack = new DEModPack();
             List<string> usedPackNames = new List<string>();
             foreach (var dmp in _dEModPacks) {
                 usedPackNames.Add(dmp.PackName);
@@ -163,13 +163,13 @@ namespace DEModLauncher_GUI.ViewModel {
                 testName = $"{modPack.PackName}({cpyID})";
                 ++cpyID;
             }
-            ddp.PackName = testName;
-            ddp.Description = modPack.Description;
-            ddp.GameDirectroy = modPack.GameDirectroy;
+            copiedPack.PackName = testName;
+            copiedPack.Description = modPack.Description;
+            copiedPack.GameDirectroy = modPack.GameDirectroy;
             foreach (var res in modPack.Resources) {
-                ddp.Resources.Add(res);
+                copiedPack.Resources.Add(res);
             }
-            _dEModPacks.Insert(_dEModPacks.IndexOf(modPack), ddp);
+            _dEModPacks.Insert(_dEModPacks.IndexOf(modPack) + 1, copiedPack);
         }
         public void SaveToFile(string fileName) {
             Model.DEModManager dm = new Model.DEModManager();

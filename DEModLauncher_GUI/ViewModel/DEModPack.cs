@@ -15,10 +15,10 @@ namespace DEModLauncher_GUI.ViewModel {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
+        private static readonly string _modLoadder = "EternalModInjector.bat";
         private string _packName;
         private string _description;
         private readonly Resources _resources;
-        private static readonly string _modLoadder = "EternalModInjector.bat";
         private string _gameDirectory;
 
         public string PackName {
@@ -106,7 +106,7 @@ namespace DEModLauncher_GUI.ViewModel {
         public void AddResource(string resourcePath) {
             string resourceName = Path.GetFileName(resourcePath);
             foreach (var existedResource in _resources) {
-                if (existedResource.Path == resourcePath) {
+                if (existedResource.Path == resourceName) {
                     throw new ArgumentException($"模组包[{resourceName}]已添加，不可重复添加");
                 }
             }
@@ -117,7 +117,7 @@ namespace DEModLauncher_GUI.ViewModel {
             if (!File.Exists(modPackBackup)) {
                 File.Copy(resourcePath, modPackBackup);
             }
-            DEModResource resource = new DEModResource(resourcePath);
+            DEModResource resource = new DEModResource(resourceName);
             _resources.Add(resource);
         }
         public void DeleteResource(DEModResource resource) {

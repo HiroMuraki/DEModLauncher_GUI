@@ -56,6 +56,5 @@ namespace DEModLauncher_GUI.ViewModel {
         public void Disable() {
             _status = ResourceStatus.Disabled;
         }
-
     }
 }
