@@ -6,6 +6,9 @@
 		<UseWPF>true</UseWPF>
 		<UseWindowsForms>true</UseWindowsForms>
 		<ApplicationIcon>Resources\ICO.ico</ApplicationIcon>
+		<Authors>Hiro Muraki</Authors>
+		<Description />
+		<Company />
 	</PropertyGroup>
 
 	<ItemGroup>

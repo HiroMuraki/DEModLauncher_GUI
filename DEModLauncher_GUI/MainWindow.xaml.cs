@@ -126,14 +126,6 @@ namespace DEModLauncher_GUI {
         private void OpenGameDirectory_Click(object sender, MouseButtonEventArgs e) {
             _dEModMananger.OpenGameDirectory();
         }
-        private void OpenResourceFile_Click(object sender, RoutedEventArgs e) {
-            try {
-                _dEModMananger.OpenResourceFile(GetResourceFromControl(sender));
-            }
-            catch (Exception exp) {
-                MessageBox.Show(exp.Message, "打开错误", MessageBoxButton.OK, MessageBoxImage.Error);
-            }
-        }
         #endregion
 
         #region 模组操作
@@ -184,6 +176,7 @@ namespace DEModLauncher_GUI {
                     MessageBox.Show(exp.Message, "修改模组配置错误", MessageBoxButton.OK, MessageBoxImage.Error);
                 }
             }
+            e.Handled = true;
         }
         private void CheckConflict_Click(object sender, RoutedEventArgs e) {
             DEModPack dmp = GetDEModPackFromControl(sender);
@@ -245,6 +238,14 @@ namespace DEModLauncher_GUI {
         }
         private void DeleteResource_Click(object sender, RoutedEventArgs e) {
             _dEModMananger.CurrentMod.DeleteResource(GetResourceFromControl(sender));
+        }
+        private void OpenResourceFile_Click(object sender, RoutedEventArgs e) {
+            try {
+                _dEModMananger.OpenResourceFile(GetResourceFromControl(sender));
+            }
+            catch (Exception exp) {
+                MessageBox.Show(exp.Message, "打开错误", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
         }
         #endregion
 
