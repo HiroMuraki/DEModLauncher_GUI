@@ -8,7 +8,7 @@ using System.IO.Compression;
 using System.Threading.Tasks;
 
 namespace DEModLauncher_GUI.ViewModel {
-    using Resources = ObservableCollection<string>;
+    using Resources = ObservableCollection<DEModResource>;
     public class DEModPack : INotifyPropertyChanged {
         public event PropertyChangedEventHandler PropertyChanged;
         public void OnPropertyChanged(string propertyName) {
@@ -44,6 +44,7 @@ namespace DEModLauncher_GUI.ViewModel {
                 return _resources;
             }
         }
+
         public string GameDirectroy {
             get {
                 return _gameDirectory;
@@ -79,7 +80,7 @@ namespace DEModLauncher_GUI.ViewModel {
             p.Start();
             return p.StandardOutput;
         }
-        public void MoveUpResource(string resourcePath) {
+        public void MoveUpResource(DEModResource resourcePath) {
             int currentIndex = _resources.IndexOf(resourcePath);
             if (currentIndex <= 0) {
                 return;
@@ -89,7 +90,7 @@ namespace DEModLauncher_GUI.ViewModel {
             _resources[currentIndex] = _resources[newIndex];
             _resources[newIndex] = t;
         }
-        public void MoveDownResource(string resourcePath) {
+        public void MoveDownResource(DEModResource resourcePath) {
             int currentIndex = _resources.IndexOf(resourcePath);
             if (currentIndex < 0) {
                 return;
@@ -104,8 +105,10 @@ namespace DEModLauncher_GUI.ViewModel {
         }
         public void AddResource(string resourcePath) {
             string resourceName = Path.GetFileName(resourcePath);
-            if (_resources.Contains(resourceName)) {
-                throw new ArgumentException($"模组包[{resourceName}]已添加，不可重复添加");
+            foreach (var existedResource in _resources) {
+                if (existedResource.Path == resourcePath) {
+                    throw new ArgumentException($"模组包[{resourceName}]已添加，不可重复添加");
+                }
             }
             if (_gameDirectory == null) {
                 throw new ArgumentException("请先选择游戏文件夹");
@@ -114,24 +117,28 @@ namespace DEModLauncher_GUI.ViewModel {
             if (!File.Exists(modPackBackup)) {
                 File.Copy(resourcePath, modPackBackup);
             }
-            _resources.Add(resourceName);
+            DEModResource resource = new DEModResource(resourcePath);
+            _resources.Add(resource);
         }
-        public void DeleteResource(string resourcePath) {
-            _resources.Remove(resourcePath);
+        public void DeleteResource(DEModResource resource) {
+            _resources.Remove(resource);
         }
         public Tuple<int, int, int, Dictionary<string, List<string>>> GetConflictInformation() {
             Dictionary<string, List<string>> resourceDict = new Dictionary<string, List<string>>();
             int totalCount = 0;
             int validCount = 0;
-            foreach (var resourceFile in _resources) {
-                string fullFileName = $@"{ModPacksDirectory}\{resourceFile}";
+            foreach (var resource in _resources) {
+                if (resource.Status == ResourceStatus.Disabled) {
+                    continue;
+                }
+                string fullFileName = $@"{ModPacksDirectory}\{resource.Path}";
                 foreach (var subFile in GetZippedFiles(fullFileName)) {
                     if (!resourceDict.ContainsKey(subFile)) {
                         resourceDict[subFile] = new List<string>();
                         validCount += 1;
                     }
                     totalCount += 1;
-                    resourceDict[subFile].Add(resourceFile);
+                    resourceDict[subFile].Add(resource.Path);
                 }
             }
             int conflictedCount = totalCount - validCount;
@@ -163,8 +170,11 @@ namespace DEModLauncher_GUI.ViewModel {
         }
         private void LaunchCheck() {
             foreach (var resource in _resources) {
-                if (!File.Exists($@"{ModPacksDirectory}\{resource}")) {
-                    throw new FileNotFoundException($"无法找到模组包{resource}\n请检查{ModPacksDirectory}\\{resource}");
+                if (resource.Status == ResourceStatus.Disabled) {
+                    continue;
+                }
+                if (!File.Exists($@"{ModPacksDirectory}\{resource.Path}")) {
+                    throw new FileNotFoundException($"无法找到模组包{resource.Path}\n请检查{ModPacksDirectory}\\{resource.Path}");
                 }
             }
         }
@@ -178,8 +188,11 @@ namespace DEModLauncher_GUI.ViewModel {
             }
         }
         private void SetResources() {
-            foreach (var file in _resources) {
-                string fileName = Path.GetFileName(file);
+            foreach (var resource in _resources) {
+                if (resource.Status == ResourceStatus.Disabled) {
+                    continue;
+                }
+                string fileName = Path.GetFileName(resource.Path);
                 string sourceFile = $@"{ModPacksDirectory}\{fileName}";
                 string destFile = $@"{ModDirectory}\{fileName}";
                 File.Copy(sourceFile, destFile);

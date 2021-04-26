@@ -181,7 +181,9 @@ namespace DEModLauncher_GUI.ViewModel {
                 dp.PackName = modPack.PackName;
                 dp.Description = modPack.Description;
                 dp.Resources = new List<string>();
-                dp.Resources.AddRange(modPack.Resources);
+                foreach (var res in modPack.Resources) {
+                    dp.Resources.Add(res.Path);
+                }
                 dm.ModPacks.Add(dp);
             }
             using (FileStream file = new FileStream(fileName, FileMode.Create, FileAccess.Write)) {
@@ -206,7 +208,8 @@ namespace DEModLauncher_GUI.ViewModel {
                 dp.Description = modPack.Description;
                 dp.GameDirectroy = dm.GameDirectory;
                 foreach (var res in modPack.Resources) {
-                    dp.Resources.Add(res);
+                    DEModResource resource = new DEModResource(res);
+                    dp.Resources.Add(resource);
                 }
                 _dEModPacks.Add(dp);
                 if (CurrentMod == null && modPack.PackName == dm.CurrentMod) {

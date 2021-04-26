@@ -4,6 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:ViewModel="clr-namespace:DEModLauncher_GUI.ViewModel"
+        xmlns:ValueConverter="clr-namespace:DEModLauncher_GUI.ViewModel.ValueConverter"
         mc:Ignorable="d" x:Name="Self"
         DataContext="{Binding ElementName=Self,Path=DEModManager}"
         FontFamily="Microsoft YaHei UI"
@@ -12,6 +13,9 @@
     <WindowChrome.WindowChrome>
         <WindowChrome UseAeroCaptionButtons="False" CaptionHeight="0" ResizeBorderThickness="0"/>
     </WindowChrome.WindowChrome>
+    <Window.Resources>
+        <ValueConverter:ResourceStatusToBoolean x:Key="ResourceStatusToBoolean"/>
+    </Window.Resources>
     <Border BorderBrush="{StaticResource BorderColor}" Background="{StaticResource MainColor}" BorderThickness="2">
         <Grid>
             <Grid.RowDefinitions>
@@ -119,7 +123,7 @@
                             </ScrollViewer.ContextMenu>
                             <ItemsControl ItemsSource="{Binding CurrentMod.Resources}">
                                 <ItemsControl.ItemTemplate>
-                                    <DataTemplate DataType="{x:Type ViewModel:DEModPack}">
+                                    <DataTemplate DataType="{x:Type ViewModel:DEModResource}">
                                         <Grid>
                                             <Grid.ContextMenu>
                                                 <ContextMenu BorderThickness="0" Padding="0" Background="Transparent">
@@ -129,22 +133,8 @@
                                                     <MenuItem Tag="{Binding}" Header="{StaticResource REMOVE_MOD_RESOURCE}" Click="DeleteResource_Click"/>
                                                 </ContextMenu>
                                             </Grid.ContextMenu>
-                                            <Label Height="28" Content="{Binding}" ToolTip="{Binding}" Tag="{Binding}"
-                                                   FontSize="12" Padding="30,0" BorderThickness="0,0,0,1" 
-                                                   HorizontalContentAlignment="Left" VerticalContentAlignment="Center"
-                                                   MouseDoubleClick="OpenResourceFile_Click">
-                                                <Label.Style>
-                                                    <Style TargetType="Label">
-                                                        <Setter Property="Foreground" Value="{StaticResource TextColor}" />
-                                                        <Style.Triggers>
-                                                            <Trigger Property="IsMouseOver" Value="True">
-                                                                <Setter Property="Foreground" Value="{StaticResource MainColor}"/>
-                                                                <Setter Property="Background" Value="{StaticResource FocusColor}" />
-                                                            </Trigger>
-                                                        </Style.Triggers>
-                                                    </Style>
-                                                </Label.Style>
-                                            </Label>
+                                            <ToggleButton Content="{Binding Path}" ToolTip="{Binding Path}" Tag="{Binding}" IsChecked="{Binding Status,Converter={StaticResource ResourceStatusToBoolean}}"
+                                                          MouseDoubleClick="OpenResourceFile_Click" Style="{StaticResource GToggleButton}"/>
                                         </Grid>
                                     </DataTemplate>
                                 </ItemsControl.ItemTemplate>
