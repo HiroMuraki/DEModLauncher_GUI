@@ -241,7 +241,7 @@ namespace DEModLauncher_GUI {
         }
         private void OpenResourceFile_Click(object sender, RoutedEventArgs e) {
             try {
-                _dEModMananger.OpenResourceFile(GetResourceFromControl(sender));
+                _dEModMananger.OpenResourceFile(GetResourceFromControl(sender).Path);
             }
             catch (Exception exp) {
                 MessageBox.Show(exp.Message, "打开错误", MessageBoxButton.OK, MessageBoxImage.Error);
@@ -261,8 +261,8 @@ namespace DEModLauncher_GUI {
         }
         #endregion
 
-        private static string GetResourceFromControl(object sender) {
-            return (sender as FrameworkElement).Tag as string;
+        private static DEModResource GetResourceFromControl(object sender) {
+            return (sender as FrameworkElement).Tag as DEModResource;
         }
         private static DEModPack GetDEModPackFromControl(object sender) {
             return (sender as FrameworkElement).Tag as DEModPack;
