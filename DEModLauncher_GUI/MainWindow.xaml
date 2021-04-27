@@ -190,13 +190,13 @@
                                     </EventTrigger.Actions>
                                 </EventTrigger>
                             </StackPanel.Triggers>
-                            <Button ToolTip="{StaticResource ADD_MOD_RESOURCE_TOOLTIP}"
+                            <Button ToolTip="{StaticResource ADD_RESOURCES_FROM_MOD_PACK}" Tag="{Binding CurrentMod}"
+                                    Click="AddModPackReference_Click" Style="{StaticResource GThinButtonStatic}"
+                                    Width="Auto">
+                            <Button ToolTip="{StaticResource ADD_MOD_RESOURCE_TOOLTIP}" Tag="{Binding CurrentMod}"
                                     Click="AddResource_Click" Style="{StaticResource GThinButtonStatic}"
                                     Width="Auto">
                             </Button>
-                            <Button ToolTip="{StaticResource ADD_RESOURCES_FROM_MOD_PACK}"
-                                    Click="AddModPackReference_Click" Style="{StaticResource GThinButtonStatic}"
-                                    Width="Auto">
                             </Button>
                         </StackPanel>
                     </Grid>
