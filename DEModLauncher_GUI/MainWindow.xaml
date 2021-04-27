@@ -193,10 +193,10 @@
                             <Button ToolTip="{StaticResource ADD_RESOURCES_FROM_MOD_PACK}" Tag="{Binding CurrentMod}"
                                     Click="AddModPackReference_Click" Style="{StaticResource GThinButtonStatic}"
                                     Width="Auto">
+                            </Button>
                             <Button ToolTip="{StaticResource ADD_MOD_RESOURCE_TOOLTIP}" Tag="{Binding CurrentMod}"
                                     Click="AddResource_Click" Style="{StaticResource GThinButtonStatic}"
                                     Width="Auto">
-                            </Button>
                             </Button>
                         </StackPanel>
                     </Grid>
