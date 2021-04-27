@@ -13,48 +13,47 @@
     <WindowChrome.WindowChrome>
         <WindowChrome UseAeroCaptionButtons="False" CaptionHeight="0"/>
     </WindowChrome.WindowChrome>
-        <Border BorderBrush="{StaticResource BorderColor}" BorderThickness="1">
-    <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="35"/>
-            <RowDefinition/>
-            <RowDefinition Height="35"/>
-        </Grid.RowDefinitions>
-            
-        <Grid Grid.Row="0">
-            <Border Background="{StaticResource AccentColor}" MouseLeftButtonDown="Window_Move"/>
-            <Label Content="当前可选模组配置" FontSize="14" FontWeight="Bold" Foreground="{StaticResource TextColor}"
-                   VerticalContentAlignment="Center" HorizontalContentAlignment="Center"
-                   IsHitTestVisible="False"/>
-            <Button Grid.Column="1" Content="&#x2573;" Width="35" FontSize="18"
-                    Style="{StaticResource GButton}" BorderThickness="0" HorizontalAlignment="Right"
-                    Click="Window_Close"/>
-        </Grid>
-        <Grid Grid.Row="1">
-            <ScrollViewer>
-                <ItemsControl ItemsSource="{Binding ModPackSelectors}">
-                    <ItemsControl.ItemTemplate>
-                        <DataTemplate DataType="{x:Type ViewModel:DEModPackSelector}">
-                            <Grid>
-                                <ToggleButton Content="{Binding DEModPack.PackName}" ToolTip="{Binding Description}" Tag="{Binding}"
+    <Border Background="{StaticResource MainColor}" BorderBrush="{StaticResource BorderColor}" BorderThickness="1">
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="35"/>
+                <RowDefinition/>
+                <RowDefinition Height="35"/>
+            </Grid.RowDefinitions>
+            <Grid Grid.Row="0">
+                <Border Background="{StaticResource AccentColor}" MouseLeftButtonDown="Window_Move"/>
+                <Label Content="当前可选模组配置" FontSize="14" FontWeight="Bold" Foreground="{StaticResource TextColor}"
+                       VerticalContentAlignment="Center" HorizontalContentAlignment="Center"
+                       IsHitTestVisible="False"/>
+                <Button Grid.Column="1" Content="&#x2573;" Width="35" FontSize="18"
+                        Style="{StaticResource GButton}" BorderThickness="0" HorizontalAlignment="Right"
+                        Click="Window_Close"/>
+            </Grid>
+            <Grid Grid.Row="1">
+                <ScrollViewer>
+                    <ItemsControl ItemsSource="{Binding ModPackSelectors}">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate DataType="{x:Type ViewModel:DEModPackSelector}">
+                                <Grid>
+                                    <ToggleButton Content="{Binding DEModPack.PackName}" ToolTip="{Binding Description}" Tag="{Binding}"
                                               IsChecked="{Binding IsSelected}" Style="{StaticResource GToggleButton2}"/>
-                            </Grid>
-                        </DataTemplate>
-                    </ItemsControl.ItemTemplate>
-                    <ItemsControl.ItemsPanel>
-                        <ItemsPanelTemplate>
-                            <StackPanel>
+                                </Grid>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                        <ItemsControl.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <StackPanel>
 
-                            </StackPanel>
-                        </ItemsPanelTemplate>
-                    </ItemsControl.ItemsPanel>
-                </ItemsControl>
-            </ScrollViewer>
-        </Grid>
-        <Grid Grid.Row="2">
-            <Button Content="添加" FontSize="18" Style="{StaticResource GButton}"
+                                </StackPanel>
+                            </ItemsPanelTemplate>
+                        </ItemsControl.ItemsPanel>
+                    </ItemsControl>
+                </ScrollViewer>
+            </Grid>
+            <Grid Grid.Row="2">
+                <Button Content="添加" FontSize="18" Style="{StaticResource GButton}"
                     Click="Confirm_Click" BorderThickness="0"/>
+            </Grid>
         </Grid>
-    </Grid>
-        </Border>
+    </Border>
 </Window>
