@@ -50,6 +50,7 @@
                                         <Grid>
                                             <Grid.ContextMenu>
                                                 <ContextMenu BorderThickness="0" Padding="0" Background="Transparent">
+                                                    <MenuItem Tag="{Binding}" Header="{StaticResource ADD_RESOURCES_FROM_MOD_PACK}" Click="AddModPackReference_Click"/>
                                                     <MenuItem Tag="{Binding}" Header="{StaticResource EDIT_MOD_PACK}" Click="RenameMod_Click"/>
                                                     <MenuItem Tag="{Binding}" Header="{StaticResource MOVE_UP_MOD_PACK}" Click="MoveUpMod_Click"/>
                                                     <MenuItem Tag="{Binding}" Header="{StaticResource MOVE_DOWN_MOD_PACK}" Click="MoveDownMod_Click"/>

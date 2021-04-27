@@ -80,6 +80,16 @@ namespace DEModLauncher_GUI.ViewModel {
             p.Start();
             return p.StandardOutput;
         }
+        public void AddResourcesReference(DEModPack modPack) {
+            foreach (var item in modPack.Resources) {
+                try {
+                    AddResource(item.Path);
+                }
+                catch {
+                    continue;
+                }
+            }
+        }
         public void MoveUpResource(DEModResource resourcePath) {
             int currentIndex = _resources.IndexOf(resourcePath);
             if (currentIndex <= 0) {
