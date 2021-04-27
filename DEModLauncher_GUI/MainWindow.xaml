@@ -50,7 +50,6 @@
                                         <Grid>
                                             <Grid.ContextMenu>
                                                 <ContextMenu BorderThickness="0" Padding="0" Background="Transparent">
-                                                    <MenuItem Tag="{Binding}" Header="{StaticResource ADD_RESOURCES_FROM_MOD_PACK}" Click="AddModPackReference_Click"/>
                                                     <MenuItem Tag="{Binding}" Header="{StaticResource EDIT_MOD_PACK}" Click="RenameMod_Click"/>
                                                     <MenuItem Tag="{Binding}" Header="{StaticResource MOVE_UP_MOD_PACK}" Click="MoveUpMod_Click"/>
                                                     <MenuItem Tag="{Binding}" Header="{StaticResource MOVE_DOWN_MOD_PACK}" Click="MoveDownMod_Click"/>
@@ -76,10 +75,10 @@
                         </ScrollViewer>
                     </Grid>
                     <Grid Grid.Row="2">
-                        <Button Grid.Column="1" Content="+" ToolTip="{StaticResource ADD_MOD_PACK_TOOLTIP}" 
+                        <Button ToolTip="{StaticResource ADD_MOD_PACK_TOOLTIP}" 
                                 HorizontalAlignment="Left" VerticalAlignment="Bottom"
                                 Style="{StaticResource GThinButton}"
-                                Click="AddMod_Click"/>
+                                Click="AddMod_Click" MouseDoubleClick="AddModPackReference_Click"/>
                     </Grid>
                 </Grid>
                 <Grid Grid.Column="1">
@@ -150,10 +149,56 @@
                         </ScrollViewer>
                     </Grid>
                     <Grid Grid.Row="1">
-                        <Button Content="+" ToolTip="{StaticResource ADD_MOD_RESOURCE_TOOLTIP}"
-                                VerticalAlignment="Bottom" HorizontalAlignment="Left"
-                                Style="{StaticResource GThinButton}"
-                                Click="AddResource_Click"/>
+                        <StackPanel VerticalAlignment="Bottom" HorizontalAlignment="Left" Width="30" Height="30">
+                            <StackPanel.Triggers>
+                                <EventTrigger RoutedEvent="Mouse.MouseEnter">
+                                    <EventTrigger.Actions>
+                                        <BeginStoryboard>
+                                            <Storyboard Storyboard.TargetProperty="Width">
+                                                <DoubleAnimation AccelerationRatio="0.2"
+                                                                 DecelerationRatio="0.8"
+                                                                 Duration="0:0:0.1"
+                                                                 To="125"/>
+                                            </Storyboard>
+                                        </BeginStoryboard>
+                                        <BeginStoryboard>
+                                            <Storyboard Storyboard.TargetProperty="Height">
+                                                <DoubleAnimation AccelerationRatio="0.2"
+                                                                 DecelerationRatio="0.8"
+                                                                 Duration="0:0:0.1"
+                                                                 To="60"/>
+                                            </Storyboard>
+                                        </BeginStoryboard>
+                                    </EventTrigger.Actions>
+                                </EventTrigger>
+                                <EventTrigger RoutedEvent="Mouse.MouseLeave">
+                                    <EventTrigger.Actions>
+                                        <BeginStoryboard>
+                                            <Storyboard Storyboard.TargetProperty="Width">
+                                                <DoubleAnimation AccelerationRatio="0.2"
+                                                                 DecelerationRatio="0.8"
+                                                                 Duration="0:0:0.1"/>
+                                            </Storyboard>
+                                        </BeginStoryboard>
+                                        <BeginStoryboard>
+                                            <Storyboard Storyboard.TargetProperty="Height">
+                                                <DoubleAnimation AccelerationRatio="0.2"
+                                                                 DecelerationRatio="0.8"
+                                                                 Duration="0:0:0.1"/>
+                                            </Storyboard>
+                                        </BeginStoryboard>
+                                    </EventTrigger.Actions>
+                                </EventTrigger>
+                            </StackPanel.Triggers>
+                            <Button ToolTip="{StaticResource ADD_MOD_RESOURCE_TOOLTIP}"
+                                    Click="AddResource_Click" Style="{StaticResource GThinButtonStatic}"
+                                    Width="Auto">
+                            </Button>
+                            <Button ToolTip="{StaticResource ADD_RESOURCES_FROM_MOD_PACK}"
+                                    Click="AddModPackReference_Click" Style="{StaticResource GThinButtonStatic}"
+                                    Width="Auto">
+                            </Button>
+                        </StackPanel>
                     </Grid>
                 </Grid>
             </Grid>
@@ -241,8 +286,8 @@
                 </Grid.Style>
                 <ScrollViewer x:Name="StandardOutPutHandlerArea">
                     <TextBox x:Name="StandardOutPutHandler" Foreground="{StaticResource TextColor}" Background="Black" Opacity="0.85"
-                         BorderThickness="0" FontSize="12" Padding="50,30" IsReadOnly="True" 
-                         MouseLeftButtonDown="Window_Move"/>
+                             BorderThickness="0" FontSize="12" Padding="50,30" IsReadOnly="True" 
+                             MouseLeftButtonDown="Window_Move"/>
                 </ScrollViewer>
             </Grid>
         </Grid>
