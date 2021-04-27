@@ -157,7 +157,7 @@
                                             <Storyboard Storyboard.TargetProperty="Width">
                                                 <DoubleAnimation AccelerationRatio="0.2"
                                                                  DecelerationRatio="0.8"
-                                                                 Duration="0:0:0.1"
+                                                                 Duration="0:0:0.05"
                                                                  To="125"/>
                                             </Storyboard>
                                         </BeginStoryboard>
@@ -166,6 +166,7 @@
                                                 <DoubleAnimation AccelerationRatio="0.2"
                                                                  DecelerationRatio="0.8"
                                                                  Duration="0:0:0.1"
+                                                                 BeginTime="0:0:0.1"
                                                                  To="60"/>
                                             </Storyboard>
                                         </BeginStoryboard>
