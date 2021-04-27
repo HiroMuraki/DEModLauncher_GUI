@@ -228,12 +228,34 @@ namespace DEModLauncher_GUI {
                 ofd.Multiselect = true;
                 if (ofd.ShowDialog() == System.Windows.Forms.DialogResult.OK) {
                     foreach (var fileName in ofd.FileNames) {
-                        _dEModMananger.CurrentMod.AddResource(fileName);
+                        try {
+                            _dEModMananger.CurrentMod.AddResource(fileName);
+                        }
+                        catch (Exception exp) {
+                            MessageBox.Show(exp.Message, "添加模组文件错误", MessageBoxButton.OK, MessageBoxImage.Warning);
+                        }
                     }
                 }
             }
             catch (Exception exp) {
                 MessageBox.Show(exp.Message, "添加模组文件错误", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+        private void AddModPackReference_Click(object sender, RoutedEventArgs e) {
+            try {
+                DEModPack current = GetDEModPackFromControl(sender);
+                var allowedModPack = from i in _dEModMananger.DEModPacks where i != current select i;
+                View.DEModPackSelectWindow selector = new View.DEModPackSelectWindow(allowedModPack) {
+                    Owner = this
+                };
+                if (selector.ShowDialog() == true) {
+                    foreach (var selectedMod in selector.SelectedModPacks) {
+                        current.AddResourcesReference(selectedMod);
+                    }
+                }
+            }
+            catch (Exception exp) {
+                MessageBox.Show($"添加时发生错误，原因：{exp.Message}", "错误", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
         private void DeleteResource_Click(object sender, RoutedEventArgs e) {
@@ -267,5 +289,6 @@ namespace DEModLauncher_GUI {
         private static DEModPack GetDEModPackFromControl(object sender) {
             return (sender as FrameworkElement).Tag as DEModPack;
         }
+
     }
 }

@@ -1,0 +1,60 @@
+﻿<Window x:Class="DEModLauncher_GUI.View.DEModPackSelectWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:DEModLauncher_GUI.View"
+        xmlns:ViewModel="clr-namespace:DEModLauncher_GUI.ViewModel"
+        xmlns:View="clr-namespace:DEModLauncher_GUI.View"
+        mc:Ignorable="d" x:Name="Self"
+        DataContext="{Binding ElementName=Self}"
+        WindowStartupLocation="CenterOwner" ResizeMode="NoResize"
+        Title="DEModPackSelectWindow" Height="400" Width="350">
+    <WindowChrome.WindowChrome>
+        <WindowChrome UseAeroCaptionButtons="False" CaptionHeight="0"/>
+    </WindowChrome.WindowChrome>
+        <Border BorderBrush="{StaticResource BorderColor}" BorderThickness="1">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="35"/>
+            <RowDefinition/>
+            <RowDefinition Height="35"/>
+        </Grid.RowDefinitions>
+            
+        <Grid Grid.Row="0">
+            <Border Background="{StaticResource AccentColor}" MouseLeftButtonDown="Window_Move"/>
+            <Label Content="当前可选模组配置" FontSize="14" FontWeight="Bold" Foreground="{StaticResource TextColor}"
+                   VerticalContentAlignment="Center" HorizontalContentAlignment="Center"
+                   IsHitTestVisible="False"/>
+            <Button Grid.Column="1" Content="&#x2573;" Width="35" FontSize="18"
+                    Style="{StaticResource GButton}" BorderThickness="0" HorizontalAlignment="Right"
+                    Click="Window_Close"/>
+        </Grid>
+        <Grid Grid.Row="1">
+            <ScrollViewer>
+                <ItemsControl ItemsSource="{Binding ModPackSelectors}">
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate DataType="{x:Type ViewModel:DEModPackSelector}">
+                            <Grid>
+                                <ToggleButton Content="{Binding DEModPack.PackName}" ToolTip="{Binding Description}" Tag="{Binding}"
+                                              IsChecked="{Binding IsSelected}" Style="{StaticResource GToggleButton2}"/>
+                            </Grid>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <StackPanel>
+
+                            </StackPanel>
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                </ItemsControl>
+            </ScrollViewer>
+        </Grid>
+        <Grid Grid.Row="2">
+            <Button Content="添加" FontSize="18" Style="{StaticResource GButton}"
+                    Click="Confirm_Click" BorderThickness="0"/>
+        </Grid>
+    </Grid>
+        </Border>
+</Window>
