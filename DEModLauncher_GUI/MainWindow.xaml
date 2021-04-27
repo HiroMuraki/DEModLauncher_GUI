@@ -75,10 +75,10 @@
                         </ScrollViewer>
                     </Grid>
                     <Grid Grid.Row="2">
-                        <Button Grid.Column="1" Content="+" FontSize="14" Padding="0" ToolTip="{StaticResource ADD_MOD_PACK_TOOLTIP}" 
-                            Width="25" Height="25" HorizontalAlignment="Left" VerticalAlignment="Bottom"
-                            BorderThickness="0,1,1,0" Style="{StaticResource GButton}"
-                            Click="AddMod_Click"/>
+                        <Button Grid.Column="1" Content="+" ToolTip="{StaticResource ADD_MOD_PACK_TOOLTIP}" 
+                                HorizontalAlignment="Left" VerticalAlignment="Bottom"
+                                Style="{StaticResource GThinButton}"
+                                Click="AddMod_Click"/>
                     </Grid>
                 </Grid>
                 <Grid Grid.Column="1">
@@ -113,7 +113,7 @@
                         </Grid>
                     </Grid>
                     <Grid Grid.Row="1">
-                        <ScrollViewer VerticalScrollBarVisibility="Hidden">
+                        <ScrollViewer VerticalScrollBarVisibility="Hidden" MouseDoubleClick="AddResource_Click">
                             <ScrollViewer.ContextMenu>
                                 <ContextMenu BorderThickness="0" Padding="0" Background="Transparent">
                                     <MenuItem Tag="{Binding CurrentMod}" Header="{StaticResource ADD_MOD_RESOURCE_TOOLTIP}" Click="AddResource_Click"/>
@@ -134,7 +134,7 @@
                                                 </ContextMenu>
                                             </Grid.ContextMenu>
                                             <ToggleButton Content="{Binding Path}" ToolTip="{Binding Path}" Tag="{Binding}" IsChecked="{Binding Status,Converter={StaticResource ResourceStatusToBoolean}}"
-                                                          MouseDoubleClick="OpenResourceFile_Click" Style="{StaticResource GToggleButton}"/>
+                                                          Style="{StaticResource GToggleButton}"/>
                                         </Grid>
                                     </DataTemplate>
                                 </ItemsControl.ItemTemplate>
@@ -149,10 +149,10 @@
                         </ScrollViewer>
                     </Grid>
                     <Grid Grid.Row="1">
-                        <Button Content="+" Height="25" Width="25" Padding="0" 
-                            VerticalAlignment="Bottom" HorizontalAlignment="Left"
-                            BorderThickness="0,1,1,0" Style="{StaticResource GButton}"
-                            FontSize="14" ToolTip="{StaticResource ADD_MOD_RESOURCE_TOOLTIP}" Click="AddResource_Click"/>
+                        <Button Content="+" ToolTip="{StaticResource ADD_MOD_RESOURCE_TOOLTIP}"
+                                VerticalAlignment="Bottom" HorizontalAlignment="Left"
+                                Style="{StaticResource GThinButton}"
+                                Click="AddResource_Click"/>
                     </Grid>
                 </Grid>
             </Grid>
