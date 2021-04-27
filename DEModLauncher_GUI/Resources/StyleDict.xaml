@@ -60,16 +60,17 @@
         <Setter Property="Height" Value="30" />
         <Setter Property="BorderThickness" Value="0,1,1,0" />
         <Setter Property="Padding" Value="0" />
-        <Setter Property="FontSize" Value="18" />
+        <Setter Property="FontSize" Value="12" />
+        <Setter Property="Content" Value="{Binding RelativeSource={RelativeSource Self},Path=ToolTip}" />
         <Style.Triggers>
             <EventTrigger RoutedEvent="Mouse.MouseEnter">
                 <EventTrigger.Actions>
                     <BeginStoryboard>
                         <Storyboard Storyboard.TargetProperty="Width">
                             <DoubleAnimation AccelerationRatio="0.2"
-                                                                 DecelerationRatio="0.8"
-                                                                 Duration="0:0:0.1"
-                                                                 By="50"/>
+                                             DecelerationRatio="0.8"
+                                             Duration="0:0:0.1"
+                                             By="60"/>
                         </Storyboard>
                     </BeginStoryboard>
                 </EventTrigger.Actions>
@@ -79,12 +80,30 @@
                     <BeginStoryboard>
                         <Storyboard Storyboard.TargetProperty="Width">
                             <DoubleAnimation AccelerationRatio="0.2"
-                                                                 DecelerationRatio="0.8"
-                                                                 Duration="0:0:0.1"/>
+                                             DecelerationRatio="0.8"
+                                             Duration="0:0:0.1"/>
                         </Storyboard>
                     </BeginStoryboard>
                 </EventTrigger.Actions>
             </EventTrigger>
+            <Trigger Property="ActualWidth" Value="30">
+                <Setter Property="Content" Value="+" />
+                <Setter Property="FontSize" Value="18" />
+            </Trigger>
+        </Style.Triggers>
+    </Style>
+    <Style x:Key="GThinButtonStatic" TargetType="Button" BasedOn="{StaticResource GButton}">
+        <Setter Property="Width" Value="30" />
+        <Setter Property="Height" Value="30" />
+        <Setter Property="BorderThickness" Value="0,1,1,0" />
+        <Setter Property="Padding" Value="0" />
+        <Setter Property="FontSize" Value="12" />
+        <Setter Property="Content" Value="{Binding RelativeSource={RelativeSource Self},Path=ToolTip}" />
+        <Style.Triggers>
+            <Trigger Property="ActualWidth" Value="30">
+                <Setter Property="Content" Value="+" />
+                <Setter Property="FontSize" Value="18" />
+            </Trigger>
         </Style.Triggers>
     </Style>
     <Style x:Key="GRadioButton" TargetType="RadioButton">

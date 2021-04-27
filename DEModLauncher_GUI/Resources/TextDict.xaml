@@ -34,7 +34,7 @@
     <!--添加模组配置ToolTip-->
     <Sys:String x:Key="ADD_MOD_PACK_TOOLTIP">添加模组配置</Sys:String>
     <!--从其他模组配置中添加模组包-->
-    <Sys:String x:Key="ADD_RESOURCES_FROM_MOD_PACK">添加现有模组配置</Sys:String>
+    <Sys:String x:Key="ADD_RESOURCES_FROM_MOD_PACK">添加自现有模组配置</Sys:String>
     <!--编辑模组配置-->
     <Sys:String x:Key="EDIT_MOD_PACK">编辑</Sys:String>
     <!--向上移动模组配置-->
