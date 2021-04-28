@@ -234,7 +234,7 @@ namespace DEModLauncher_GUI {
                             _dEModMananger.CurrentMod.AddResource(fileName);
                         }
                         catch (Exception exp) {
-                            MessageBox.Show($"模组文件：{fileName}添加错误\n原因{exp.Message}", "添加模组文件错误", 
+                            MessageBox.Show($"模组文件：{fileName}添加错误\n\n原因：{exp.Message}", "添加模组文件错误", 
                                             MessageBoxButton.OK, MessageBoxImage.Warning);
                         }
                     }
@@ -252,7 +252,7 @@ namespace DEModLauncher_GUI {
                         _dEModMananger.CurrentMod.AddResource(fileName);
                     }
                     catch (Exception exp) {
-                        MessageBox.Show($"模组文件：{fileName}添加错误\n原因{exp.Message}", "错误", 
+                        MessageBox.Show($"模组文件：{fileName}添加错误\n\n原因{exp.Message}", "错误", 
                                           MessageBoxButton.OK, MessageBoxImage.Warning);
                     }
                 }
