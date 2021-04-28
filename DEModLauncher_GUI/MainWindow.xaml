@@ -44,34 +44,36 @@
                                     <MenuItem Tag="{Binding}" Header="{StaticResource ADD_MOD_PACK_TOOLTIP}" Click="AddMod_Click"/>
                                 </ContextMenu>
                             </ScrollViewer.ContextMenu>
-                            <ItemsControl ItemsSource="{Binding DEModPacks}">
-                                <ItemsControl.ItemTemplate>
-                                    <DataTemplate DataType="{x:Type ViewModel:DEModPack}">
-                                        <Grid>
-                                            <Grid.ContextMenu>
-                                                <ContextMenu BorderThickness="0" Padding="0" Background="Transparent">
-                                                    <MenuItem Tag="{Binding}" Header="{StaticResource EDIT_MOD_PACK}" Click="RenameMod_Click"/>
-                                                    <MenuItem Tag="{Binding}" Header="{StaticResource MOVE_UP_MOD_PACK}" Click="MoveUpMod_Click"/>
-                                                    <MenuItem Tag="{Binding}" Header="{StaticResource MOVE_DOWN_MOD_PACK}" Click="MoveDownMod_Click"/>
-                                                    <MenuItem Tag="{Binding}" Header="{StaticResource REMOVE_MOD_PACK}" Click="DeleteMod_Click"/>
-                                                    <MenuItem Tag="{Binding}" Header="{StaticResource DUPLICATE_MOD_PACK}" Click="DuplicateMod_Click"/>
-                                                    <MenuItem Tag="{Binding}" Header="{StaticResource CHECK_MOD_PACK_CONFLICT}" Click="CheckConflict_Click"/>
-                                                </ContextMenu>
-                                            </Grid.ContextMenu>
-                                            <RadioButton Content="{Binding PackName}" ToolTip="{Binding Description}" Tag="{Binding}"
-                                                         Style="{StaticResource GRadioButton}" GroupName="PackNameSelected"
+                            <Grid Margin="5,0">
+                                <ItemsControl ItemsSource="{Binding DEModPacks}">
+                                    <ItemsControl.ItemTemplate>
+                                        <DataTemplate DataType="{x:Type ViewModel:DEModPack}">
+                                            <Grid>
+                                                <Grid.ContextMenu>
+                                                    <ContextMenu BorderThickness="0" Padding="0" Background="Transparent">
+                                                        <MenuItem Tag="{Binding}" Header="{StaticResource EDIT_MOD_PACK}" Click="RenameMod_Click"/>
+                                                        <MenuItem Tag="{Binding}" Header="{StaticResource MOVE_UP_MOD_PACK}" Click="MoveUpMod_Click"/>
+                                                        <MenuItem Tag="{Binding}" Header="{StaticResource MOVE_DOWN_MOD_PACK}" Click="MoveDownMod_Click"/>
+                                                        <MenuItem Tag="{Binding}" Header="{StaticResource REMOVE_MOD_PACK}" Click="DeleteMod_Click"/>
+                                                        <MenuItem Tag="{Binding}" Header="{StaticResource DUPLICATE_MOD_PACK}" Click="DuplicateMod_Click"/>
+                                                        <MenuItem Tag="{Binding}" Header="{StaticResource CHECK_MOD_PACK_CONFLICT}" Click="CheckConflict_Click"/>
+                                                    </ContextMenu>
+                                                </Grid.ContextMenu>
+                                                <RadioButton Content="{Binding PackName}" ToolTip="{Binding Description}" Tag="{Binding}"
+                                                         Style="{StaticResource GModPackButton}" GroupName="PackNameSelected"
                                                          Click="SelectMod_Click" MouseDoubleClick="RenameMod_Click"/>
-                                        </Grid>
-                                    </DataTemplate>
-                                </ItemsControl.ItemTemplate>
-                                <ItemsControl.ItemsPanel>
-                                    <ItemsPanelTemplate>
-                                        <StackPanel>
+                                            </Grid>
+                                        </DataTemplate>
+                                    </ItemsControl.ItemTemplate>
+                                    <ItemsControl.ItemsPanel>
+                                        <ItemsPanelTemplate>
+                                            <StackPanel>
 
-                                        </StackPanel>
-                                    </ItemsPanelTemplate>
-                                </ItemsControl.ItemsPanel>
-                            </ItemsControl>
+                                            </StackPanel>
+                                        </ItemsPanelTemplate>
+                                    </ItemsControl.ItemsPanel>
+                                </ItemsControl>
+                            </Grid>
                         </ScrollViewer>
                     </Grid>
                     <Grid Grid.Row="2">
@@ -113,7 +115,7 @@
                         </Grid>
                     </Grid>
                     <Grid Grid.Row="1">
-                        <ScrollViewer VerticalScrollBarVisibility="Hidden" MouseDoubleClick="AddResource_Click">
+                        <ScrollViewer VerticalScrollBarVisibility="Hidden">
                             <ScrollViewer.ContextMenu>
                                 <ContextMenu BorderThickness="0" Padding="0" Background="Transparent">
                                     <MenuItem Tag="{Binding CurrentMod}" Header="{StaticResource ADD_MOD_RESOURCE_TOOLTIP}" Click="AddResource_Click"/>
@@ -121,7 +123,7 @@
                                     <MenuItem Tag="{Binding CurrentMod}" Header="{StaticResource CHECK_MOD_PACK_CONFLICT}" Click="CheckConflict_Click"/>
                                 </ContextMenu>
                             </ScrollViewer.ContextMenu>
-                            <ItemsControl ItemsSource="{Binding CurrentMod.Resources}">
+                            <ItemsControl ItemsSource="{Binding CurrentMod.Resources}" Margin="8">
                                 <ItemsControl.ItemTemplate>
                                     <DataTemplate DataType="{x:Type ViewModel:DEModResource}">
                                         <Grid>
@@ -134,7 +136,7 @@
                                                 </ContextMenu>
                                             </Grid.ContextMenu>
                                             <ToggleButton Content="{Binding Path}" ToolTip="{Binding Path}" Tag="{Binding}" IsChecked="{Binding Status,Converter={StaticResource ResourceStatusToBoolean}}"
-                                                          Style="{StaticResource GToggleButton}"/>
+                                                          Style="{StaticResource GResourceItemButton}"/>
                                         </Grid>
                                     </DataTemplate>
                                 </ItemsControl.ItemTemplate>
@@ -165,8 +167,8 @@
                                             <Storyboard Storyboard.TargetProperty="Height">
                                                 <DoubleAnimation AccelerationRatio="0.2"
                                                                  DecelerationRatio="0.8"
-                                                                 Duration="0:0:0.1"
-                                                                 BeginTime="0:0:0.1"
+                                                                 Duration="0:0:0.05"
+                                                                 BeginTime="0:0:0.05"
                                                                  To="60"/>
                                             </Storyboard>
                                         </BeginStoryboard>
@@ -178,20 +180,20 @@
                                             <Storyboard Storyboard.TargetProperty="Width">
                                                 <DoubleAnimation AccelerationRatio="0.2"
                                                                  DecelerationRatio="0.8"
-                                                                 Duration="0:0:0.1"/>
+                                                                 Duration="0:0:0.05"/>
                                             </Storyboard>
                                         </BeginStoryboard>
                                         <BeginStoryboard>
                                             <Storyboard Storyboard.TargetProperty="Height">
                                                 <DoubleAnimation AccelerationRatio="0.2"
                                                                  DecelerationRatio="0.8"
-                                                                 Duration="0:0:0.1"/>
+                                                                 Duration="0:0:0.05"/>
                                             </Storyboard>
                                         </BeginStoryboard>
                                     </EventTrigger.Actions>
                                 </EventTrigger>
                             </StackPanel.Triggers>
-                            <Button ToolTip="{StaticResource ADD_RESOURCES_FROM_MOD_PACK}" Tag="{Binding CurrentMod}"
+                            <Button ToolTip="{StaticResource ADD_MOD_RESOURCES_FROM_MOD_PACK_TOOLTIP}" Tag="{Binding CurrentMod}"
                                     Click="AddModPackReference_Click" Style="{StaticResource GThinButtonStatic}"
                                     Width="Auto">
                             </Button>
@@ -286,7 +288,7 @@
                     </Style>
                 </Grid.Style>
                 <ScrollViewer x:Name="StandardOutPutHandlerArea">
-                    <TextBox x:Name="StandardOutPutHandler" Foreground="{StaticResource TextColor}" Background="Black" Opacity="0.85"
+                    <TextBox Text="{Binding ConsoleStandardOutput,Mode=OneWay}" Foreground="{StaticResource TextColor}" Background="Black" Opacity="0.85"
                              BorderThickness="0" FontSize="12" Padding="50,30" IsReadOnly="True" 
                              MouseLeftButtonDown="Window_Move"/>
                 </ScrollViewer>
