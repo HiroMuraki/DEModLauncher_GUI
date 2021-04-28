@@ -12,7 +12,7 @@ namespace DEModLauncher_GUI.Model {
         [DataMember]
         public string GameMainExecutor;
         [DataMember]
-        public string ModLoadder;
+        public string ModLoader;
         [DataMember]
         public string GameDirectory;
         [DataMember]
