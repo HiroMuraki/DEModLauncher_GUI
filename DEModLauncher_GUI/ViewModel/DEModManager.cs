@@ -20,7 +20,7 @@ namespace DEModLauncher_GUI.ViewModel {
         private static readonly DataContractJsonSerializer _serializer = new DataContractJsonSerializer(typeof(Model.DEModManager));
         private static readonly string _windowsExplorerExecutor = "explorer.exe";
         private string _gameMainExecutor = "DOOMEternalx64vk.exe";
-        private string _modLoadder = "EternalModInjector.bat";
+        private string _modLoader = "EternalModInjector.bat";
         private string _gameDirectory;
         private bool _isLaunching;
         private DEModPack _currentMod;
@@ -101,7 +101,7 @@ namespace DEModLauncher_GUI.ViewModel {
                 throw new InvalidOperationException("当前未选择有效模组");
             }
             _currentMod.GameDirectroy = _gameDirectory;
-            return _currentMod.Launch(_modLoadder);
+            return _currentMod.Launch(_modLoader);
         }
         public void LaunchDirectly() {
             Process p = new Process();
@@ -188,7 +188,7 @@ namespace DEModLauncher_GUI.ViewModel {
         public void SaveToFile(string fileName) {
             Model.DEModManager dm = new Model.DEModManager();
             dm.GameDirectory = _gameDirectory;
-            dm.ModLoadder = _modLoadder;
+            dm.ModLoadder = _modLoader;
             dm.GameMainExecutor = _gameMainExecutor;
             dm.CurrentMod = _currentMod?.PackName;
             dm.ModPacks = new List<Model.DEModPack>();
@@ -218,7 +218,7 @@ namespace DEModLauncher_GUI.ViewModel {
             CurrentMod = null;
             GameDirectory = dm.GameDirectory;
             if (!string.IsNullOrEmpty(dm.ModLoadder)) {
-                _modLoadder = dm.ModLoadder;
+                _modLoader = dm.ModLoadder;
             }
             if (!string.IsNullOrEmpty(dm.GameMainExecutor)) {
                 _gameMainExecutor = dm.GameMainExecutor;
