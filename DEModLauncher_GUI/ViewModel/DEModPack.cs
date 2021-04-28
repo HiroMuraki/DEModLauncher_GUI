@@ -15,7 +15,6 @@ namespace DEModLauncher_GUI.ViewModel {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
-        private static readonly string _modLoadder = "EternalModInjector.bat";
         private string _packName;
         private string _description;
         private readonly Resources _resources;
@@ -82,11 +81,11 @@ namespace DEModLauncher_GUI.ViewModel {
             _resources = new Resources();
         }
 
-        public StreamReader Launch() {
+        public StreamReader Launch(string modLoadder) {
             LaunchCheck();
             ClearResources();
             SetResources();
-            Process p = GenerateProcess();
+            Process p = GenerateProcess(modLoadder);
             p.Start();
             return p.StandardOutput;
         }
@@ -218,12 +217,12 @@ namespace DEModLauncher_GUI.ViewModel {
                 File.Copy(sourceFile, destFile);
             }
         }
-        private Process GenerateProcess() {
+        private Process GenerateProcess(string modLoadder) {
             Process p = new Process();
             p.StartInfo.UseShellExecute = false;
             p.StartInfo.CreateNoWindow = true;
             p.StartInfo.RedirectStandardOutput = true;
-            p.StartInfo.FileName = $@"{_gameDirectory}\{_modLoadder}";
+            p.StartInfo.FileName = $@"{_gameDirectory}\{modLoadder}";
             return p;
         }
     }

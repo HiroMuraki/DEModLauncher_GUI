@@ -10,6 +10,10 @@ namespace DEModLauncher_GUI.Model {
     [DataContract]
     public class DEModManager {
         [DataMember]
+        public string GameMainExecutor;
+        [DataMember]
+        public string ModLoadder;
+        [DataMember]
         public string GameDirectory;
         [DataMember]
         public string CurrentMod;
