@@ -33,8 +33,6 @@ namespace DEModLauncher_GUI.ViewModel.ValueConverter {
                         return ResourceStatus.Enabled;
                     case false:
                         return ResourceStatus.Disabled;
-                    default:
-                        return ResourceStatus.Enabled;
                 }
             }
             catch {

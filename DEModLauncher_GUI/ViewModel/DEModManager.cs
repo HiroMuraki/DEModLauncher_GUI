@@ -188,7 +188,7 @@ namespace DEModLauncher_GUI.ViewModel {
         public void SaveToFile(string fileName) {
             Model.DEModManager dm = new Model.DEModManager();
             dm.GameDirectory = _gameDirectory;
-            dm.ModLoadder = _modLoader;
+            dm.ModLoader = _modLoader;
             dm.GameMainExecutor = _gameMainExecutor;
             dm.CurrentMod = _currentMod?.PackName;
             dm.ModPacks = new List<Model.DEModPack>();
@@ -217,8 +217,8 @@ namespace DEModLauncher_GUI.ViewModel {
 
             CurrentMod = null;
             GameDirectory = dm.GameDirectory;
-            if (!string.IsNullOrEmpty(dm.ModLoadder)) {
-                _modLoader = dm.ModLoadder;
+            if (!string.IsNullOrEmpty(dm.ModLoader)) {
+                _modLoader = dm.ModLoader;
             }
             if (!string.IsNullOrEmpty(dm.GameMainExecutor)) {
                 _gameMainExecutor = dm.GameMainExecutor;
