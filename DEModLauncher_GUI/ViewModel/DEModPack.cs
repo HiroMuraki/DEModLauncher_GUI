@@ -20,6 +20,7 @@ namespace DEModLauncher_GUI.ViewModel {
         private string _description;
         private readonly Resources _resources;
         private string _gameDirectory;
+        private bool _isSelected;
 
         public string PackName {
             get {
@@ -42,6 +43,15 @@ namespace DEModLauncher_GUI.ViewModel {
         public Resources Resources {
             get {
                 return _resources;
+            }
+        }
+        public bool IsSelected {
+            get {
+                return _isSelected;
+            }
+            set {
+                _isSelected = value;
+                OnPropertyChanged(nameof(IsSelected));
             }
         }
 

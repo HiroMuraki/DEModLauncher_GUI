@@ -68,6 +68,9 @@ namespace DEModLauncher_GUI.ViewModel {
             }
             set {
                 _currentMod = value;
+                if (value != null) {
+                    value.IsSelected = true;
+                }
                 OnPropertyChanged(nameof(CurrentMod));
             }
         }
@@ -144,9 +147,7 @@ namespace DEModLauncher_GUI.ViewModel {
             dmp.Description = description;
             dmp.GameDirectroy = _gameDirectory;
             _dEModPacks.Add(dmp);
-            if (_currentMod == null) {
-                CurrentMod = dmp;
-            }
+            CurrentMod = dmp;
         }
         public void RenameMod(DEModPack targetModPack, string newName, string description) {
             if (targetModPack.PackName != newName) {
