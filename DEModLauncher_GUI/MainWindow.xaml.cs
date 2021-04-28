@@ -129,40 +129,42 @@ namespace DEModLauncher_GUI {
         #endregion
 
         #region 模组操作
-        private void SelectMod_Click(object sender, RoutedEventArgs e) {
-            DEModPack selectedMod = (sender as FrameworkElement).Tag as DEModPack;
+        private void SelectModPack_Click(object sender, RoutedEventArgs e) {
+            DEModPack selectedMod = GetDEModPackFromControl(sender);
             _dEModMananger.CurrentMod = selectedMod;
         }
-        private void MoveUpMod_Click(object sender, RoutedEventArgs e) {
+        private void MoveUpModPack_Click(object sender, RoutedEventArgs e) {
             _dEModMananger.MoveUpMod(GetDEModPackFromControl(sender));
         }
-        private void MoveDownMod_Click(object sender, RoutedEventArgs e) {
+        private void MoveDownModPack_Click(object sender, RoutedEventArgs e) {
             _dEModMananger.MoveDownMod(GetDEModPackFromControl(sender));
         }
-        private void DuplicateMod_Click(object sender, RoutedEventArgs e) {
+        private void DuplicateModPack_Click(object sender, RoutedEventArgs e) {
             _dEModMananger.DuplicateMod(GetDEModPackFromControl(sender));
         }
-        private void AddMod_Click(object sender, RoutedEventArgs e) {
+        private void AddModPack_Click(object sender, RoutedEventArgs e) {
             try {
                 View.TextInputWindow textInput = new View.TextInputWindow();
                 textInput.Owner = this;
                 if (textInput.ShowDialog() == true) {
                     _dEModMananger.AddMod(textInput.TextA, textInput.TextB);
+                    ModPackDisplayer.ScrollToBottom();
                 }
             }
             catch (Exception exp) {
                 MessageBox.Show(exp.Message, "添加模组配置错误", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
-        private void DeleteMod_Click(object sender, RoutedEventArgs e) {
+        private void DeleteModPack_Click(object sender, RoutedEventArgs e) {
             var dmp = GetDEModPackFromControl(sender);
-            var result = MessageBox.Show($"是否删除模组配置：{dmp.PackName}", "警告", MessageBoxButton.YesNo, MessageBoxImage.Warning);
+            var result = MessageBox.Show($"是否删除模组配置：{dmp.PackName}", "警告", 
+                                         MessageBoxButton.YesNo, MessageBoxImage.Warning);
             if (result != MessageBoxResult.Yes) {
                 return;
             }
             _dEModMananger.DeleteMod(dmp);
         }
-        private void RenameMod_Click(object sender, RoutedEventArgs e) {
+        private void EditModPack_Click(object sender, RoutedEventArgs e) {
             DEModPack modPack = GetDEModPackFromControl(sender);
             View.TextInputWindow textInput = new View.TextInputWindow();
             textInput.Owner = this;
@@ -289,6 +291,5 @@ namespace DEModLauncher_GUI {
         private static DEModPack GetDEModPackFromControl(object sender) {
             return (sender as FrameworkElement).Tag as DEModPack;
         }
-
     }
 }

@@ -38,10 +38,10 @@
                                MouseLeftButtonDown="Window_Move"/>
                     </Grid>
                     <Grid Grid.Row="2">
-                        <ScrollViewer VerticalScrollBarVisibility="Hidden">
+                        <ScrollViewer x:Name="ModPackDisplayer" VerticalScrollBarVisibility="Hidden">
                             <ScrollViewer.ContextMenu>
                                 <ContextMenu BorderThickness="0" Padding="0" Background="Transparent">
-                                    <MenuItem Tag="{Binding}" Header="{StaticResource ADD_MOD_PACK_TOOLTIP}" Click="AddMod_Click"/>
+                                    <MenuItem Tag="{Binding}" Header="{StaticResource ADD_MOD_PACK_TOOLTIP}" Click="AddModPack_Click"/>
                                 </ContextMenu>
                             </ScrollViewer.ContextMenu>
                             <Grid Margin="5,0">
@@ -51,17 +51,18 @@
                                             <Grid>
                                                 <Grid.ContextMenu>
                                                     <ContextMenu BorderThickness="0" Padding="0" Background="Transparent">
-                                                        <MenuItem Tag="{Binding}" Header="{StaticResource EDIT_MOD_PACK}" Click="RenameMod_Click"/>
-                                                        <MenuItem Tag="{Binding}" Header="{StaticResource MOVE_UP_MOD_PACK}" Click="MoveUpMod_Click"/>
-                                                        <MenuItem Tag="{Binding}" Header="{StaticResource MOVE_DOWN_MOD_PACK}" Click="MoveDownMod_Click"/>
-                                                        <MenuItem Tag="{Binding}" Header="{StaticResource REMOVE_MOD_PACK}" Click="DeleteMod_Click"/>
-                                                        <MenuItem Tag="{Binding}" Header="{StaticResource DUPLICATE_MOD_PACK}" Click="DuplicateMod_Click"/>
+                                                        <MenuItem Tag="{Binding}" Header="{StaticResource EDIT_MOD_PACK}" Click="EditModPack_Click"/>
+                                                        <MenuItem Tag="{Binding}" Header="{StaticResource MOVE_UP_MOD_PACK}" Click="MoveUpModPack_Click"/>
+                                                        <MenuItem Tag="{Binding}" Header="{StaticResource MOVE_DOWN_MOD_PACK}" Click="MoveDownModPack_Click"/>
+                                                        <MenuItem Tag="{Binding}" Header="{StaticResource REMOVE_MOD_PACK}" Click="DeleteModPack_Click"/>
+                                                        <MenuItem Tag="{Binding}" Header="{StaticResource DUPLICATE_MOD_PACK}" Click="DuplicateModPack_Click"/>
                                                         <MenuItem Tag="{Binding}" Header="{StaticResource CHECK_MOD_PACK_CONFLICT}" Click="CheckConflict_Click"/>
                                                     </ContextMenu>
                                                 </Grid.ContextMenu>
                                                 <RadioButton Content="{Binding PackName}" ToolTip="{Binding Description}" Tag="{Binding}"
-                                                         Style="{StaticResource GModPackButton}" GroupName="PackNameSelected"
-                                                         Click="SelectMod_Click" MouseDoubleClick="RenameMod_Click"/>
+                                                             IsChecked="{Binding IsSelected}"
+                                                             Style="{StaticResource GModPackButton}" GroupName="PackNameSelected"
+                                                             Click="SelectModPack_Click" MouseDoubleClick="EditModPack_Click"/>
                                             </Grid>
                                         </DataTemplate>
                                     </ItemsControl.ItemTemplate>
@@ -80,7 +81,7 @@
                         <Button ToolTip="{StaticResource ADD_MOD_PACK_TOOLTIP}" 
                                 HorizontalAlignment="Left" VerticalAlignment="Bottom"
                                 Style="{StaticResource GAddButton}"
-                                Click="AddMod_Click" MouseDoubleClick="AddModPackReference_Click"/>
+                                Click="AddModPack_Click" MouseDoubleClick="AddModPackReference_Click"/>
                     </Grid>
                 </Grid>
                 <Grid Grid.Column="1">
@@ -100,7 +101,15 @@
                                FontSize="14" FontWeight="Bold" BorderThickness="0" BorderBrush="{StaticResource BorderColor}"
                                VerticalContentAlignment="Center" HorizontalContentAlignment="Center" 
                                Background="{StaticResource AccentColor}" Foreground="{StaticResource TextColor}"
-                               MouseLeftButtonDown="Window_Move" MouseDoubleClick="RenameMod_Click"/>
+                               MouseLeftButtonDown="Window_Move" MouseDoubleClick="EditModPack_Click">
+                            <Label.ContextMenu>
+                                <ContextMenu BorderThickness="0" Padding="0" Background="Transparent">
+                                    <MenuItem Tag="{Binding CurrentMod}" Header="{StaticResource ADD_MOD_RESOURCE_TOOLTIP}" Click="AddResource_Click"/>
+                                    <MenuItem Tag="{Binding CurrentMod}" Header="{StaticResource EDIT_MOD_PACK}" Click="EditModPack_Click"/>
+                                    <MenuItem Tag="{Binding CurrentMod}" Header="{StaticResource CHECK_MOD_PACK_CONFLICT}" Click="CheckConflict_Click"/>
+                                </ContextMenu>
+                            </Label.ContextMenu>
+                        </Label>
                         <Grid HorizontalAlignment="Right" VerticalAlignment="Center" Width="80" Height="40">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition/>
@@ -119,7 +128,7 @@
                             <ScrollViewer.ContextMenu>
                                 <ContextMenu BorderThickness="0" Padding="0" Background="Transparent">
                                     <MenuItem Tag="{Binding CurrentMod}" Header="{StaticResource ADD_MOD_RESOURCE_TOOLTIP}" Click="AddResource_Click"/>
-                                    <MenuItem Tag="{Binding CurrentMod}" Header="{StaticResource EDIT_MOD_PACK}" Click="RenameMod_Click"/>
+                                    <MenuItem Tag="{Binding CurrentMod}" Header="{StaticResource EDIT_MOD_PACK}" Click="EditModPack_Click"/>
                                     <MenuItem Tag="{Binding CurrentMod}" Header="{StaticResource CHECK_MOD_PACK_CONFLICT}" Click="CheckConflict_Click"/>
                                 </ContextMenu>
                             </ScrollViewer.ContextMenu>
