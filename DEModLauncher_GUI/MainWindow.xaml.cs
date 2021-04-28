@@ -157,7 +157,7 @@ namespace DEModLauncher_GUI {
         }
         private void DeleteModPack_Click(object sender, RoutedEventArgs e) {
             var dmp = GetDEModPackFromControl(sender);
-            var result = MessageBox.Show($"是否删除模组配置：{dmp.PackName}", "警告", 
+            var result = MessageBox.Show($"是否删除模组配置：{dmp.PackName}", "警告",
                                          MessageBoxButton.YesNo, MessageBoxImage.Warning);
             if (result != MessageBoxResult.Yes) {
                 return;
@@ -234,15 +234,34 @@ namespace DEModLauncher_GUI {
                             _dEModMananger.CurrentMod.AddResource(fileName);
                         }
                         catch (Exception exp) {
-                            MessageBox.Show(exp.Message, "添加模组文件错误", MessageBoxButton.OK, MessageBoxImage.Warning);
+                            MessageBox.Show($"模组文件：{fileName}添加错误\n原因{exp.Message}", "添加模组文件错误", 
+                                            MessageBoxButton.OK, MessageBoxImage.Warning);
                         }
                     }
                 }
             }
             catch (Exception exp) {
-                MessageBox.Show(exp.Message, "添加模组文件错误", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show(exp.Message, "错误", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
+        private void AddFile_FileDrop(object sender, DragEventArgs e) {
+            try {
+                string[] fileList = e.Data.GetData(DataFormats.FileDrop) as string[];
+                foreach (var fileName in fileList) {
+                    try {
+                        _dEModMananger.CurrentMod.AddResource(fileName);
+                    }
+                    catch (Exception exp) {
+                        MessageBox.Show($"模组文件：{fileName}添加错误\n原因{exp.Message}", "错误", 
+                                          MessageBoxButton.OK, MessageBoxImage.Warning);
+                    }
+                }
+            }
+            catch (Exception exp) {
+                MessageBox.Show(exp.Message, "错误", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+
         private void AddModPackReference_Click(object sender, RoutedEventArgs e) {
             try {
                 DEModPack current = GetDEModPackFromControl(sender);
