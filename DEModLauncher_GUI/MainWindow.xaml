@@ -79,7 +79,7 @@
                     <Grid Grid.Row="2">
                         <Button ToolTip="{StaticResource ADD_MOD_PACK_TOOLTIP}" 
                                 HorizontalAlignment="Left" VerticalAlignment="Bottom"
-                                Style="{StaticResource GThinButton}"
+                                Style="{StaticResource GAddButton}"
                                 Click="AddMod_Click" MouseDoubleClick="AddModPackReference_Click"/>
                     </Grid>
                 </Grid>
@@ -107,10 +107,10 @@
                                 <ColumnDefinition/>
                             </Grid.ColumnDefinitions>
                             <Button Grid.Column="0" Content="━" FontSize="18"
-                                    Style="{StaticResource GButton}" BorderThickness="0"
+                                    Style="{StaticResource GButtonTitle}" BorderThickness="0"
                                     Click="Window_Minimum"/>
                             <Button Grid.Column="1" Content="&#x2573;" FontSize="18"
-                                    Style="{StaticResource GButton}" BorderThickness="0"
+                                    Style="{StaticResource GButtonTitle}" BorderThickness="0"
                                     Click="Window_Close"/>
                         </Grid>
                     </Grid>
@@ -194,11 +194,11 @@
                                 </EventTrigger>
                             </StackPanel.Triggers>
                             <Button ToolTip="{StaticResource ADD_MOD_RESOURCES_FROM_MOD_PACK_TOOLTIP}" Tag="{Binding CurrentMod}"
-                                    Click="AddModPackReference_Click" Style="{StaticResource GThinButtonStatic}"
+                                    Click="AddModPackReference_Click" Style="{StaticResource GAddButtonStatic}"
                                     Width="Auto">
                             </Button>
                             <Button ToolTip="{StaticResource ADD_MOD_RESOURCE_TOOLTIP}" Tag="{Binding CurrentMod}"
-                                    Click="AddResource_Click" Style="{StaticResource GThinButtonStatic}"
+                                    Click="AddResource_Click" Style="{StaticResource GAddButtonStatic}"
                                     Width="Auto">
                             </Button>
                         </StackPanel>

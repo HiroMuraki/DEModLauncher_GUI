@@ -4,6 +4,7 @@
     <SolidColorBrush x:Key="AccentColor">#ca3030</SolidColorBrush>
     <SolidColorBrush x:Key="MainColor">#222222</SolidColorBrush>
     <SolidColorBrush x:Key="BorderColor">#000000</SolidColorBrush>
+    <SolidColorBrush x:Key="ModPackItemColor">#2a2a2a</SolidColorBrush>
     <SolidColorBrush x:Key="ResourceItemColor">#2d2d2d</SolidColorBrush>
     <SolidColorBrush x:Key="ItemShadowColor">#000000</SolidColorBrush>
     <SolidColorBrush x:Key="TextColor">#f0f0f0</SolidColorBrush>

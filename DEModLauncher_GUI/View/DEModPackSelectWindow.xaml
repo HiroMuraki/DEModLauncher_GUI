@@ -26,7 +26,7 @@
                        VerticalContentAlignment="Center" HorizontalContentAlignment="Center"
                        IsHitTestVisible="False"/>
                 <Button Grid.Column="1" Content="&#x2573;" Width="35" FontSize="18"
-                        Style="{StaticResource GButton}" BorderThickness="0" HorizontalAlignment="Right"
+                        Style="{StaticResource GButtonTitle}" BorderThickness="0" HorizontalAlignment="Right"
                         Click="Window_Close"/>
             </Grid>
             <Grid Grid.Row="1">
