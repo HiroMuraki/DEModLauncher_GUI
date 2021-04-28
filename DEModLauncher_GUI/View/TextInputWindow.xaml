@@ -23,7 +23,7 @@
                        Background="{StaticResource AccentColor}" Foreground="White" FontSize="13"
                        BorderBrush="{StaticResource BorderColor}" BorderThickness="0,0,0,1"
                        MouseLeftButtonDown="Window_Move"/>
-                <Button Style="{StaticResource GButton}" Content="&#x2573;" HorizontalAlignment="Right"
+                <Button Style="{StaticResource GButtonTitle}" Content="&#x2573;" HorizontalAlignment="Right"
                         Width="30" BorderThickness="0" Click="Cancel_Click"/>
             </Grid>
             <TextBox Grid.Row="1" x:Name="_inputTextB" 
