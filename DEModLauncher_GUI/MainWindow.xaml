@@ -50,7 +50,7 @@
                                         <DataTemplate DataType="{x:Type ViewModel:DEModPack}">
                                             <Grid>
                                                 <Grid.ContextMenu>
-                                                    <ContextMenu BorderThickness="0" Padding="0" Background="Transparent">
+                                                    <ContextMenu>
                                                         <MenuItem Tag="{Binding}" Header="{StaticResource EDIT_MOD_PACK}" Click="EditModPack_Click"/>
                                                         <MenuItem Tag="{Binding}" Header="{StaticResource MOVE_UP_MOD_PACK}" Click="MoveUpModPack_Click"/>
                                                         <MenuItem Tag="{Binding}" Header="{StaticResource MOVE_DOWN_MOD_PACK}" Click="MoveDownModPack_Click"/>
@@ -103,7 +103,7 @@
                                Background="{StaticResource AccentColor}" Foreground="{StaticResource TextColor}"
                                MouseLeftButtonDown="Window_Move" MouseDoubleClick="EditModPack_Click">
                             <Label.ContextMenu>
-                                <ContextMenu BorderThickness="0" Padding="0" Background="Transparent">
+                                <ContextMenu>
                                     <MenuItem Tag="{Binding CurrentMod}" Header="{StaticResource ADD_MOD_RESOURCE_TOOLTIP}" Click="AddResource_Click"/>
                                     <MenuItem Tag="{Binding CurrentMod}" Header="{StaticResource EDIT_MOD_PACK}" Click="EditModPack_Click"/>
                                     <MenuItem Tag="{Binding CurrentMod}" Header="{StaticResource CHECK_MOD_PACK_CONFLICT}" Click="CheckConflict_Click"/>
@@ -126,7 +126,7 @@
                     <Grid Grid.Row="1">
                         <ScrollViewer VerticalScrollBarVisibility="Hidden">
                             <ScrollViewer.ContextMenu>
-                                <ContextMenu BorderThickness="0" Padding="0" Background="Transparent">
+                                <ContextMenu>
                                     <MenuItem Tag="{Binding CurrentMod}" Header="{StaticResource ADD_MOD_RESOURCE_TOOLTIP}" Click="AddResource_Click"/>
                                     <MenuItem Tag="{Binding CurrentMod}" Header="{StaticResource EDIT_MOD_PACK}" Click="EditModPack_Click"/>
                                     <MenuItem Tag="{Binding CurrentMod}" Header="{StaticResource CHECK_MOD_PACK_CONFLICT}" Click="CheckConflict_Click"/>
@@ -137,7 +137,7 @@
                                     <DataTemplate DataType="{x:Type ViewModel:DEModResource}">
                                         <Grid>
                                             <Grid.ContextMenu>
-                                                <ContextMenu BorderThickness="0" Padding="0" Background="Transparent">
+                                                <ContextMenu>
                                                     <MenuItem Tag="{Binding}" Header="{StaticResource VIEW_MOD_RESOURCE}" Click="OpenResourceFile_Click"/>
                                                     <MenuItem Tag="{Binding}" Header="{StaticResource MOVE_UP_MOD_RESOURCE}" Click="MoveUpResource_Click"/>
                                                     <MenuItem Tag="{Binding}" Header="{StaticResource MOVE_DOWN_MOD_RESOURCE}" Click="MoveDownResource_Click"/>
