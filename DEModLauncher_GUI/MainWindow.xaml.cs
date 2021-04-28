@@ -32,6 +32,7 @@ namespace DEModLauncher_GUI {
             }
         }
         private DEModManager _dEModMananger;
+
         public DEModManager DEModManager {
             get {
                 return _dEModMananger;
@@ -234,7 +235,7 @@ namespace DEModLauncher_GUI {
                             _dEModMananger.CurrentMod.AddResource(fileName);
                         }
                         catch (Exception exp) {
-                            MessageBox.Show($"模组文件：{fileName}添加错误\n\n原因：{exp.Message}", "添加模组文件错误", 
+                            MessageBox.Show($"无法添加模组文件：{fileName}\n\n原因：{exp.Message}", "添加模组文件错误", 
                                             MessageBoxButton.OK, MessageBoxImage.Warning);
                         }
                     }
@@ -252,7 +253,7 @@ namespace DEModLauncher_GUI {
                         _dEModMananger.CurrentMod.AddResource(fileName);
                     }
                     catch (Exception exp) {
-                        MessageBox.Show($"模组文件：{fileName}添加错误\n\n原因{exp.Message}", "错误", 
+                        MessageBox.Show($"无法添加模组文件：{fileName}\n\n原因{exp.Message}", "错误", 
                                           MessageBoxButton.OK, MessageBoxImage.Warning);
                     }
                 }
@@ -276,7 +277,7 @@ namespace DEModLauncher_GUI {
                 }
             }
             catch (Exception exp) {
-                MessageBox.Show($"添加时发生错误，原因：{exp.Message}", "错误", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show($"添加时模组文件时发生错误，原因：{exp.Message}", "错误", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
         private void DeleteResource_Click(object sender, RoutedEventArgs e) {
