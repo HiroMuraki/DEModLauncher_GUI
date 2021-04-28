@@ -115,16 +115,16 @@
                                 <ColumnDefinition/>
                                 <ColumnDefinition/>
                             </Grid.ColumnDefinitions>
-                            <Button Grid.Column="0" Content="━" FontSize="18"
-                                    Style="{StaticResource GButtonTitle}" BorderThickness="0"
+                            <Button Grid.Column="0" Content="━"
+                                    Style="{StaticResource GButtonTitle}"
                                     Click="Window_Minimum"/>
-                            <Button Grid.Column="1" Content="&#x2573;" FontSize="18"
-                                    Style="{StaticResource GButtonTitle}" BorderThickness="0"
+                            <Button Grid.Column="1" Content="&#x2573;"
+                                    Style="{StaticResource GButtonTitle}"
                                     Click="Window_Close"/>
                         </Grid>
                     </Grid>
                     <Grid Grid.Row="1">
-                        <ScrollViewer VerticalScrollBarVisibility="Hidden">
+                        <ScrollViewer VerticalScrollBarVisibility="Hidden" AllowDrop="True" DragDrop.Drop="AddFile_FileDrop">
                             <ScrollViewer.ContextMenu>
                                 <ContextMenu>
                                     <MenuItem Tag="{Binding CurrentMod}" Header="{StaticResource ADD_MOD_RESOURCE_TOOLTIP}" Click="AddResource_Click"/>
@@ -296,9 +296,20 @@
                         </Style.Triggers>
                     </Style>
                 </Grid.Style>
-                <ScrollViewer x:Name="StandardOutPutHandlerArea">
-                    <TextBox Text="{Binding ConsoleStandardOutput,Mode=OneWay}" Foreground="{StaticResource TextColor}" Background="Black" Opacity="0.85"
-                             BorderThickness="0" FontSize="12" Padding="50,30" IsReadOnly="True" 
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="30"/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+                <Grid Grid.Row="0">
+                    <Border Grid.Row="0" Background="{StaticResource AccentColor}" MouseLeftButtonDown="Window_Move"/>
+                    <Button Content="━" VerticalAlignment="Center" HorizontalAlignment="Right"
+                            Style="{StaticResource GButtonTitle}" Height="30" Width="30"
+                            Click="Window_Minimum"/>
+                </Grid>
+                <ScrollViewer Grid.Row="1" x:Name="StandardOutPutHandlerArea" Background="{StaticResource BorderColor}" Opacity="0.85">
+                    <TextBox Text="{Binding ConsoleStandardOutput,Mode=OneWay}" 
+                             Background="Transparent" Foreground="{StaticResource TextColor}"
+                             BorderThickness="0" FontSize="12" Margin="50,30" IsReadOnly="True" 
                              MouseLeftButtonDown="Window_Move"/>
                 </ScrollViewer>
             </Grid>

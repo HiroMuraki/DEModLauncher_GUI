@@ -82,7 +82,8 @@
         <Setter Property="Background" Value="Transparent" />
         <Setter Property="Foreground" Value="{StaticResource TextColor}" />
         <Setter Property="BorderBrush" Value="{StaticResource BorderColor}" />
-        <Setter Property="FontSize" Value="14" />
+        <Setter Property="BorderThickness" Value="0" />
+        <Setter Property="FontSize" Value="18" />
         <Setter Property="Padding" Value="0" />
         <Setter Property="Template">
             <Setter.Value>
