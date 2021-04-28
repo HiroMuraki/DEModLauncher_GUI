@@ -59,7 +59,7 @@ namespace DEModLauncher_GUI {
                 return;
             }
             _dEModMananger.IsLaunching = true;
-            StandardOutPutHandler.Text = string.Empty;
+            _dEModMananger.ConsoleStandardOutput = string.Empty;
             StreamReader reader;
             try {
                 reader = _dEModMananger.Launch();
@@ -77,7 +77,7 @@ namespace DEModLauncher_GUI {
                         sb.Append($"{reader.ReadLine()}\n");
                     }
                     Application.Current.Dispatcher.Invoke(() => {
-                        StandardOutPutHandler.Text = sb.ToString();
+                        _dEModMananger.ConsoleStandardOutput = sb.ToString();
                         StandardOutPutHandlerArea.ScrollToBottom();
                     });
                 }

@@ -23,6 +23,8 @@ namespace DEModLauncher_GUI.ViewModel {
         private bool _isLaunching;
         private DEModPack _currentMod;
         private readonly DEModPacks _dEModPacks;
+        private string _consoleStandardOutput;
+
         public string GameDirectory {
             get {
                 return _gameDirectory;
@@ -72,6 +74,15 @@ namespace DEModLauncher_GUI.ViewModel {
         public DEModPacks DEModPacks {
             get {
                 return _dEModPacks;
+            }
+        }
+        public string ConsoleStandardOutput {
+            get {
+                return _consoleStandardOutput;
+            }
+            set {
+                _consoleStandardOutput = value;
+                OnPropertyChanged(nameof(ConsoleStandardOutput));
             }
         }
 
@@ -232,27 +243,6 @@ namespace DEModLauncher_GUI.ViewModel {
             p.StartInfo.FileName = "explorer.exe";
             p.StartInfo.Arguments = $@"/select, {ModPacksDirectory}\{resourceName}";
             p.Start();
-        }
-
-        private void ClearResources() {
-            var fileList = Directory.GetFiles(ModsDirectory);
-            foreach (var file in fileList) {
-                string fileName = Path.GetDirectoryName(file);
-                string modBackup = $@"{ModPacksDirectory}\{fileName}";
-                if (!File.Exists(modBackup)) {
-                    File.Move(file, modBackup);
-                }
-                else {
-                    File.Delete(file);
-                }
-            }
-        }
-        private void SetResources() {
-            foreach (var resourceName in _currentMod.Resources) {
-                string sourceFile = $@"{ModPacksDirectory}\{resourceName}";
-                string destFile = $@"{ModsDirectory}\{resourceName}";
-                File.Copy(sourceFile, destFile);
-            }
         }
     }
 }

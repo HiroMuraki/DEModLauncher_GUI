@@ -31,12 +31,12 @@
             </Grid>
             <Grid Grid.Row="1">
                 <ScrollViewer>
-                    <ItemsControl ItemsSource="{Binding ModPackSelectors}">
+                    <ItemsControl ItemsSource="{Binding ModPackSelectors}" Margin="10,5">
                         <ItemsControl.ItemTemplate>
                             <DataTemplate DataType="{x:Type ViewModel:DEModPackSelector}">
                                 <Grid>
-                                    <ToggleButton Content="{Binding DEModPack.PackName}" ToolTip="{Binding Description}" Tag="{Binding}"
-                                              IsChecked="{Binding IsSelected}" Style="{StaticResource GToggleButton2}"/>
+                                    <ToggleButton Content="{Binding DEModPack.PackName}" ToolTip="{Binding DEModPack.Description}" Tag="{Binding}"
+                                                  IsChecked="{Binding IsSelected}" Style="{StaticResource GResourceSelectorButton}"/>
                                 </Grid>
                             </DataTemplate>
                         </ItemsControl.ItemTemplate>
