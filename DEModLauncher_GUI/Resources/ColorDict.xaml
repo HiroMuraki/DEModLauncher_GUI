@@ -7,6 +7,7 @@
     <SolidColorBrush x:Key="ModPackItemColor">#2c2c2c</SolidColorBrush>
     <SolidColorBrush x:Key="ResourceItemColor">#2c2c2c</SolidColorBrush>
     <SolidColorBrush x:Key="ItemShadowColor">#000000</SolidColorBrush>
-    <SolidColorBrush x:Key="TextColor">#f0f0f0</SolidColorBrush>
+    <SolidColorBrush x:Key="TextColor">#efefef</SolidColorBrush>
+    <SolidColorBrush x:Key="TextHoveredColor">#ffffff</SolidColorBrush>
     <SolidColorBrush x:Key="TextDisabledColor">#606060</SolidColorBrush>
 </ResourceDictionary>

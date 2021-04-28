@@ -44,7 +44,7 @@
                                     <MenuItem Tag="{Binding}" Header="{StaticResource ADD_MOD_PACK_TOOLTIP}" Click="AddModPack_Click"/>
                                 </ContextMenu>
                             </ScrollViewer.ContextMenu>
-                            <Grid Margin="5,0">
+                            <Grid Margin="10,0">
                                 <ItemsControl ItemsSource="{Binding DEModPacks}">
                                     <ItemsControl.ItemTemplate>
                                         <DataTemplate DataType="{x:Type ViewModel:DEModPack}">

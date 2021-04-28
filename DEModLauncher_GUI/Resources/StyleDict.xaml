@@ -162,7 +162,7 @@
         <Setter Property="VerticalContentAlignment" Value="Center" />
         <Setter Property="HorizontalContentAlignment" Value="Center" />
         <Setter Property="FontSize" Value="12" />
-        <Setter Property="Height" Value="35" />
+        <Setter Property="Height" Value="40" />
         <Setter Property="Padding" Value="0" />
         <Setter Property="Template">
             <Setter.Value>
@@ -183,7 +183,7 @@
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsMouseOver" Value="True">
                             <Setter Property="Background" Value="{StaticResource MainColor}" />
-                            <Setter Property="Foreground" Value="{StaticResource TextColor}" />
+                            <Setter Property="Foreground" Value="{StaticResource TextHoveredColor}" />
                         </Trigger>
                         <EventTrigger RoutedEvent="RadioButton.Checked">
                             <EventTrigger.Actions>
