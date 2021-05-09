@@ -47,6 +47,8 @@
     <Sys:String x:Key="DUPLICATE_MOD_PACK">创建副本</Sys:String>
     <!--检查模组配置是否存在文件冲突-->
     <Sys:String x:Key="CHECK_MOD_PACK_CONFLICT">冲突检查</Sys:String>
+    <!--导出模组组合包-->
+    <Sys:String x:Key="GENERATE_MERGED_FILE">导出组合包</Sys:String>
 
     <!--模组配置名_ToolTip-->
     <Sys:String x:Key="TEXT_OF_MOD_PACK_NAME">模组配置名</Sys:String>

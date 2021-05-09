@@ -213,6 +213,23 @@ namespace DEModLauncher_GUI {
                 MessageBox.Show($"冲突检查出错，原因：{exp.Message}", "错误", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
+        public void GenerateMergedFile_ClicK(object sender, RoutedEventArgs e) {
+            try {
+                DEModPack modPack = GetDEModPackFromControl(sender);
+                System.Windows.Forms.SaveFileDialog sfd = new System.Windows.Forms.SaveFileDialog();
+                sfd.FileName = modPack.PackName;
+                sfd.InitialDirectory = Environment.CurrentDirectory;
+                sfd.Filter = "zip压缩包|*.zip";
+                sfd.AddExtension = true;
+                if (sfd.ShowDialog() == System.Windows.Forms.DialogResult.OK) {
+                    modPack.GenerateMergedFile(sfd.FileName);
+                    MessageBox.Show($"导出成功，文件已保存至{sfd.FileName}", "完成", MessageBoxButton.OK, MessageBoxImage.Information);
+                }
+            }
+            catch (Exception exp) {
+                MessageBox.Show($"无法生成组合包，原因：{exp.Message}", "生成错误", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
         #endregion
 
         #region 资源操作
@@ -235,7 +252,7 @@ namespace DEModLauncher_GUI {
                             _dEModMananger.CurrentMod.AddResource(fileName);
                         }
                         catch (Exception exp) {
-                            MessageBox.Show($"无法添加模组文件：{fileName}\n\n原因：{exp.Message}", "添加模组文件错误", 
+                            MessageBox.Show($"无法添加模组文件：{fileName}\n\n原因：{exp.Message}", "添加模组文件错误",
                                             MessageBoxButton.OK, MessageBoxImage.Warning);
                         }
                     }
@@ -253,7 +270,7 @@ namespace DEModLauncher_GUI {
                         _dEModMananger.CurrentMod.AddResource(fileName);
                     }
                     catch (Exception exp) {
-                        MessageBox.Show($"无法添加模组文件：{fileName}\n\n原因{exp.Message}", "错误", 
+                        MessageBox.Show($"无法添加模组文件：{fileName}\n\n原因{exp.Message}", "错误",
                                           MessageBoxButton.OK, MessageBoxImage.Warning);
                     }
                 }

@@ -142,6 +142,32 @@ namespace DEModLauncher_GUI.ViewModel {
         public void DeleteResource(DEModResource resource) {
             _resources.Remove(resource);
         }
+        public void GenerateMergedFile(string outputFile) {
+            int conflictedItems = GetConflictInformation().Item3;
+            string fileName = Path.GetFileNameWithoutExtension(outputFile);
+            string mergeWorkingFolder = $@"{ModPacksDirectory}\MERGE_WORKING_FOLDER_{fileName}";
+            if (conflictedItems > 0) {
+                throw new NotSupportedException("该模组配置存在冲突，请解决冲突后再导出");
+            }
+            try {
+                if (Directory.Exists(mergeWorkingFolder)) {
+                    Directory.Delete(mergeWorkingFolder, true);
+                }
+                Directory.CreateDirectory(mergeWorkingFolder);
+                foreach (var resource in _resources) {
+                    using (ZipArchive zipFile = ZipFile.OpenRead($@"{ModPacksDirectory}\{resource.Path}")) {
+                        zipFile.ExtractToDirectory(mergeWorkingFolder);
+                    }
+                }
+                ZipFile.CreateFromDirectory(mergeWorkingFolder, outputFile, CompressionLevel.Fastest, false);
+            }
+            catch (Exception) {
+                throw;
+            }
+            finally {
+                Directory.Delete(mergeWorkingFolder, true);
+            }
+        }
         public Tuple<int, int, int, Dictionary<string, List<string>>> GetConflictInformation() {
             Dictionary<string, List<string>> resourceDict = new Dictionary<string, List<string>>();
             int totalCount = 0;
