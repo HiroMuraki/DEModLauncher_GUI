@@ -8,8 +8,8 @@
     <Sys:String x:Key="RELOAD_PROFILE_FILE">重新读取</Sys:String>
     <Sys:String x:Key="RELOAD_PROFILE_FILE_TOOLTIP">重新读取模组配置</Sys:String>
     <!--加载模组后启动游戏-->
-    <Sys:String x:Key="LAUNCH_AFTER_LOAD_MOD">加载后启动</Sys:String>
-    <Sys:String x:Key="LAUNCH_AFTER_LOAD_MOD_TOOLTIP">加载模组后启动</Sys:String>
+    <Sys:String x:Key="LAUNCH_AFTER_LOAD_MOD">加载模组并启动</Sys:String>
+    <Sys:String x:Key="LAUNCH_AFTER_LOAD_MOD_TOOLTIP">调用加载器加载模组并启动游戏</Sys:String>
     <!--直接启动游戏-->
     <Sys:String x:Key="LAUNCH_DIRECTLY">启动</Sys:String>
     <Sys:String x:Key="LAUNCH_DIRECTLY_TOOLTIP">直接启动游戏</Sys:String>
@@ -52,8 +52,12 @@
 
     <!--模组配置名_ToolTip-->
     <Sys:String x:Key="TEXT_OF_MOD_PACK_NAME">模组配置名</Sys:String>
+    <!--模组配置图片_ToolTip-->
+    <Sys:String x:Key="TEXT_OF_MOD_PACK_IMAGE">点击修改模组配置图片</Sys:String>
     <!--模组配置描述-->
     <Sys:String x:Key="TEXT_OF_MOD_PACK_DESCRIPTION">模组描述名</Sys:String>
     <!--保存模组配置修改-->
     <Sys:String x:Key="SAVE_MOD_PACK_MODIFY">保存</Sys:String>
+    <!--取消模组配置修改-->
+    <Sys:String x:Key="CANCEL_MOD_PACK_MODIFY">取消</Sys:String>
 </ResourceDictionary>

@@ -8,8 +8,8 @@
         mc:Ignorable="d" x:Name="Self"
         DataContext="{Binding ElementName=Self,Path=DEModManager}"
         FontFamily="Microsoft YaHei UI"
-        WindowStartupLocation="CenterScreen" ResizeMode="NoResize"
-        Title="DEMODLauncher" Height="500" Width="800">
+        WindowStartupLocation="CenterScreen" ResizeMode="NoResize" MouseWheel="Direction_MouseWHeel"
+        Title="DEMODLauncher" Height="550" Width="800">
     <WindowChrome.WindowChrome>
         <WindowChrome UseAeroCaptionButtons="False" CaptionHeight="0" ResizeBorderThickness="0"/>
     </WindowChrome.WindowChrome>
@@ -20,109 +20,83 @@
         <Grid>
             <Grid.RowDefinitions>
                 <RowDefinition/>
-                <RowDefinition Height="75"/>
+                <RowDefinition Height="130"/>
             </Grid.RowDefinitions>
             <Grid Grid.Row="0">
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="0.3*"/>
-                    <ColumnDefinition Width="1"/>
+                    <ColumnDefinition Width="1.5*"/>
+                    <ColumnDefinition Width="2"/>
                     <ColumnDefinition Width="0.7*"/>
                 </Grid.ColumnDefinitions>
                 <Grid Grid.Column="0">
                     <Grid.RowDefinitions>
-                        <RowDefinition Height="90"/>
                         <RowDefinition/>
+                        <RowDefinition Height="40"/>
                     </Grid.RowDefinitions>
-                    <Grid Grid.Row="0">
-                        <Image Source="/DEModLauncher_GUI;component/Resources/Images/header3.jpg" Stretch="UniformToFill"
-                               MouseLeftButtonDown="Window_Move"/>
+                    <Grid.Triggers>
+                        <EventTrigger RoutedEvent="Mouse.MouseEnter">
+                            <EventTrigger.Actions>
+                                <BeginStoryboard>
+                                    <Storyboard Storyboard.TargetName="LaunchOptionBar" Storyboard.TargetProperty="Opacity">
+                                        <DoubleAnimation To="1" Duration="0:0:0.1" AccelerationRatio="0.2" DecelerationRatio="0.8"/>
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </EventTrigger.Actions>
+                        </EventTrigger>
+                        <EventTrigger RoutedEvent="Mouse.MouseLeave">
+                            <EventTrigger.Actions>
+                                <BeginStoryboard>
+                                    <Storyboard Storyboard.TargetName="LaunchOptionBar" Storyboard.TargetProperty="Opacity">
+                                        <DoubleAnimation Duration="0:0:0.1" AccelerationRatio="0.2" DecelerationRatio="0.8"/>
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </EventTrigger.Actions>
+                        </EventTrigger>
+                    </Grid.Triggers>
+                    <Grid.ContextMenu>
+                        <ContextMenu>
+                            <MenuItem Tag="{Binding CurrentMod}" Header="{StaticResource ADD_MOD_RESOURCE_TOOLTIP}" Click="AddResource_Click"/>
+                            <MenuItem Tag="{Binding CurrentMod}" Header="{StaticResource EDIT_MOD_PACK}" Click="EditModPack_Click"/>
+                            <MenuItem Tag="{Binding CurrentMod}" Header="{StaticResource CHECK_MOD_PACK_CONFLICT}" Click="CheckConflict_Click"/>
+                            <MenuItem Tag="{Binding CurrentMod}" Header="{StaticResource GENERATE_MERGED_FILE}" Click="GenerateMergedFile_ClicK"/>
+                        </ContextMenu>
+                    </Grid.ContextMenu>
+                    <Image Grid.Row="0" Grid.RowSpan="2" Source="C:\Users\11717\Desktop\PIC\可爱\1iytyssdcn9n9m4wpgnbld1o1.jpg" Stretch="UniformToFill" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                    <Grid Grid.Row="1">
+                        <Border Background="Black" Opacity="0.70"/>
+                        <Label Content="{Binding CurrentMod.PackName}" Foreground="{StaticResource TextColor}" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" FontSize="18"/>
                     </Grid>
-                    <Grid Grid.Row="2">
-                        <ScrollViewer x:Name="ModPackDisplayer" VerticalScrollBarVisibility="Hidden">
-                            <ScrollViewer.ContextMenu>
-                                <ContextMenu BorderThickness="0" Padding="0" Background="Transparent">
-                                    <MenuItem Tag="{Binding}" Header="{StaticResource ADD_MOD_PACK_TOOLTIP}" Click="AddModPack_Click"/>
-                                </ContextMenu>
-                            </ScrollViewer.ContextMenu>
-                            <Grid Margin="10,0">
-                                <ItemsControl ItemsSource="{Binding DEModPacks}">
-                                    <ItemsControl.ItemTemplate>
-                                        <DataTemplate DataType="{x:Type ViewModel:DEModPack}">
-                                            <Grid>
-                                                <Grid.ContextMenu>
-                                                    <ContextMenu>
-                                                        <MenuItem Tag="{Binding}" Header="{StaticResource EDIT_MOD_PACK}" Click="EditModPack_Click"/>
-                                                        <MenuItem Tag="{Binding}" Header="{StaticResource MOVE_UP_MOD_PACK}" Click="MoveUpModPack_Click"/>
-                                                        <MenuItem Tag="{Binding}" Header="{StaticResource MOVE_DOWN_MOD_PACK}" Click="MoveDownModPack_Click"/>
-                                                        <MenuItem Tag="{Binding}" Header="{StaticResource REMOVE_MOD_PACK}" Click="DeleteModPack_Click"/>
-                                                        <MenuItem Tag="{Binding}" Header="{StaticResource DUPLICATE_MOD_PACK}" Click="DuplicateModPack_Click"/>
-                                                        <MenuItem Tag="{Binding}" Header="{StaticResource CHECK_MOD_PACK_CONFLICT}" Click="CheckConflict_Click"/>
-                                                        <MenuItem Tag="{Binding}" Header="{StaticResource GENERATE_MERGED_FILE}" Click="GenerateMergedFile_ClicK"/>
-                                                    </ContextMenu>
-                                                </Grid.ContextMenu>
-                                                <RadioButton Content="{Binding PackName}" ToolTip="{Binding Description}" Tag="{Binding}"
-                                                             IsChecked="{Binding IsSelected}"
-                                                             Style="{StaticResource GModPackButton}" GroupName="PackNameSelected"
-                                                             Click="SelectModPack_Click" MouseDoubleClick="EditModPack_Click"/>
-                                            </Grid>
-                                        </DataTemplate>
-                                    </ItemsControl.ItemTemplate>
-                                    <ItemsControl.ItemsPanel>
-                                        <ItemsPanelTemplate>
-                                            <StackPanel>
-
-                                            </StackPanel>
-                                        </ItemsPanelTemplate>
-                                    </ItemsControl.ItemsPanel>
-                                </ItemsControl>
-                            </Grid>
-                        </ScrollViewer>
-                    </Grid>
-                    <Grid Grid.Row="2">
-                        <Button ToolTip="{StaticResource ADD_MOD_PACK_TOOLTIP}" 
-                                HorizontalAlignment="Left" VerticalAlignment="Bottom"
-                                Style="{StaticResource GAddButton}"
-                                Click="AddModPack_Click" MouseDoubleClick="AddModPackReference_Click"/>
+                    <Grid x:Name="LaunchOptionBar" Grid.Row="1" Opacity="0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="3*"/>
+                            <ColumnDefinition Width="1*"/>
+                        </Grid.ColumnDefinitions>
+                        <Button Grid.Column="0" Content="{StaticResource LAUNCH_AFTER_LOAD_MOD}" 
+                            ToolTip="{StaticResource LAUNCH_AFTER_LOAD_MOD_TOOLTIP}" FontSize="14"
+                            Style="{StaticResource GButton}" BorderThickness="0,1,1,0"
+                            Click="LaunchMod_Click"/>
+                        <Button Grid.Column="1" Content="{StaticResource LAUNCH_DIRECTLY}" 
+                            ToolTip="{StaticResource LAUNCH_DIRECTLY_TOOLTIP}" FontSize="14"
+                            Style="{StaticResource GButton}" BorderThickness="0,1,0,0"
+                            Click="LaunchGame_Click"/>
                     </Grid>
                 </Grid>
-                <Grid Grid.Column="1">
-                    <Border Background="{StaticResource BorderColor}"/>
-                </Grid>
+                <GridSplitter Grid.Column="1" Width="5" HorizontalAlignment="Center" Background="{StaticResource AccentColor}"/>
                 <Grid Grid.Column="2">
                     <Grid.RowDefinitions>
-                        <RowDefinition Height="40"/>
+                        <RowDefinition Height="30"/>
                         <RowDefinition/>
                     </Grid.RowDefinitions>
                     <Grid Grid.Row="0">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition/>
-                        </Grid.ColumnDefinitions>
-                        <Label Grid.Column="0" Content="{Binding CurrentMod.PackName}" ToolTip="{Binding CurrentMod.Description}"
-                               Tag="{Binding CurrentMod}"
-                               FontSize="14" FontWeight="Bold" BorderThickness="0" BorderBrush="{StaticResource BorderColor}"
-                               VerticalContentAlignment="Center" HorizontalContentAlignment="Center" 
-                               Background="{StaticResource AccentColor}" Foreground="{StaticResource TextColor}"
-                               MouseLeftButtonDown="Window_Move" MouseDoubleClick="EditModPack_Click">
-                            <Label.ContextMenu>
-                                <ContextMenu>
-                                    <MenuItem Tag="{Binding CurrentMod}" Header="{StaticResource ADD_MOD_RESOURCE_TOOLTIP}" Click="AddResource_Click"/>
-                                    <MenuItem Tag="{Binding CurrentMod}" Header="{StaticResource EDIT_MOD_PACK}" Click="EditModPack_Click"/>
-                                    <MenuItem Tag="{Binding CurrentMod}" Header="{StaticResource CHECK_MOD_PACK_CONFLICT}" Click="CheckConflict_Click"/>
-                                    <MenuItem Tag="{Binding CurrentMod}" Header="{StaticResource GENERATE_MERGED_FILE}" Click="GenerateMergedFile_ClicK"/>
-                                </ContextMenu>
-                            </Label.ContextMenu>
-                        </Label>
-                        <Grid HorizontalAlignment="Right" VerticalAlignment="Center" Width="80" Height="40">
+                        <Border Grid.Column="0" Background="{StaticResource AccentColor}" MouseLeftButtonDown="Window_Move">
+                        </Border>
+                        <Grid HorizontalAlignment="Right" VerticalAlignment="Center" Width="70" Height="30">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition/>
                                 <ColumnDefinition/>
                             </Grid.ColumnDefinitions>
-                            <Button Grid.Column="0" Content="━"
-                                    Style="{StaticResource GButtonTitle}"
-                                    Click="Window_Minimum"/>
-                            <Button Grid.Column="1" Content="&#x2573;"
-                                    Style="{StaticResource GButtonTitle}"
-                                    Click="Window_Close"/>
+                            <Button Grid.Column="0" Content="━" Style="{StaticResource GButtonTitle}" Click="Window_Minimum"/>
+                            <Button Grid.Column="1" Content="&#x2573;" Style="{StaticResource GButtonTitle}" Click="Window_Close"/>
                         </Grid>
                     </Grid>
                     <Grid Grid.Row="1">
@@ -161,9 +135,7 @@
                                 </ItemsControl.ItemsPanel>
                             </ItemsControl>
                         </ScrollViewer>
-                    </Grid>
-                    <Grid Grid.Row="1">
-                        <StackPanel VerticalAlignment="Bottom" HorizontalAlignment="Left" Width="30" Height="30">
+                        <StackPanel VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="30" Height="30">
                             <StackPanel.Triggers>
                                 <EventTrigger RoutedEvent="Mouse.MouseEnter">
                                     <EventTrigger.Actions>
@@ -218,73 +190,107 @@
                 </Grid>
             </Grid>
             <Grid Grid.Row="1">
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="30"/>
-                    <RowDefinition/>
-                </Grid.RowDefinitions>
-                <Grid Grid.Row="0">
-                    <Grid>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="Auto"/>
-                            <ColumnDefinition/>
-                            <ColumnDefinition Width="Auto"/>
-                        </Grid.ColumnDefinitions>
-                        <Label Grid.Column="0" Content="{StaticResource GAME_DIRECTORY}" 
-                               ToolTip="{StaticResource GAME_DIRECTORY_TOOLTIP}" Width="80" VerticalContentAlignment="Center" HorizontalContentAlignment="Center"
-                               BorderThickness="0,1,0,0" BorderBrush="{StaticResource BorderColor}" 
-                               Background="{StaticResource MainColor}" Foreground="{StaticResource TextColor}"/>
-                        <TextBox Grid.Column="1" Text="{Binding GameDirectory,Mode=OneWay}" ToolTip="{Binding GameDirectory}" IsReadOnly="True" 
-                                 VerticalContentAlignment="Center" BorderThickness="0,1,0,0" BorderBrush="{StaticResource BorderColor}"  
-                                 Background="{StaticResource MainColor}" Foreground="{StaticResource TextColor}"
-                                 MouseDoubleClick="OpenGameDirectory_Click">
-                            <TextBox.Style>
-                                <Style TargetType="TextBox">
-                                    <Setter Property="Template">
-                                        <Setter.Value>
-                                            <ControlTemplate TargetType="TextBox">
-                                                <Border Background="{TemplateBinding Background}"
-                                                        BorderBrush="{TemplateBinding BorderBrush}"
-                                                        BorderThickness="{TemplateBinding BorderThickness}">
-                                                    <ScrollViewer x:Name="PART_ContentHost"/>
-                                                </Border>
-                                            </ControlTemplate>
-                                        </Setter.Value>
-                                    </Setter>
-                                </Style>
-                            </TextBox.Style>
-                        </TextBox>
-                        <Button Grid.Column="2" Content="{StaticResource SELECT_GAME_FOLDER}" 
-                                ToolTip="{StaticResource SELECT_GAME_FOLDER_TOOLTIP}"
-                                Width="60" Click="SelectGameDirectory_Click"
-                                BorderThickness="1,1,0,0" Style="{StaticResource GButton}"/>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+                <ScrollViewer Grid.Column="0" x:Name="ModPackDisplayer" VerticalScrollBarVisibility="Hidden" HorizontalScrollBarVisibility="Hidden"  MouseDown="Direction_MouseDown" MouseMove="Direction_MouseMove">
+                    <ScrollViewer.ContextMenu>
+                        <ContextMenu BorderThickness="0" Padding="0" Background="Transparent">
+                            <MenuItem Tag="{Binding}" Header="{StaticResource ADD_MOD_PACK_TOOLTIP}" Click="AddModPack_Click"/>
+                        </ContextMenu>
+                    </ScrollViewer.ContextMenu>
+                    <Grid Margin="10,0" VerticalAlignment="Center">
+                        <ItemsControl ItemsSource="{Binding DEModPacks}">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate DataType="{x:Type ViewModel:DEModPack}">
+                                    <Grid>
+                                        <Grid.ContextMenu>
+                                            <ContextMenu>
+                                                <MenuItem Tag="{Binding}" Header="{StaticResource EDIT_MOD_PACK}" Click="EditModPack_Click"/>
+                                                <MenuItem Tag="{Binding}" Header="{StaticResource MOVE_UP_MOD_PACK}" Click="MoveUpModPack_Click"/>
+                                                <MenuItem Tag="{Binding}" Header="{StaticResource MOVE_DOWN_MOD_PACK}" Click="MoveDownModPack_Click"/>
+                                                <MenuItem Tag="{Binding}" Header="{StaticResource REMOVE_MOD_PACK}" Click="DeleteModPack_Click"/>
+                                                <MenuItem Tag="{Binding}" Header="{StaticResource DUPLICATE_MOD_PACK}" Click="DuplicateModPack_Click"/>
+                                                <MenuItem Tag="{Binding}" Header="{StaticResource CHECK_MOD_PACK_CONFLICT}" Click="CheckConflict_Click"/>
+                                                <MenuItem Tag="{Binding}" Header="{StaticResource GENERATE_MERGED_FILE}" Click="GenerateMergedFile_ClicK"/>
+                                            </ContextMenu>
+                                        </Grid.ContextMenu>
+                                        <RadioButton Content="{Binding PackName}" ToolTip="{Binding Description}" Tag="{Binding}"
+                                                     IsChecked="{Binding IsSelected}" Margin="5,0"
+                                                     Style="{StaticResource GModPackButton}" GroupName="PackNameSelected"
+                                                     Click="SelectModPack_Click" MouseDoubleClick="EditModPack_Click">
+                                        </RadioButton>
+                                    </Grid>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                            <ItemsControl.ItemsPanel>
+                                <ItemsPanelTemplate>
+                                    <StackPanel Orientation="Horizontal">
+
+                                    </StackPanel>
+                                </ItemsPanelTemplate>
+                            </ItemsControl.ItemsPanel>
+                        </ItemsControl>
                     </Grid>
-                </Grid>
-                <Grid Grid.Row="1">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="Auto"/>
-                        <ColumnDefinition Width="Auto"/>
-                        <ColumnDefinition/>
-                        <ColumnDefinition Width="Auto"/>
-                    </Grid.ColumnDefinitions>
-                    <Button Content="{StaticResource SAVE_PROFILE_FILE}" 
+                </ScrollViewer>
+                <Button Grid.Column="1" Width="30" Content="+" ToolTip="{StaticResource ADD_MOD_PACK_TOOLTIP}" Foreground="{StaticResource TextColor}" Click="AddModPack_Click">
+                    <Button.Triggers>
+                        <EventTrigger RoutedEvent="Mouse.MouseEnter">
+                            <EventTrigger.Actions>
+                                <BeginStoryboard>
+                                    <Storyboard Storyboard.TargetProperty="Width">
+                                        <DoubleAnimation To="130" Duration="0:0:0.1" AccelerationRatio="0.2" DecelerationRatio="0.8"/>
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </EventTrigger.Actions>
+                        </EventTrigger>
+                        <EventTrigger RoutedEvent="Mouse.MouseLeave">
+                            <EventTrigger.Actions>
+                                <BeginStoryboard>
+                                    <Storyboard Storyboard.TargetProperty="Width">
+                                        <DoubleAnimation Duration="0:0:0.1" AccelerationRatio="0.2" DecelerationRatio="0.8"/>
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </EventTrigger.Actions>
+                        </EventTrigger>
+                    </Button.Triggers>
+                    <Button.Style>
+                        <Style TargetType="Button">
+                            <Setter Property="Background" Value="Transparent" />
+                            <Setter Property="Foreground" Value="{StaticResource TextColor}" />
+                            <Setter Property="BorderBrush" Value="{StaticResource BorderColor}" />
+                            <Setter Property="BorderThickness" Value="0" />
+                            <Setter Property="FontSize" Value="18" />
+                            <Setter Property="FontWeight" Value="Bold" />
+                            <Setter Property="Padding" Value="0" />
+                            <Setter Property="Template">
+                                <Setter.Value>
+                                    <ControlTemplate TargetType="Button">
+                                        <Border Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}">
+                                            <ContentPresenter VerticalAlignment="{TemplateBinding VerticalContentAlignment}" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" Margin="{TemplateBinding Padding}"/>
+                                        </Border>
+                                        <ControlTemplate.Triggers>
+                                            <Trigger Property="IsMouseOver" Value="True">
+                                                <Setter Property="FontSize" Value="50" />
+                                            </Trigger>
+                                        </ControlTemplate.Triggers>
+                                    </ControlTemplate>
+                                </Setter.Value>
+                            </Setter>
+                        </Style>
+                    </Button.Style>
+                </Button>
+            </Grid>
+            <!--Grid Grid.RowSpan="2">
+                <Button Content="{StaticResource SAVE_PROFILE_FILE}" 
                             ToolTip="{StaticResource SAVE_PROFILE_FILE_TOOLTIP}" FontSize="14" Width="80" Grid.Column="0"
                             Style="{StaticResource GButton}" BorderThickness="0,1,0,0"
                             Click="SaveToFile_Click"/>
-                    <Button Content="{StaticResource RELOAD_PROFILE_FILE}" 
-                            ToolTip="{StaticResource RELOAD_PROFILE_FILE_TOOLTIP}" FontSize="14" Width="80" Grid.Column="1" 
-                            Style="{StaticResource GButton}" BorderThickness="1,1,1,0"
-                            Click="LoadFromFile_Click"/>
-                    <Button Content="{StaticResource LAUNCH_AFTER_LOAD_MOD}" 
-                            ToolTip="{StaticResource LAUNCH_AFTER_LOAD_MOD_TOOLTIP}" FontSize="14" Grid.Column="2" 
-                            Style="{StaticResource GButton}" BorderThickness="0,1,1,0" 
-                            Click="LaunchMod_Click"/>
-                    <Button Content="{StaticResource LAUNCH_DIRECTLY}" 
-                            ToolTip="{StaticResource LAUNCH_DIRECTLY_TOOLTIP}" FontSize="14" Width="100" Grid.Column="3"
-                            Style="{StaticResource GButton}" BorderThickness="0,1,0,0"
-                            Click="LaunchGame_Click"/>
-                </Grid>
-            </Grid>
-            <Grid Grid.RowSpan="2">
+                <Button Content="{StaticResource RELOAD_PROFILE_FILE}" 
+                    ToolTip="{StaticResource RELOAD_PROFILE_FILE_TOOLTIP}" FontSize="14" Width="80" Grid.Column="1" 
+                    Style="{StaticResource GButton}" BorderThickness="1,1,1,0"
+                    Click="LoadFromFile_Click"/>
                 <Grid.Style>
                     <Style TargetType="Grid">
                         <Style.Triggers>
@@ -315,7 +321,47 @@
                              BorderThickness="0" FontSize="12" Margin="50,30" IsReadOnly="True" 
                              MouseLeftButtonDown="Window_Move"/>
                 </ScrollViewer>
-            </Grid>
+            </Grid-->
         </Grid>
     </Border>
 </Window>
+
+<!--Grid Grid.Row="1">
+    <Grid Grid.Row="0">
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+            <Label Grid.Column="0" Content="{StaticResource GAME_DIRECTORY}" 
+                               ToolTip="{StaticResource GAME_DIRECTORY_TOOLTIP}" Width="80" VerticalContentAlignment="Center" HorizontalContentAlignment="Center"
+                               BorderThickness="0,1,0,0" BorderBrush="{StaticResource BorderColor}" 
+                               Background="{StaticResource MainColor}" Foreground="{StaticResource TextColor}"/>
+            <TextBox Grid.Column="1" Text="{Binding GameDirectory,Mode=OneWay}" ToolTip="{Binding GameDirectory}" IsReadOnly="True" 
+                                 VerticalContentAlignment="Center" BorderThickness="0,1,0,0" BorderBrush="{StaticResource BorderColor}"  
+                                 Background="{StaticResource MainColor}" Foreground="{StaticResource TextColor}"
+                                 MouseDoubleClick="OpenGameDirectory_Click">
+                <TextBox.Style>
+                    <Style TargetType="TextBox">
+                        <Setter Property="Template">
+                            <Setter.Value>
+                                <ControlTemplate TargetType="TextBox">
+                                    <Border Background="{TemplateBinding Background}"
+                                                        BorderBrush="{TemplateBinding BorderBrush}"
+                                                        BorderThickness="{TemplateBinding BorderThickness}">
+                                        <ScrollViewer x:Name="PART_ContentHost"/>
+                                    </Border>
+                                </ControlTemplate>
+                            </Setter.Value>
+                        </Setter>
+                    </Style>
+                </TextBox.Style>
+            </TextBox>
+            <Button Grid.Column="2" Content="{StaticResource SELECT_GAME_FOLDER}" 
+                                ToolTip="{StaticResource SELECT_GAME_FOLDER_TOOLTIP}"
+                                Width="60" Click="SelectGameDirectory_Click"
+                                BorderThickness="1,1,0,0" Style="{StaticResource GButton}"/>
+        </Grid>
+    </Grid>
+</Grid-->

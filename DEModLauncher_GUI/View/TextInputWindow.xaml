@@ -6,36 +6,52 @@
         xmlns:local="clr-namespace:DEModLauncher_GUI.View"
         mc:Ignorable="d" ResizeMode="NoResize"
         WindowStartupLocation="CenterOwner"
-        Title="{Binding ElementName=_inputTextA,Path=Text,Mode=OneTime}" Height="350" Width="440">
-    <WindowChrome.WindowChrome>
-        <WindowChrome CaptionHeight="0" UseAeroCaptionButtons="False"/>
-    </WindowChrome.WindowChrome>
-    <Border BorderBrush="{StaticResource BorderColor}" BorderThickness="1">
+        Title="{Binding ElementName=_inputTextA,Path=Text,Mode=OneWay}" Height="600" Width="440">
+    <Border BorderBrush="{StaticResource BorderColor}" BorderThickness="0">
         <Grid>
             <Grid.RowDefinitions>
-                <RowDefinition Height="30"/>
+                <RowDefinition Height="200"/>
                 <RowDefinition/>
                 <RowDefinition Height="40"/>
             </Grid.RowDefinitions>
             <Grid Grid.Row="0">
-                <Label Content="{Binding ElementName=_inputTextA,Path=Text,Mode=OneTime}"
-                       VerticalContentAlignment="Center" Padding="13,0"
-                       Background="{StaticResource AccentColor}" Foreground="White" FontSize="13"
-                       BorderBrush="{StaticResource BorderColor}" BorderThickness="0,0,0,1"
-                       MouseLeftButtonDown="Window_Move"/>
-                <Button Style="{StaticResource GButtonTitle}" Content="&#x2573;" HorizontalAlignment="Right"
-                        Width="30" BorderThickness="0" Click="Cancel_Click"/>
+                <Grid.Triggers>
+                    <EventTrigger RoutedEvent="Mouse.MouseEnter">
+                        <EventTrigger.Actions>
+                            <BeginStoryboard>
+                                <Storyboard Storyboard.TargetName="ImageMask" Storyboard.TargetProperty="Opacity">
+                                    <DoubleAnimation To="0.5" Duration="0:0:0.1" AccelerationRatio="0.2" DecelerationRatio="0.8"/>
+                                </Storyboard>
+                            </BeginStoryboard>
+                        </EventTrigger.Actions>
+                    </EventTrigger>
+                    <EventTrigger RoutedEvent="Mouse.MouseLeave">
+                        <EventTrigger.Actions>
+                            <BeginStoryboard>
+                                <Storyboard Storyboard.TargetName="ImageMask" Storyboard.TargetProperty="Opacity">
+                                    <DoubleAnimation Duration="0:0:0.1" AccelerationRatio="0.2" DecelerationRatio="0.8"/>
+                                </Storyboard>
+                            </BeginStoryboard>
+                        </EventTrigger.Actions>
+                    </EventTrigger>
+                </Grid.Triggers>
+                <Image Source="C:\Users\11717\Desktop\PIC\可爱\1iytyssdcn9n9m4wpgnbld1o1.jpg" Stretch="UniformToFill" VerticalAlignment="Center"/>
+                <Border x:Name="ImageMask" Background="Black" Opacity="0" ToolTip="{StaticResource TEXT_OF_MOD_PACK_IMAGE}" MouseLeftButtonDown="Window_Move"/>
             </Grid>
-            <TextBox Grid.Row="1" x:Name="_inputTextB" 
-                     ToolTip="{StaticResource TEXT_OF_MOD_PACK_DESCRIPTION}" x:FieldModifier="private" Grid.Column="0"
-                     FontSize="13" AcceptsReturn="True" Padding="10" BorderThickness="0"/>
+            <Grid Grid.Row="1">
+                <ScrollViewer VerticalScrollBarVisibility="Auto">
+                    <TextBox x:Name="_inputTextB" x:FieldModifier="private"
+                             ToolTip="{StaticResource TEXT_OF_MOD_PACK_DESCRIPTION}"
+                             FontSize="13" AcceptsReturn="True" Padding="10" BorderThickness="0"/>
+                </ScrollViewer>
+            </Grid>
             <Grid Grid.Row="2">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition/>
                     <ColumnDefinition Width="80"/>
                 </Grid.ColumnDefinitions>
-                <TextBox Grid.Column="0" x:Name="_inputTextA" 
-                         ToolTip="{StaticResource TEXT_OF_MOD_PACK_NAME}" x:FieldModifier="private"
+                <TextBox Grid.Column="0" x:Name="_inputTextA" x:FieldModifier="private"
+                         ToolTip="{StaticResource TEXT_OF_MOD_PACK_NAME}" 
                          VerticalContentAlignment="Center" HorizontalContentAlignment="Center"
                          BorderBrush="{StaticResource BorderColor}" BorderThickness="0,1,0,0" FontSize="18"/>
                 <Button Grid.Column="1" Content="{StaticResource SAVE_MOD_PACK_MODIFY}" Style="{StaticResource GButton}" 

@@ -160,26 +160,38 @@
         <Setter Property="Foreground" Value="{StaticResource TextColor}" />
         <Setter Property="BorderBrush" Value="{StaticResource BorderColor}" />
         <Setter Property="BorderThickness" Value="0,0,0,1" />
-        <Setter Property="VerticalContentAlignment" Value="Center" />
-        <Setter Property="HorizontalContentAlignment" Value="Center" />
         <Setter Property="FontSize" Value="12" />
-        <Setter Property="Height" Value="40" />
-        <Setter Property="Padding" Value="0" />
+        <Setter Property="Width" Value="150" />
+        <Setter Property="Height" Value="80" />
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="RadioButton">
                     <Grid>
-                        <Border Background="{StaticResource ItemShadowColor}"
-                                Opacity="0.5"
-                                Margin="1,1,-1,-1"
-                                CornerRadius="3"/>
-                        <Border Background="{TemplateBinding Background}"
-                                BorderBrush="{TemplateBinding BorderBrush}"
-                                BorderThickness="{TemplateBinding BorderThickness}"
-                                CornerRadius="3"/>
-                        <ContentPresenter VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
-                                          HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
-                                          Margin="{TemplateBinding Padding}"/>
+                       
+                        <Grid.RowDefinitions>
+                            <RowDefinition/>
+                            <RowDefinition Height="25"/>
+                        </Grid.RowDefinitions>
+                        <Grid Grid.Row="0" Grid.RowSpan="2" >
+                            <Border Background="{StaticResource ItemShadowColor}"
+                                    Opacity="0.5"
+                                    Margin="1,1,-1,-1"
+                                    CornerRadius="5"/>
+                            <Border Background="{TemplateBinding Background}"
+                                    BorderBrush="{TemplateBinding BorderBrush}"
+                                    BorderThickness="{TemplateBinding BorderThickness}"
+                                    CornerRadius="5"/>
+                            <Border CornerRadius="5">
+                                <Border.Background>
+                                    <ImageBrush ImageSource="C:\Users\11717\Desktop\PIC\可爱\1iytyssdcn9n9m4wpgnbld1o1.jpg" Stretch="UniformToFill"/>
+                                </Border.Background>
+                            </Border>
+                            <Border x:Name="MaskBackground" Background="Black" Opacity="0.50" CornerRadius="5"/>
+                        </Grid>
+                        <Grid Grid.Row="1">
+                            <Border x:Name="TextMask" Background="Black" Opacity="0.70" VerticalAlignment="Bottom" Height="25" CornerRadius="0,0,5,5"/>
+                            <ContentPresenter x:Name="TextContent"  VerticalAlignment="Center"  HorizontalAlignment="Center" Margin="0"/>
+                        </Grid>
                     </Grid>
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsMouseOver" Value="True">
@@ -196,6 +208,14 @@
                                                          By="10"/>
                                     </Storyboard>
                                 </BeginStoryboard>
+                                <BeginStoryboard>
+                                    <Storyboard Storyboard.TargetProperty="Width">
+                                        <DoubleAnimation AccelerationRatio="0.2"
+                                                         DecelerationRatio="0.8"
+                                                         Duration="0:0:0.1"
+                                                         By="50"/>
+                                    </Storyboard>
+                                </BeginStoryboard>
                             </EventTrigger.Actions>
                         </EventTrigger>
                         <EventTrigger RoutedEvent="RadioButton.Unchecked">
@@ -207,11 +227,21 @@
                                                          Duration="0:0:0.1"/>
                                     </Storyboard>
                                 </BeginStoryboard>
+                                <BeginStoryboard>
+                                    <Storyboard Storyboard.TargetProperty="Width">
+                                        <DoubleAnimation AccelerationRatio="0.2"
+                                                         DecelerationRatio="0.8"
+                                                         Duration="0:0:0.1"/>
+                                    </Storyboard>
+                                </BeginStoryboard>
                             </EventTrigger.Actions>
                         </EventTrigger>
                         <Trigger Property="IsChecked" Value="True" >
                             <Setter Property="FontSize" Value="14" />
                             <Setter Property="FontWeight" Value="Bold" />
+                            <Setter TargetName="TextMask" Property="Visibility" Value="Hidden" />
+                            <Setter TargetName="MaskBackground" Property="Visibility" Value="Hidden" />
+                            <Setter TargetName="TextContent" Property="Visibility" Value="Hidden" />
                             <Setter Property="Background" Value="{StaticResource FocusColor}" />
                             <Setter Property="Foreground" Value="{StaticResource MainColor}" />
                         </Trigger>
