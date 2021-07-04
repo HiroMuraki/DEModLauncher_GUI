@@ -15,6 +15,8 @@ namespace DEModLauncher_GUI.Model {
         [DataMember]
         public string Description;
         [DataMember]
+        public string ImagePath;
+        [DataMember]
         public Resources Resources;
     }
 }

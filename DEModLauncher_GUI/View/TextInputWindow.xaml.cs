@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.Win32;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -11,41 +12,43 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using DEModLauncher_GUI.ViewModel;
 
 namespace DEModLauncher_GUI.View {
     /// <summary>
     /// TextInputWindow.xaml 的交互逻辑
     /// </summary>
     public partial class TextInputWindow : Window {
-        public string TextA {
+        private DEModPack _modPack;
+
+        public DEModPack ModPack {
             get {
-                return _inputTextA.Text;
+                return _modPack;
             }
             set {
-                _inputTextA.Text = value;
+                _modPack = value;
             }
         }
-        public string TextB {
-            get {
-                return _inputTextB.Text;
-            }
-            set {
-                _inputTextB.Text = value;
-            }
-        }
-        public TextInputWindow() {
+
+        public TextInputWindow(DEModPack modPack) {
+            _modPack = modPack;
             InitializeComponent();
         }
 
+        private void ChangeImage_Click(object sender, MouseButtonEventArgs e) {
+            OpenFileDialog ofd = new OpenFileDialog();
+            ofd.Filter = "JPG图片|*.jpg|PNG图片|*.png|BMP图片|*.bmp|GIF图片|*.gif";
+            ofd.InitialDirectory = @"C:\";
+            ofd.Title = "选择模组图片";
+            if (ofd.ShowDialog() == true) {
+                ModPack.SetImage(ofd.FileName);
+            }
+        }
         private void Ok_Click(object sender, RoutedEventArgs e) {
             DialogResult = true;
         }
         private void Cancel_Click(object sender, RoutedEventArgs e) {
             DialogResult = false;
-        }
-
-        private void Window_Move(object sender, MouseButtonEventArgs e) {
-            DragMove();
         }
     }
 }

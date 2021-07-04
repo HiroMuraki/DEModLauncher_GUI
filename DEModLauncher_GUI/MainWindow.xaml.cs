@@ -21,17 +21,8 @@ namespace DEModLauncher_GUI {
     /// Interaction logic for MainWindow.xaml
     /// </summary>
     public partial class MainWindow : Window {
-        private static readonly string _defaultGameDirectory = @"C:\Program Files (x86)\Steam\steamapps\common\DOOMEternal";
-
         private Point _heldPoint;
-        private string _launcherProfileFile {
-            get {
-                if (string.IsNullOrEmpty(_dEModMananger.GameDirectory)) {
-                    return $@"Mods\ModPacks\DEModProfiles.json";
-                }
-                return $@"{_dEModMananger.GameDirectory}\Mods\ModPacks\DEModProfiles.json";
-            }
-        }
+
         private DEModManager _dEModMananger;
 
         public DEModManager DEModManager {
@@ -41,54 +32,64 @@ namespace DEModLauncher_GUI {
         }
 
         public MainWindow() {
-            _dEModMananger = new DEModManager();
-            if (File.Exists(_launcherProfileFile)) {
-                _dEModMananger.LoadFromFile(_launcherProfileFile);
+            _dEModMananger = DEModManager.GetInstance();
+            if (File.Exists(DOOMEternal.LauncherProfileFile)) {
+                _dEModMananger.LoadFromFile(DOOMEternal.LauncherProfileFile);
             }
-            if (_dEModMananger.GameDirectory == null) {
-                _dEModMananger.GameDirectory = Environment.CurrentDirectory;
+            foreach (var item in _dEModMananger.DEModPacks) {
+                item.SetImage(@"C:\Users\11717\Desktop\PIC\可爱\1iytyssdcn9n9m4wpgnbld1o1.jpg");
             }
             InitializeComponent();
         }
 
         #region 启动与保存
         private async void LaunchMod_Click(object sender, RoutedEventArgs e) {
-            //var result = MessageBox.Show($"加载模组将需要一定时间，在此期间请勿关闭本程序。是否继续?",
-            //                             $"加载模组：{_dEModMananger.CurrentMod.PackName}",
-            //                             MessageBoxButton.YesNo,
-            //                             MessageBoxImage.Question);
-            //if (result != MessageBoxResult.Yes) {
-            //    return;
-            //}
-            //_dEModMananger.IsLaunching = true;
-            //_dEModMananger.ConsoleStandardOutput = string.Empty;
-            //StreamReader reader;
-            //try {
-            //    reader = _dEModMananger.Launch();
-            //}
-            //catch (Exception exp) {
-            //    MessageBox.Show(exp.Message, "模组启动错误", MessageBoxButton.OK, MessageBoxImage.Error);
-            //    _dEModMananger.IsLaunching = false;
-            //    return;
-            //}
-            //StringBuilder sb = new StringBuilder(256);
-            //await Task.Run(async () => {
-            //    while (!reader.EndOfStream) {
-            //        await Task.Delay(TimeSpan.FromMilliseconds(100));
-            //        for (int i = 0; i < 5; i++) {
-            //            sb.Append($"{reader.ReadLine()}\n");
-            //        }
-            //        Application.Current.Dispatcher.Invoke(() => {
-            //            _dEModMananger.ConsoleStandardOutput = sb.ToString();
-            //            StandardOutPutHandlerArea.ScrollToBottom();
-            //        });
-            //    }
-            //});
-            //_dEModMananger.IsLaunching = false;
-            //Application.Current.Shutdown();
+            // 弹出提示窗口，避免误操作
+            var result = MessageBox.Show($"加载模组将需要一定时间，在此期间请勿关闭本程序。是否继续?",
+                                         $"加载模组：{_dEModMananger.CurrentMod.PackName}",
+                                         MessageBoxButton.YesNo,
+                                         MessageBoxImage.Question);
+            if (result != MessageBoxResult.Yes) {
+                return;
+            }
+            // 进入启动程序
+            _dEModMananger.IsLaunching = true;
+            _dEModMananger.ConsoleStandardOutput = string.Empty;
+            StreamReader reader;
+            try {
+                reader = _dEModMananger.LaunchWithModLoader();
+            }
+            catch (Exception exp) {
+                MessageBox.Show(exp.Message, "模组启动错误", MessageBoxButton.OK, MessageBoxImage.Error);
+                _dEModMananger.IsLaunching = false;
+                return;
+            }
+            // 从StreamReader中读取控制台输出信息
+            StringBuilder sb = new StringBuilder(256);
+            await Task.Run(async () => {
+                while (!reader.EndOfStream) {
+                    await Task.Delay(TimeSpan.FromMilliseconds(100));
+                    for (int i = 0; i < 5; i++) {
+                        sb.Append($"{reader.ReadLine()}\n");
+                    }
+                    Application.Current.Dispatcher.Invoke(() => {
+                        _dEModMananger.ConsoleStandardOutput = sb.ToString();
+                        // StandardOutPutHandlerArea.ScrollToBottom();
+                    });
+                }
+            });
+            _dEModMananger.IsLaunching = false;
+            // 启动后关闭启动器
+            Application.Current.Shutdown();
         }
         private void LaunchGame_Click(object sender, RoutedEventArgs e) {
-            _dEModMananger.LaunchDirectly();
+            try {
+                _dEModMananger.Launch();
+            }
+            catch (Exception exp) {
+                MessageBox.Show(exp.Message, "模组启动错误", MessageBoxButton.OK, MessageBoxImage.Error);
+                return;
+            }
             Application.Current.Shutdown();
         }
         private void SaveToFile_Click(object sender, RoutedEventArgs e) {
@@ -97,7 +98,7 @@ namespace DEModLauncher_GUI {
                 return;
             }
             try {
-                _dEModMananger.SaveToFile(_launcherProfileFile);
+                _dEModMananger.SaveToFile(DOOMEternal.LauncherProfileFile);
             }
             catch (Exception exp) {
                 MessageBox.Show(exp.Message, "保存配置文件出错", MessageBoxButton.OK, MessageBoxImage.Error);
@@ -110,7 +111,7 @@ namespace DEModLauncher_GUI {
             }
             try {
 
-                _dEModMananger.LoadFromFile(_launcherProfileFile);
+                _dEModMananger.LoadFromFile(DOOMEternal.LauncherProfileFile);
             }
             catch (Exception exp) {
 
@@ -119,10 +120,10 @@ namespace DEModLauncher_GUI {
         }
         private void SelectGameDirectory_Click(object sender, RoutedEventArgs e) {
             System.Windows.Forms.FolderBrowserDialog fbd = new System.Windows.Forms.FolderBrowserDialog();
-            fbd.SelectedPath = _defaultGameDirectory;
+            fbd.SelectedPath = DOOMEternal.GameDirectory;
             fbd.Description = "选择游戏文件夹";
             if (fbd.ShowDialog() == System.Windows.Forms.DialogResult.OK) {
-                _dEModMananger.GameDirectory = fbd.SelectedPath;
+                DOOMEternal.GameDirectory = fbd.SelectedPath;
             }
         }
         private void OpenGameDirectory_Click(object sender, MouseButtonEventArgs e) {
@@ -146,10 +147,11 @@ namespace DEModLauncher_GUI {
         }
         private void AddModPack_Click(object sender, RoutedEventArgs e) {
             try {
-                View.TextInputWindow textInput = new View.TextInputWindow();
+                DEModPack copy = new DEModPack();
+                View.TextInputWindow textInput = new View.TextInputWindow(copy);
                 textInput.Owner = this;
                 if (textInput.ShowDialog() == true) {
-                    _dEModMananger.AddMod(textInput.TextA, textInput.TextB);
+                    _dEModMananger.AddMod(copy.PackName, copy.Description);
                     ModPackDisplayer.ScrollToHorizontalOffset(ModPackDisplayer.ScrollableWidth * 2);
                 }
             }
@@ -168,13 +170,15 @@ namespace DEModLauncher_GUI {
         }
         private void EditModPack_Click(object sender, RoutedEventArgs e) {
             DEModPack modPack = GetDEModPackFromControl(sender);
-            View.TextInputWindow textInput = new View.TextInputWindow();
-            textInput.Owner = this;
-            textInput.TextA = modPack.PackName;
-            textInput.TextB = modPack.Description;
+            DEModPack copy = new DEModPack();
+            copy.PackName = modPack.PackName;
+            copy.Description = modPack.Description;
+            copy.SetImage(modPack.ImagePath);
+            View.TextInputWindow textInput = new View.TextInputWindow(copy) { Owner = this };
             if (textInput.ShowDialog() == true) {
                 try {
-                    _dEModMananger.RenameMod(modPack, textInput.TextA, textInput.TextB);
+                    _dEModMananger.RenameMod(modPack, copy.PackName, copy.Description);
+                    modPack.SetImage(copy.ImagePath);
                 }
                 catch (Exception exp) {
                     MessageBox.Show(exp.Message, "修改模组配置错误", MessageBoxButton.OK, MessageBoxImage.Error);
@@ -245,7 +249,7 @@ namespace DEModLauncher_GUI {
                 System.Windows.Forms.OpenFileDialog ofd = new System.Windows.Forms.OpenFileDialog();
                 ofd.Title = "选择模组包文件";
                 ofd.Filter = "zip压缩包|*.zip";
-                ofd.InitialDirectory = _dEModMananger.ModPacksDirectory;
+                ofd.InitialDirectory = DOOMEternal.ModPacksDirectory;
                 ofd.Multiselect = true;
                 if (ofd.ShowDialog() == System.Windows.Forms.DialogResult.OK) {
                     foreach (var fileName in ofd.FileNames) {
@@ -340,17 +344,20 @@ namespace DEModLauncher_GUI {
             }
             Point newPont = e.GetPosition(this);
             double movedDistance = newPont.X - _heldPoint.X;
+            double movedDistanceAbs = Math.Abs(movedDistance);
             if (movedDistance < 0) {
-                ModPackDisplayer.ScrollToHorizontalOffset(ModPackDisplayer.HorizontalOffset + 15);
+                ModPackDisplayer.ScrollToHorizontalOffset(ModPackDisplayer.HorizontalOffset + movedDistanceAbs);
             }
             else {
-                ModPackDisplayer.ScrollToHorizontalOffset(ModPackDisplayer.HorizontalOffset - 15);
+                ModPackDisplayer.ScrollToHorizontalOffset(ModPackDisplayer.HorizontalOffset - movedDistanceAbs);
             }
             _heldPoint = newPont;
+            e.Handled = true;
         }
 
         private void Direction_MouseWHeel(object sender, MouseWheelEventArgs e) {
             ModPackDisplayer.ScrollToHorizontalOffset(ModPackDisplayer.HorizontalOffset - e.Delta);
+            e.Handled = true;
         }
     }
 }

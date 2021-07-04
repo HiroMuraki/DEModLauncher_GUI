@@ -9,18 +9,14 @@ using System.Threading.Tasks;
 
 namespace DEModLauncher_GUI.ViewModel {
     using Resources = ObservableCollection<DEModResource>;
-    public class DEModPack : INotifyPropertyChanged {
-        public event PropertyChangedEventHandler PropertyChanged;
-        public void OnPropertyChanged(string propertyName) {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        }
-
+    public class DEModPack : ViewModelBase {
         private string _packName;
         private string _description;
+        private string _imagePath;
         private readonly Resources _resources;
-        private string _gameDirectory;
         private bool _isSelected;
 
+        #region 公共属性
         public string PackName {
             get {
                 return _packName;
@@ -39,6 +35,11 @@ namespace DEModLauncher_GUI.ViewModel {
                 OnPropertyChanged(nameof(Description));
             }
         }
+        public string ImagePath {
+            get {
+                return $@"{DOOMEternal.ModImagesDirectory}\{_imagePath}";
+            }
+        }
         public Resources Resources {
             get {
                 return _resources;
@@ -53,39 +54,20 @@ namespace DEModLauncher_GUI.ViewModel {
                 OnPropertyChanged(nameof(IsSelected));
             }
         }
+        #endregion
 
-        public string GameDirectroy {
-            get {
-                return _gameDirectory;
-            }
-            set {
-                _gameDirectory = value;
-                OnPropertyChanged(nameof(GameDirectroy));
-                OnPropertyChanged(nameof(ModDirectory));
-                OnPropertyChanged(nameof(ModPacksDirectory));
-            }
-        }
-        public string ModDirectory {
-            get {
-                return $@"{_gameDirectory}\Mods";
-            }
-        }
-        public string ModPacksDirectory {
-            get {
-                return $@"{_gameDirectory}\Mods\ModPacks";
-            }
-        }
-
+        #region 构造方法
         public DEModPack() {
-            _packName = "UNNAMED_MODPACK";
             _resources = new Resources();
         }
+        #endregion
 
-        public StreamReader Launch(string modLoadder) {
+        #region 公共方法
+        public StreamReader Launch() {
             LaunchCheck();
             ClearResources();
             SetResources();
-            Process p = GenerateProcess(modLoadder);
+            Process p = GenerateProcess(DOOMEternal.ModLoader);
             p.Start();
             return p.StandardOutput;
         }
@@ -129,10 +111,10 @@ namespace DEModLauncher_GUI.ViewModel {
                     throw new ArgumentException($"模组包[{resourceName}]已添加，不可重复添加");
                 }
             }
-            if (_gameDirectory == null) {
+            if (DOOMEternal.GameDirectory == null) {
                 throw new ArgumentException("请先选择游戏文件夹");
             }
-            string modPackBackup = $@"{ModPacksDirectory}\{resourceName}";
+            string modPackBackup = $@"{DOOMEternal.ModPacksDirectory}\{resourceName}";
             if (!File.Exists(modPackBackup)) {
                 File.Copy(resourcePath, modPackBackup);
             }
@@ -142,10 +124,27 @@ namespace DEModLauncher_GUI.ViewModel {
         public void DeleteResource(DEModResource resource) {
             _resources.Remove(resource);
         }
+        public void SetImage(string imagePath) {
+            if (string.IsNullOrEmpty(imagePath)) {
+                return;
+            }
+            string fileName = Path.GetFileNameWithoutExtension(imagePath);
+            string fileExt = Path.GetExtension(imagePath);
+            string imageName = $@"{fileName}{fileExt}";
+            string destPath = $@"{DOOMEternal.ModImagesDirectory}\{imageName}";
+            if (!Directory.Exists(DOOMEternal.ModImagesDirectory)) {
+                Directory.CreateDirectory(DOOMEternal.ModImagesDirectory);
+            }
+            if (!File.Exists(destPath)) {
+                File.Copy(imagePath, destPath);
+            }
+            _imagePath = imageName;
+            OnPropertyChanged(nameof(ImagePath));
+        }
         public void GenerateMergedFile(string outputFile) {
             int conflictedItems = GetConflictInformation().Item3;
             string fileName = Path.GetFileNameWithoutExtension(outputFile);
-            string mergeWorkingFolder = $@"{ModPacksDirectory}\MERGE_WORKING_FOLDER_{fileName}";
+            string mergeWorkingFolder = $@"{DOOMEternal.ModPacksDirectory}\MERGE_WORKING_FOLDER_{fileName}";
             if (conflictedItems > 0) {
                 throw new NotSupportedException("该模组配置存在冲突，请解决冲突后再导出");
             }
@@ -155,7 +154,7 @@ namespace DEModLauncher_GUI.ViewModel {
                 }
                 Directory.CreateDirectory(mergeWorkingFolder);
                 foreach (var resource in _resources) {
-                    using (ZipArchive zipFile = ZipFile.OpenRead($@"{ModPacksDirectory}\{resource.Path}")) {
+                    using (ZipArchive zipFile = ZipFile.OpenRead($@"{DOOMEternal.ModPacksDirectory}\{resource.Path}")) {
                         zipFile.ExtractToDirectory(mergeWorkingFolder);
                     }
                 }
@@ -176,7 +175,7 @@ namespace DEModLauncher_GUI.ViewModel {
                 if (resource.Status == ResourceStatus.Disabled) {
                     continue;
                 }
-                string fullFileName = $@"{ModPacksDirectory}\{resource.Path}";
+                string fullFileName = $@"{DOOMEternal.ModPacksDirectory}\{resource.Path}";
                 foreach (var subFile in GetZippedFiles(fullFileName)) {
                     if (!resourceDict.ContainsKey(subFile)) {
                         resourceDict[subFile] = new List<string>();
@@ -193,6 +192,7 @@ namespace DEModLauncher_GUI.ViewModel {
             int resourceCount = _resources.Count;
             return $"{_packName}({resourceCount}个模组)";
         }
+        #endregion
 
         private static Dictionary<string, List<string>> GetConflictedFiles(Dictionary<string, List<string>> fileDict) {
             Dictionary<string, List<string>> conflictedFiles = new Dictionary<string, List<string>>();
@@ -218,13 +218,13 @@ namespace DEModLauncher_GUI.ViewModel {
                 if (resource.Status == ResourceStatus.Disabled) {
                     continue;
                 }
-                if (!File.Exists($@"{ModPacksDirectory}\{resource.Path}")) {
-                    throw new FileNotFoundException($"无法找到模组包{resource.Path}\n请检查{ModPacksDirectory}\\{resource.Path}");
+                if (!File.Exists($@"{DOOMEternal.ModPacksDirectory}\{resource.Path}")) {
+                    throw new FileNotFoundException($"无法找到模组包{resource.Path}\n请检查{DOOMEternal.ModPacksDirectory}\\{resource.Path}");
                 }
             }
         }
         private void ClearResources() {
-            var fileList = Directory.GetFiles(ModDirectory);
+            var fileList = Directory.GetFiles(DOOMEternal.ModDirectory);
             foreach (var file in fileList) {
                 if (!File.Exists(file)) {
                     continue;
@@ -238,8 +238,8 @@ namespace DEModLauncher_GUI.ViewModel {
                     continue;
                 }
                 string fileName = Path.GetFileName(resource.Path);
-                string sourceFile = $@"{ModPacksDirectory}\{fileName}";
-                string destFile = $@"{ModDirectory}\{fileName}";
+                string sourceFile = $@"{DOOMEternal.ModPacksDirectory}\{fileName}";
+                string destFile = $@"{DOOMEternal.ModDirectory}\{fileName}";
                 File.Copy(sourceFile, destFile);
             }
         }
@@ -248,7 +248,7 @@ namespace DEModLauncher_GUI.ViewModel {
             p.StartInfo.UseShellExecute = false;
             p.StartInfo.CreateNoWindow = true;
             p.StartInfo.RedirectStandardOutput = true;
-            p.StartInfo.FileName = $@"{_gameDirectory}\{modLoadder}";
+            p.StartInfo.FileName = $@"{DOOMEternal.GameDirectory}\{modLoadder}";
             return p;
         }
     }

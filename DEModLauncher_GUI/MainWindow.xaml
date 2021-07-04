@@ -3,10 +3,11 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:View="clr-namespace:DEModLauncher_GUI.View"
         xmlns:ViewModel="clr-namespace:DEModLauncher_GUI.ViewModel"
         xmlns:ValueConverter="clr-namespace:DEModLauncher_GUI.ViewModel.ValueConverter"
-        mc:Ignorable="d" x:Name="Self"
-        DataContext="{Binding ElementName=Self,Path=DEModManager}"
+        mc:Ignorable="d"
+        DataContext="{Binding Path=DEModManager,RelativeSource={RelativeSource Mode=Self}}"
         FontFamily="Microsoft YaHei UI"
         WindowStartupLocation="CenterScreen" ResizeMode="NoResize" MouseWheel="Direction_MouseWHeel"
         Title="DEMODLauncher" Height="550" Width="800">
@@ -61,7 +62,7 @@
                             <MenuItem Tag="{Binding CurrentMod}" Header="{StaticResource GENERATE_MERGED_FILE}" Click="GenerateMergedFile_ClicK"/>
                         </ContextMenu>
                     </Grid.ContextMenu>
-                    <Image Grid.Row="0" Grid.RowSpan="2" Source="C:\Users\11717\Desktop\PIC\可爱\1iytyssdcn9n9m4wpgnbld1o1.jpg" Stretch="UniformToFill" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                    <Image Grid.Row="0" Grid.RowSpan="2" Source="{Binding CurrentMod.ImagePath}" Stretch="UniformToFill" VerticalAlignment="Center" HorizontalAlignment="Center"/>
                     <Grid Grid.Row="1">
                         <Border Background="Black" Opacity="0.70"/>
                         <Label Content="{Binding CurrentMod.PackName}" Foreground="{StaticResource TextColor}" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" FontSize="18"/>
@@ -178,12 +179,10 @@
                                 </EventTrigger>
                             </StackPanel.Triggers>
                             <Button ToolTip="{StaticResource ADD_MOD_RESOURCES_FROM_MOD_PACK_TOOLTIP}" Tag="{Binding CurrentMod}"
-                                    Click="AddModPackReference_Click" Style="{StaticResource GAddButtonStatic}"
-                                    Width="Auto">
+                                    Click="AddModPackReference_Click" Style="{StaticResource GAddButtonStatic}" BorderThickness="0" Width="Auto">
                             </Button>
                             <Button ToolTip="{StaticResource ADD_MOD_RESOURCE_TOOLTIP}" Tag="{Binding CurrentMod}"
-                                    Click="AddResource_Click" Style="{StaticResource GAddButtonStatic}"
-                                    Width="Auto">
+                                    Click="AddResource_Click" Style="{StaticResource GAddButtonStatic}" BorderThickness="0" Width="Auto">
                             </Button>
                         </StackPanel>
                     </Grid>
@@ -194,7 +193,7 @@
                     <ColumnDefinition/>
                     <ColumnDefinition Width="Auto"/>
                 </Grid.ColumnDefinitions>
-                <ScrollViewer Grid.Column="0" x:Name="ModPackDisplayer" VerticalScrollBarVisibility="Hidden" HorizontalScrollBarVisibility="Hidden"  MouseDown="Direction_MouseDown" MouseMove="Direction_MouseMove">
+                <ScrollViewer Grid.Column="0" x:Name="ModPackDisplayer" VerticalScrollBarVisibility="Hidden" HorizontalScrollBarVisibility="Hidden" PreviewMouseWheel="Direction_MouseWHeel"  PreviewMouseDown="Direction_MouseDown" PreviewMouseMove="Direction_MouseMove">
                     <ScrollViewer.ContextMenu>
                         <ContextMenu BorderThickness="0" Padding="0" Background="Transparent">
                             <MenuItem Tag="{Binding}" Header="{StaticResource ADD_MOD_PACK_TOOLTIP}" Click="AddModPack_Click"/>
@@ -216,11 +215,8 @@
                                                 <MenuItem Tag="{Binding}" Header="{StaticResource GENERATE_MERGED_FILE}" Click="GenerateMergedFile_ClicK"/>
                                             </ContextMenu>
                                         </Grid.ContextMenu>
-                                        <RadioButton Content="{Binding PackName}" ToolTip="{Binding Description}" Tag="{Binding}"
-                                                     IsChecked="{Binding IsSelected}" Margin="5,0"
-                                                     Style="{StaticResource GModPackButton}" GroupName="PackNameSelected"
-                                                     Click="SelectModPack_Click" MouseDoubleClick="EditModPack_Click">
-                                        </RadioButton>
+                                        <View:ModPackButton ToolTip="{Binding Description}" PackName="{Binding PackName}" ImagePath="{Binding ImagePath}" Tag="{Binding}" IsChecked="{Binding IsSelected}" Margin="5,0" 
+                                                            GroupName="PackNameSelected" Click="SelectModPack_Click"/>
                                     </Grid>
                                 </DataTemplate>
                             </ItemsControl.ItemTemplate>
@@ -273,6 +269,7 @@
                                         <ControlTemplate.Triggers>
                                             <Trigger Property="IsMouseOver" Value="True">
                                                 <Setter Property="FontSize" Value="50" />
+                                                <Setter Property="Background" Value="{StaticResource AccentColor}" />
                                             </Trigger>
                                         </ControlTemplate.Triggers>
                                     </ControlTemplate>

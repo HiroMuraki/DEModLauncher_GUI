@@ -1,5 +1,7 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:View="clr-namespace:DEModLauncher_GUI.View"
+                    xmlns:ValueConverter="clr-namespace:DEModLauncher_GUI.ViewModel.ValueConverter">
     <Style TargetType="MenuItem">
         <Setter Property="Background" Value="{StaticResource MainColor}" />
         <Setter Property="Foreground" Value="{StaticResource TextColor}" />
@@ -155,9 +157,8 @@
             </Trigger>
         </Style.Triggers>
     </Style>
-    <Style x:Key="GModPackButton" TargetType="RadioButton">
+    <Style TargetType="{x:Type View:ModPackButton}">
         <Setter Property="Background" Value="{StaticResource ModPackItemColor}" />
-        <Setter Property="Foreground" Value="{StaticResource TextColor}" />
         <Setter Property="BorderBrush" Value="{StaticResource BorderColor}" />
         <Setter Property="BorderThickness" Value="0,0,0,1" />
         <Setter Property="FontSize" Value="12" />
@@ -165,32 +166,35 @@
         <Setter Property="Height" Value="80" />
         <Setter Property="Template">
             <Setter.Value>
-                <ControlTemplate TargetType="RadioButton">
+                <ControlTemplate TargetType="{x:Type View:ModPackButton}">
                     <Grid>
-                       
+                        <Grid.Resources>
+                            <ValueConverter:DoubleGroupToRect x:Key="DoubleGroupToRect"/>
+                        </Grid.Resources>
+                        <Grid.Clip>
+                            <RectangleGeometry RadiusX="5" RadiusY="5">
+                                <RectangleGeometry.Rect>
+                                    <MultiBinding Converter="{StaticResource DoubleGroupToRect}">
+                                        <Binding Path="Width" RelativeSource="{RelativeSource Mode=TemplatedParent}"/>
+                                        <Binding Path="Height" RelativeSource="{RelativeSource Mode=TemplatedParent}"/>
+                                    </MultiBinding>
+                                </RectangleGeometry.Rect>
+                            </RectangleGeometry>
+                        </Grid.Clip>
                         <Grid.RowDefinitions>
                             <RowDefinition/>
                             <RowDefinition Height="25"/>
                         </Grid.RowDefinitions>
                         <Grid Grid.Row="0" Grid.RowSpan="2" >
-                            <Border Background="{StaticResource ItemShadowColor}"
-                                    Opacity="0.5"
-                                    Margin="1,1,-1,-1"
-                                    CornerRadius="5"/>
-                            <Border Background="{TemplateBinding Background}"
-                                    BorderBrush="{TemplateBinding BorderBrush}"
-                                    BorderThickness="{TemplateBinding BorderThickness}"
-                                    CornerRadius="5"/>
-                            <Border CornerRadius="5">
-                                <Border.Background>
-                                    <ImageBrush ImageSource="C:\Users\11717\Desktop\PIC\可爱\1iytyssdcn9n9m4wpgnbld1o1.jpg" Stretch="UniformToFill"/>
-                                </Border.Background>
+                            <Border Background="{StaticResource ItemShadowColor}" Opacity="0.5" Margin="1,1,-1,-1"/>
+                            <Border Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}">
+                                <Image Source="{Binding Path=ImagePath,RelativeSource={RelativeSource Mode=TemplatedParent}}" Stretch="UniformToFill"/>
                             </Border>
                             <Border x:Name="MaskBackground" Background="Black" Opacity="0.50" CornerRadius="5"/>
                         </Grid>
                         <Grid Grid.Row="1">
-                            <Border x:Name="TextMask" Background="Black" Opacity="0.70" VerticalAlignment="Bottom" Height="25" CornerRadius="0,0,5,5"/>
-                            <ContentPresenter x:Name="TextContent"  VerticalAlignment="Center"  HorizontalAlignment="Center" Margin="0"/>
+                            <Border x:Name="TextMask" Background="Black" Opacity="0.70" VerticalAlignment="Bottom" Height="25"/>
+                            <Label x:Name="TextContent" Content="{Binding Path=PackName,RelativeSource={RelativeSource Mode=TemplatedParent}}" Foreground="{StaticResource TextColor}" VerticalContentAlignment="Center" HorizontalContentAlignment="Center"/>
                         </Grid>
                     </Grid>
                     <ControlTemplate.Triggers>

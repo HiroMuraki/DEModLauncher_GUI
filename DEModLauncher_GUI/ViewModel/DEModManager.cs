@@ -11,50 +11,16 @@ using System.Diagnostics;
 
 namespace DEModLauncher_GUI.ViewModel {
     using DEModPacks = ObservableCollection<DEModPack>;
-    public class DEModManager : INotifyPropertyChanged {
-        public event PropertyChangedEventHandler PropertyChanged;
-        public void OnPropertyChanged(string propertyName) {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        }
-
+    public class DEModManager : ViewModelBase {
+        private static readonly DEModManager _singletonIntance;
         private static readonly DataContractJsonSerializer _serializer = new DataContractJsonSerializer(typeof(Model.DEModManager));
         private static readonly string _windowsExplorerExecutor = "explorer.exe";
-        private string _gameMainExecutor = "DOOMEternalx64vk.exe";
-        private string _modLoader = "EternalModInjector.bat";
-        private string _gameDirectory;
         private bool _isLaunching;
         private DEModPack _currentMod;
         private readonly DEModPacks _dEModPacks;
         private string _consoleStandardOutput;
 
-        public string GameDirectory {
-            get {
-                return _gameDirectory;
-            }
-            set {
-                _gameDirectory = value;
-                foreach (var modPack in _dEModPacks) {
-                    modPack.GameDirectroy = _gameDirectory;
-                }
-                if (!Directory.Exists(ModsDirectory)) {
-                    Directory.CreateDirectory(ModsDirectory);
-                }
-                if (!Directory.Exists(ModPacksDirectory)) {
-                    Directory.CreateDirectory(ModPacksDirectory);
-                }
-                OnPropertyChanged(nameof(GameDirectory));
-            }
-        }
-        public string ModsDirectory {
-            get {
-                return $@"{_gameDirectory}\Mods";
-            }
-        }
-        public string ModPacksDirectory {
-            get {
-                return $@"{_gameDirectory}\Mods\ModPacks";
-            }
-        }
+        #region 公共属性
         public bool IsLaunching {
             get {
                 return _isLaunching;
@@ -90,23 +56,33 @@ namespace DEModLauncher_GUI.ViewModel {
                 OnPropertyChanged(nameof(ConsoleStandardOutput));
             }
         }
+        #endregion
 
-        public DEModManager() {
+        #region 构造方法
+        static DEModManager() {
+            _singletonIntance = new DEModManager();
+        }
+        private DEModManager() {
             _currentMod = null;
             _dEModPacks = new DEModPacks();
         }
+        public static DEModManager GetInstance() {
+            if (_singletonIntance == null) {
+                throw new Exception("FATAL ERROR, RESTART REQUIRED");
+            }
+            return _singletonIntance;
+        }
+        #endregion
 
-        public StreamReader Launch() {
+        #region 公共方法
+        public StreamReader LaunchWithModLoader() {
             if (_currentMod == null) {
                 throw new InvalidOperationException("当前未选择有效模组");
             }
-            _currentMod.GameDirectroy = _gameDirectory;
-            return _currentMod.Launch(_modLoader);
+            return _currentMod.Launch();
         }
-        public void LaunchDirectly() {
-            Process p = new Process();
-            p.StartInfo.FileName = $@"{_gameDirectory}\{_gameMainExecutor}";
-            p.Start();
+        public void Launch() {
+            DOOMEternal.LaunchGame();
         }
         public void MoveUpMod(DEModPack modPack) {
             int currentIndex = _dEModPacks.IndexOf(modPack);
@@ -133,7 +109,7 @@ namespace DEModLauncher_GUI.ViewModel {
             _dEModPacks[newIndex] = t;
         }
         public void AddMod(string modName, string description) {
-            if (_gameDirectory == null) {
+            if (DOOMEternal.GameDirectory == null) {
                 throw new ArgumentException("请先选择游戏文件夹");
             }
             if (string.IsNullOrEmpty(modName)) {
@@ -147,7 +123,6 @@ namespace DEModLauncher_GUI.ViewModel {
             DEModPack dmp = new DEModPack();
             dmp.PackName = modName;
             dmp.Description = description;
-            dmp.GameDirectroy = _gameDirectory;
             _dEModPacks.Add(dmp);
             CurrentMod = dmp;
         }
@@ -179,7 +154,6 @@ namespace DEModLauncher_GUI.ViewModel {
             }
             copiedPack.PackName = testName;
             copiedPack.Description = modPack.Description;
-            copiedPack.GameDirectroy = modPack.GameDirectroy;
             foreach (var res in modPack.Resources) {
                 copiedPack.Resources.Add(res);
             }
@@ -187,11 +161,13 @@ namespace DEModLauncher_GUI.ViewModel {
         }
         public void SaveToFile(string fileName) {
             Model.DEModManager dm = new Model.DEModManager();
-            dm.GameDirectory = _gameDirectory;
-            dm.ModLoader = _modLoader;
-            dm.GameMainExecutor = _gameMainExecutor;
+            // 写入管理器属性
+            dm.GameDirectory = DOOMEternal.GameDirectory;
+            dm.ModLoader = DOOMEternal.ModLoader;
+            dm.GameMainExecutor = DOOMEternal.GameMainExecutor;
             dm.CurrentMod = _currentMod?.PackName;
             dm.ModPacks = new List<Model.DEModPack>();
+            // 写入ModPacks信息
             foreach (var modPack in _dEModPacks) {
                 Model.DEModPack dp = new Model.DEModPack();
                 dp.PackName = modPack.PackName;
@@ -216,19 +192,19 @@ namespace DEModLauncher_GUI.ViewModel {
             }
 
             CurrentMod = null;
-            GameDirectory = dm.GameDirectory;
+            DOOMEternal.GameDirectory = dm.GameDirectory;
             if (!string.IsNullOrEmpty(dm.ModLoader)) {
-                _modLoader = dm.ModLoader;
+                DOOMEternal.ModLoader = dm.ModLoader;
             }
             if (!string.IsNullOrEmpty(dm.GameMainExecutor)) {
-                _gameMainExecutor = dm.GameMainExecutor;
+                DOOMEternal.GameMainExecutor = dm.GameMainExecutor;
             }
             _dEModPacks.Clear();
             foreach (var modPack in dm.ModPacks) {
                 DEModPack dp = new DEModPack();
                 dp.PackName = modPack.PackName;
                 dp.Description = modPack.Description;
-                dp.GameDirectroy = dm.GameDirectory;
+                dp.SetImage(modPack.ImagePath);
                 foreach (var res in modPack.Resources) {
                     DEModResource resource = new DEModResource(res);
                     dp.Resources.Add(resource);
@@ -242,18 +218,19 @@ namespace DEModLauncher_GUI.ViewModel {
         public void OpenGameDirectory() {
             Process p = new Process();
             p.StartInfo.FileName = _windowsExplorerExecutor;
-            p.StartInfo.Arguments = $@"/e, {_gameDirectory}";
+            p.StartInfo.Arguments = $@"/e, { DOOMEternal.GameDirectory}";
             p.Start();
         }
         public void OpenResourceFile(string resourceName) {
             Process p = new Process();
-            string filePath = $@"{ModPacksDirectory}\{resourceName}";
+            string filePath = $@"{DOOMEternal.ModPacksDirectory}\{resourceName}";
             if (!File.Exists(filePath)) {
                 throw new FileNotFoundException($"无法找到文件：{filePath}");
             }
             p.StartInfo.FileName = _windowsExplorerExecutor;
-            p.StartInfo.Arguments = $@"/select, {ModPacksDirectory}\{resourceName}";
+            p.StartInfo.Arguments = $@"/select, {DOOMEternal.ModPacksDirectory}\{resourceName}";
             p.Start();
         }
+        #endregion
     }
 }

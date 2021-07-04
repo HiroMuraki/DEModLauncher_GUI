@@ -12,6 +12,9 @@ namespace DEModLauncher_GUI {
     /// </summary>
     public partial class App : Application {
         private void Application_Startup(object sender, StartupEventArgs e) {
+            if (DOOMEternal.GameDirectory == null) {
+                DOOMEternal.GameDirectory = Environment.CurrentDirectory;
+            }
             MainWindow window = new MainWindow();
             window.ShowDialog();
         }

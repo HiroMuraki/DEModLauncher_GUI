@@ -6,16 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace DEModLauncher_GUI.ViewModel {
-    public enum ResourceStatus {
-        Enabled,
-        Disabled
-    }
-    public class DEModResource : INotifyPropertyChanged {
-        public event PropertyChangedEventHandler PropertyChanged;
-        public void OnPropertyChanged(string propertyName) {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        }
-
+    public class DEModResource : ViewModelBase {
         private string _path;
         private ResourceStatus _status;
 

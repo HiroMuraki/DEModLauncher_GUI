@@ -6,8 +6,8 @@
         xmlns:local="clr-namespace:DEModLauncher_GUI.View"
         xmlns:ViewModel="clr-namespace:DEModLauncher_GUI.ViewModel"
         xmlns:View="clr-namespace:DEModLauncher_GUI.View"
-        mc:Ignorable="d" x:Name="Self"
-        DataContext="{Binding ElementName=Self}"
+        mc:Ignorable="d"
+        DataContext="{Binding RelativeSource={RelativeSource Mode=Self}}"
         WindowStartupLocation="CenterOwner" ResizeMode="NoResize"
         Title="DEModPackSelectWindow" Height="400" Width="350">
     <WindowChrome.WindowChrome>
