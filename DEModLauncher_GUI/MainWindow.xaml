@@ -292,15 +292,11 @@
                     </Button.Style>
                 </Button>
             </Grid>
-            <!--Grid Grid.RowSpan="2">
-                <Button Content="{StaticResource SAVE_PROFILE_FILE}" 
-                            ToolTip="{StaticResource SAVE_PROFILE_FILE_TOOLTIP}" FontSize="14" Width="80" Grid.Column="0"
-                            Style="{StaticResource GButton}" BorderThickness="0,1,0,0"
-                            Click="SaveToFile_Click"/>
-                <Button Content="{StaticResource RELOAD_PROFILE_FILE}" 
-                    ToolTip="{StaticResource RELOAD_PROFILE_FILE_TOOLTIP}" FontSize="14" Width="80" Grid.Column="1" 
-                    Style="{StaticResource GButton}" BorderThickness="1,1,1,0"
-                    Click="LoadFromFile_Click"/>
+            <Grid Grid.RowSpan="3">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="30"/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
                 <Grid.Style>
                     <Style TargetType="Grid">
                         <Style.Triggers>
@@ -315,10 +311,14 @@
                         </Style.Triggers>
                     </Style>
                 </Grid.Style>
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="30"/>
-                    <RowDefinition/>
-                </Grid.RowDefinitions>
+                <Button Content="{StaticResource SAVE_PROFILE_FILE}" 
+                            ToolTip="{StaticResource SAVE_PROFILE_FILE_TOOLTIP}" FontSize="14" Width="80" Grid.Column="0"
+                            Style="{StaticResource GButton}" BorderThickness="0,1,0,0"
+                            Click="SaveToFile_Click"/>
+                <Button Content="{StaticResource RELOAD_PROFILE_FILE}" 
+                    ToolTip="{StaticResource RELOAD_PROFILE_FILE_TOOLTIP}" FontSize="14" Width="80" Grid.Column="1" 
+                    Style="{StaticResource GButton}" BorderThickness="1,1,1,0"
+                    Click="LoadFromFile_Click"/>
                 <Grid Grid.Row="0">
                     <Border Grid.Row="0" Background="{StaticResource AccentColor}" MouseLeftButtonDown="Window_Move"/>
                     <Button Content="━" VerticalAlignment="Center" HorizontalAlignment="Right"
@@ -331,7 +331,7 @@
                              BorderThickness="0" FontSize="12" Margin="50,30" IsReadOnly="True" 
                              MouseLeftButtonDown="Window_Move"/>
                 </ScrollViewer>
-            </Grid-->
+            </Grid>
         </Grid>
     </Border>
 </Window>
