@@ -131,11 +131,15 @@ namespace DEModLauncher_GUI {
         private void AddModPack_Click(object sender, RoutedEventArgs e) {
             try {
                 View.DEModPackSetter setter = new View.DEModPackSetter() { Owner = this };
+                setter.PackName = "模组名";
+                setter.Description = "描述信息";
+                setter.ImagePath = DOOMEternal.DefaultModPackImage;
                 if (setter.ShowDialog() == true) {
                     DEModPack modPack = new DEModPack();
                     modPack.PackName = setter.PackName;
                     modPack.Description = setter.Description;
                     modPack.SetImage(setter.ImagePath);
+                    modPack.IsSelected = false;
                     _dEModMananger.AddModPack(modPack);
                     ModPackDisplayer.ScrollToHorizontalOffset(ModPackDisplayer.ScrollableWidth * 2);
                 }
