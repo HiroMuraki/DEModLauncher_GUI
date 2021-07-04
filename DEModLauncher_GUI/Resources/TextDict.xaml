@@ -31,7 +31,7 @@
     <Sys:String x:Key="LAUNCH_DIRECTLY">启动</Sys:String>
     <Sys:String x:Key="LAUNCH_DIRECTLY_TOOLTIP">直接启动游戏</Sys:String>
     <!--游戏文件夹-->
-    <Sys:String x:Key="GAME_DIRECTORY">游戏文件夹</Sys:String>
+    <Sys:String x:Key="GAME_DIRECTORY">游戏目录</Sys:String>
     <Sys:String x:Key="GAME_DIRECTORY_TOOLTIP">游戏文件夹路径</Sys:String>
     <!--选择游戏文件夹-->
     <Sys:String x:Key="SELECT_GAME_FOLDER">选择</Sys:String>

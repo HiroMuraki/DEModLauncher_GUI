@@ -1,12 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Configuration;
-using System.Data;
+﻿using DEModLauncher_GUI.ViewModel;
+using System;
 using System.IO;
-using System.Linq;
-using System.Threading.Tasks;
 using System.Windows;
-using DEModLauncher_GUI.ViewModel;
 
 namespace DEModLauncher_GUI {
     /// <summary>
@@ -14,12 +9,12 @@ namespace DEModLauncher_GUI {
     /// </summary>
     public partial class App : Application {
         private void Application_Startup(object sender, StartupEventArgs e) {
-            if (DOOMEternal.GameDirectory == null) {
-                DOOMEternal.GameDirectory = Environment.CurrentDirectory;
-            }
             if (File.Exists(DOOMEternal.LauncherProfileFile)) {
                 DEModManager.GetInstance().LoadFromFile(DOOMEternal.LauncherProfileFile);
             }
+            // 强制将游戏文件夹路径设置为当前文件夹
+            DOOMEternal.GameDirectory = Environment.CurrentDirectory;
+            DOOMEternal.InitNecessaryDirectory();
             MainWindow window = new MainWindow();
             window.ShowDialog();
         }

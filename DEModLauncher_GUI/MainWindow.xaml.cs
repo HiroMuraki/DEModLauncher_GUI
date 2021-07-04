@@ -1,20 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
+﻿using DEModLauncher_GUI.ViewModel;
+using System;
 using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
-using DEModLauncher_GUI.ViewModel;
 
 namespace DEModLauncher_GUI {
     /// <summary>
@@ -161,21 +153,13 @@ namespace DEModLauncher_GUI {
         }
         private void EditModPack_Click(object sender, RoutedEventArgs e) {
             DEModPack modPack = GetDEModPackFromControl(sender);
-            DEModPack copy = new DEModPack();
-            copy.PackName = modPack.PackName;
-            copy.Description = modPack.Description;
-            copy.SetImage(modPack.ImagePath);
-            View.DEModPackSetter textInput = new View.DEModPackSetter(copy) { Owner = this };
-            if (textInput.ShowDialog() == true) {
-                try {
-                    _dEModMananger.RenameMod(modPack, copy.PackName, copy.Description);
-                    modPack.SetImage(copy.ImagePath);
-                }
-                catch (Exception exp) {
-                    MessageBox.Show(exp.Message, "修改模组配置错误", MessageBoxButton.OK, MessageBoxImage.Error);
-                }
+            EditModPack(modPack);
+        }
+        private void EditModPack_Click(object sender, MouseButtonEventArgs e) {
+            if (e.ClickCount >= 2) {
+                DEModPack modPack = GetDEModPackFromControl(sender);
+                EditModPack(modPack);
             }
-            e.Handled = true;
         }
         private void CheckConflict_Click(object sender, RoutedEventArgs e) {
             DEModPack dmp = GetDEModPackFromControl(sender);
@@ -307,6 +291,9 @@ namespace DEModLauncher_GUI {
 
         #region 窗口操作
         private void Window_Move(object sender, MouseButtonEventArgs e) {
+            if (e.ClickCount >= 2) {
+                return;
+            }
             DragMove();
         }
         private void Window_Close(object sender, RoutedEventArgs e) {
@@ -345,6 +332,22 @@ namespace DEModLauncher_GUI {
         }
         private static DEModPack GetDEModPackFromControl(object sender) {
             return (sender as FrameworkElement).Tag as DEModPack;
+        }
+        private void EditModPack(DEModPack modPack) {
+            DEModPack copy = new DEModPack();
+            copy.PackName = modPack.PackName;
+            copy.Description = modPack.Description;
+            copy.SetImage(modPack.ImagePath);
+            View.DEModPackSetter textInput = new View.DEModPackSetter(copy) { Owner = this };
+            if (textInput.ShowDialog() == true) {
+                try {
+                    _dEModMananger.RenameMod(modPack, copy.PackName, copy.Description);
+                    modPack.SetImage(copy.ImagePath);
+                }
+                catch (Exception exp) {
+                    MessageBox.Show(exp.Message, "修改模组配置错误", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
+            }
         }
     }
 }

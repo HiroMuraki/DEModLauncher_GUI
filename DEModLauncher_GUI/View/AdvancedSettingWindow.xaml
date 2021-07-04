@@ -3,7 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:DEModLauncher_GUI.View"
+        xmlns:local="clr-namespace:DEModLauncher_GUI"
         mc:Ignorable="d" ResizeMode="NoResize"
         WindowStartupLocation="CenterOwner"
         Title="{StaticResource ADVANCED_OPTION}" Height="330" Width="400">
@@ -17,15 +17,13 @@
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="Auto"/>
                     <ColumnDefinition/>
-                    <ColumnDefinition Width="Auto"/>
+                    <!--ColumnDefinition Width="Auto"/-->
                 </Grid.ColumnDefinitions>
-                <Label Grid.Column="0" Content="{StaticResource GAME_DIRECTORY}" ToolTip="{StaticResource GAME_DIRECTORY_TOOLTIP}" Width="80" VerticalContentAlignment="Center" HorizontalContentAlignment="Center"
+                <Label Grid.Column="0" Content="{StaticResource GAME_DIRECTORY}" ToolTip="{StaticResource GAME_DIRECTORY_TOOLTIP}" Width="65" VerticalContentAlignment="Center" HorizontalContentAlignment="Center"
                                BorderThickness="0,1,0,0" BorderBrush="{StaticResource BorderColor}" 
                                Background="{StaticResource MainColor}" Foreground="{StaticResource TextColor}"/>
-                <TextBox Grid.Column="1" Text="{Binding GameDirectory,Mode=OneWay}" ToolTip="{Binding GameDirectory}" IsReadOnly="True" 
-                                 VerticalContentAlignment="Center" BorderThickness="0,1,0,0" BorderBrush="{StaticResource BorderColor}"  
-                                 Background="{StaticResource MainColor}" Foreground="{StaticResource TextColor}"
-                                 MouseDoubleClick="SelectGameDirectory_Click">
+                <TextBox Grid.Column="1" x:Name="GameDirectory" IsReadOnly="True" VerticalContentAlignment="Center" BorderThickness="0,1,0,0" BorderBrush="{StaticResource BorderColor}"  
+                         Background="{StaticResource MainColor}" Foreground="{StaticResource TextColor}">
                     <TextBox.Style>
                         <Style TargetType="TextBox">
                             <Setter Property="Template">
@@ -42,8 +40,8 @@
                         </Style>
                     </TextBox.Style>
                 </TextBox>
-                <Button Grid.Column="2" Content="{StaticResource SELECT_GAME_FOLDER}" ToolTip="{StaticResource SELECT_GAME_FOLDER_TOOLTIP}"
-                        Width="60" Click="SelectGameDirectory_Click" Style="{StaticResource GButton}"/>
+                <!--Button Grid.Column="2" Content="{StaticResource SELECT_GAME_FOLDER}" ToolTip="{StaticResource SELECT_GAME_FOLDER_TOOLTIP}"
+                        Width="60" Click="SelectGameDirectory_Click" Style="{StaticResource GButton}"/-->
             </Grid>
             <Grid Grid.Row="1">
                 <StackPanel>

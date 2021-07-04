@@ -64,7 +64,7 @@
                         </ContextMenu>
                     </Grid.ContextMenu>
                     <Grid Grid.Row="0" Grid.RowSpan="2" MouseLeftButtonDown="Window_Move">
-                        <Image Source="{Binding CurrentMod.ImagePath}" Stretch="UniformToFill" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                        <Image Source="{Binding CurrentMod.ImagePath}" Stretch="UniformToFill" VerticalAlignment="Center" HorizontalAlignment="Center" MouseDown="EditModPack_Click" Tag="{Binding CurrentMod}"/>
                     </Grid>
                     <Grid Grid.Row="1">
                         <Border Background="Black" Opacity="0.70"/>
@@ -100,7 +100,7 @@
                                 <ColumnDefinition Width="35"/>
                                 <ColumnDefinition Width="35"/>
                             </Grid.ColumnDefinitions>
-                            <Button Grid.Column="0" Content="[E]" Style="{StaticResource GButtonTitle}" Click="OpenOptionMenu_Click">
+                            <Button Grid.Column="0" Content="E" Style="{StaticResource GButtonTitle}" Click="OpenOptionMenu_Click">
                                 <Button.ContextMenu>
                                     <ContextMenu>
                                         <MenuItem Header="{StaticResource SAVE_PROFILE_FILE}" ToolTip="{StaticResource SAVE_PROFILE_FILE_TOOLTIP}" Click="SaveToFile_Click"/>
@@ -230,7 +230,7 @@
                                             </ContextMenu>
                                         </Grid.ContextMenu>
                                         <View:ModPackButton ToolTip="{Binding Description}" PackName="{Binding PackName}" ImagePath="{Binding ImagePath}" Tag="{Binding}" IsChecked="{Binding IsSelected}" Margin="5,0" 
-                                                            GroupName="PackNameSelected" Click="SelectModPack_Click"/>
+                                                            GroupName="PackNameSelected" Click="SelectModPack_Click" PreviewMouseLeftButtonDown="EditModPack_Click"/>
                                     </Grid>
                                 </DataTemplate>
                             </ItemsControl.ItemTemplate>

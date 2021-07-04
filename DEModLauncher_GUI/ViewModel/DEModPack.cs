@@ -1,11 +1,9 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
 using System.IO.Compression;
-using System.Threading.Tasks;
 
 namespace DEModLauncher_GUI.ViewModel {
     using Resources = ObservableCollection<DEModResource>;
@@ -139,9 +137,6 @@ namespace DEModLauncher_GUI.ViewModel {
             string fileExt = Path.GetExtension(imagePath);
             string imageName = $@"{fileName}{fileExt}";
             string destPath = $@"{DOOMEternal.ModPackImagesDirectory}\{imageName}";
-            if (!Directory.Exists(DOOMEternal.ModPackImagesDirectory)) {
-                Directory.CreateDirectory(DOOMEternal.ModPackImagesDirectory);
-            }
             if (!File.Exists(destPath)) {
                 File.Copy(imagePath, destPath);
             }
@@ -194,6 +189,32 @@ namespace DEModLauncher_GUI.ViewModel {
             }
             int conflictedCount = totalCount - validCount;
             return Tuple.Create(totalCount, validCount, conflictedCount, GetConflictedFiles(resourceDict));
+        }
+        public Model.DEModPack GetDataModel() {
+            Model.DEModPack mp = new Model.DEModPack();
+            mp.PackName = _packName;
+            mp.Description = _description;
+            mp.ImagePath = _imagePath;
+            mp.Resources = new List<string>();
+            foreach (var item in _resources) {
+                mp.Resources.Add(item.Path);
+            }
+            return mp;
+        }
+        public DEModPack GetDeepCopy() {
+            DEModPack copy = new DEModPack();
+            // 设置新模组包名
+            copy._packName = _packName;
+            // 模组图片
+            copy._imagePath = _imagePath;
+            // 模组描述
+            copy._description = _description;
+            // 复制资源列表
+            foreach (var res in _resources) {
+                copy.Resources.Add(res);
+            }
+            copy._isSelected = false;
+            return copy;
         }
         public override string ToString() {
             int resourceCount = _resources.Count;

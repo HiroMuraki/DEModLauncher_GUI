@@ -1,9 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Diagnostics;
+using System.IO;
 
 namespace DEModLauncher_GUI {
     public static class DOOMEternal {
@@ -38,7 +34,7 @@ namespace DEModLauncher_GUI {
 
         public static void LaunchGame() {
             Process p = new Process();
-            p.StartInfo.FileName = $@"{DOOMEternal.GameDirectory}\{DOOMEternal.GameMainExecutor}";
+            p.StartInfo.FileName = $@"{GameDirectory}\{GameMainExecutor}";
             p.Start();
         }
 
@@ -47,6 +43,17 @@ namespace DEModLauncher_GUI {
             p.StartInfo.FileName = "explorer.exe";
             p.StartInfo.Arguments = $@"/e, {GameDirectory}";
             p.Start();
+        }
+        public static void InitNecessaryDirectory() {
+            if (!Directory.Exists(ModDirectory)) {
+                Directory.CreateDirectory(ModDirectory);
+            }
+            if (!Directory.Exists(ModPacksDirectory)) {
+                Directory.CreateDirectory(ModPacksDirectory);
+            }
+            if (!Directory.Exists(ModPackImagesDirectory)) {
+                Directory.CreateDirectory(ModPackImagesDirectory);
+            }
         }
 
     }

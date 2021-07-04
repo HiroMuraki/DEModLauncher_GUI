@@ -1,11 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace DEModLauncher_GUI.ViewModel {
+﻿namespace DEModLauncher_GUI.ViewModel {
     public class DEModResource : ViewModelBase {
         private string _path;
         private ResourceStatus _status;
