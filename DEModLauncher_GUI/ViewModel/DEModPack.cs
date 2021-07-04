@@ -38,7 +38,12 @@ namespace DEModLauncher_GUI.ViewModel {
                 if (string.IsNullOrEmpty(_imagePath)) {
                     return DOOMEternal.DefaultModPackImage;
                 }
-                return $@"{DOOMEternal.ModPackImagesDirectory}\{_imagePath}";
+                // 如果图片文件不存在的话，则使用默认图片
+                string fullPath = $@"{DOOMEternal.ModPackImagesDirectory}\{_imagePath}";
+                if (!File.Exists(fullPath)) {
+                    return DOOMEternal.DefaultModPackImage;
+                }
+                return fullPath;
             }
         }
         public Resources Resources {
@@ -143,9 +148,16 @@ namespace DEModLauncher_GUI.ViewModel {
             if (string.IsNullOrEmpty(imagePath)) {
                 return;
             }
-            string imageName = Path.GetFileName(imagePath);
-            string destPath = $@"{DOOMEternal.ModPackImagesDirectory}\{imageName}";
-            if (!File.Exists(destPath) && File.Exists(imagePath)) {
+            // 获取唯一文件名
+            string destPath;
+            string imageName;
+            string imageExt = Path.GetExtension(imagePath);
+            do {
+                imageName = $"{GetImageID()}{imageExt}";
+                destPath = $@"{DOOMEternal.ModPackImagesDirectory}\{imageName}";
+            } while (File.Exists(destPath));
+            // 图片复制到图片库中
+            if (File.Exists(imagePath)) {
                 File.Copy(imagePath, destPath);
             }
             _imagePath = imageName;
@@ -286,6 +298,14 @@ namespace DEModLauncher_GUI.ViewModel {
             p.StartInfo.RedirectStandardOutput = true;
             p.StartInfo.FileName = $@"{DOOMEternal.GameDirectory}\{modLoadder}";
             return p;
+        }
+        private string GetImageID() {
+            Random rnd = new Random();
+            int[] array = new int[16];
+            for (int i = 0; i < array.Length; i++) {
+                array[i] = rnd.Next(0, 10);
+            }
+            return string.Join("", array);
         }
     }
 }

@@ -120,21 +120,23 @@ namespace DEModLauncher_GUI {
             _dEModMananger.CurrentMod = selectedMod;
         }
         private void MoveUpModPack_Click(object sender, RoutedEventArgs e) {
-            _dEModMananger.MoveUpMod(GetDEModPackFromControl(sender));
+            _dEModMananger.MoveUpModPack(GetDEModPackFromControl(sender));
         }
         private void MoveDownModPack_Click(object sender, RoutedEventArgs e) {
-            _dEModMananger.MoveDownMod(GetDEModPackFromControl(sender));
+            _dEModMananger.MoveDownModPack(GetDEModPackFromControl(sender));
         }
         private void DuplicateModPack_Click(object sender, RoutedEventArgs e) {
-            _dEModMananger.DuplicateMod(GetDEModPackFromControl(sender));
+            _dEModMananger.DuplicateModPack(GetDEModPackFromControl(sender));
         }
         private void AddModPack_Click(object sender, RoutedEventArgs e) {
             try {
-                DEModPack copy = new DEModPack();
-                View.DEModPackSetter textInput = new View.DEModPackSetter(copy);
-                textInput.Owner = this;
-                if (textInput.ShowDialog() == true) {
-                    _dEModMananger.AddMod(copy.PackName, copy.Description);
+                View.DEModPackSetter setter = new View.DEModPackSetter() { Owner = this };
+                if (setter.ShowDialog() == true) {
+                    DEModPack modPack = new DEModPack();
+                    modPack.PackName = setter.PackName;
+                    modPack.Description = setter.Description;
+                    modPack.SetImage(setter.ImagePath);
+                    _dEModMananger.AddModPack(modPack);
                     ModPackDisplayer.ScrollToHorizontalOffset(ModPackDisplayer.ScrollableWidth * 2);
                 }
             }
@@ -149,7 +151,7 @@ namespace DEModLauncher_GUI {
             if (result != MessageBoxResult.Yes) {
                 return;
             }
-            _dEModMananger.DeleteMod(dmp);
+            _dEModMananger.DeleteModPack(dmp);
         }
         private void EditModPack_Click(object sender, RoutedEventArgs e) {
             DEModPack modPack = GetDEModPackFromControl(sender);
@@ -334,15 +336,16 @@ namespace DEModLauncher_GUI {
             return (sender as FrameworkElement).Tag as DEModPack;
         }
         private void EditModPack(DEModPack modPack) {
-            DEModPack copy = new DEModPack();
-            copy.PackName = modPack.PackName;
-            copy.Description = modPack.Description;
-            copy.SetImage(modPack.ImagePath);
-            View.DEModPackSetter textInput = new View.DEModPackSetter(copy) { Owner = this };
-            if (textInput.ShowDialog() == true) {
+            View.DEModPackSetter setter = new View.DEModPackSetter() { Owner = this };
+            setter.PackName = modPack.PackName;
+            setter.Description = modPack.Description;
+            setter.ImagePath = modPack.ImagePath;
+            if (setter.ShowDialog() == true) {
                 try {
-                    _dEModMananger.RenameMod(modPack, copy.PackName, copy.Description);
-                    modPack.SetImage(copy.ImagePath);
+                    _dEModMananger.RenameModPack(modPack, setter.PackName, setter.Description);
+                    if (setter.ImagePath != modPack.ImagePath) {
+                        modPack.SetImage(setter.ImagePath);
+                    }
                 }
                 catch (Exception exp) {
                     MessageBox.Show(exp.Message, "修改模组配置错误", MessageBoxButton.OK, MessageBoxImage.Error);

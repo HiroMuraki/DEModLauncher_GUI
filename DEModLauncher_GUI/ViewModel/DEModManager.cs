@@ -80,7 +80,7 @@ namespace DEModLauncher_GUI.ViewModel {
         public void Launch() {
             DOOMEternal.LaunchGame();
         }
-        public void MoveUpMod(DEModPack modPack) {
+        public void MoveUpModPack(DEModPack modPack) {
             int currentIndex = _dEModPacks.IndexOf(modPack);
             if (currentIndex <= 0) {
                 return;
@@ -91,7 +91,7 @@ namespace DEModLauncher_GUI.ViewModel {
             _dEModPacks[newIndex] = t;
 
         }
-        public void MoveDownMod(DEModPack modPack) {
+        public void MoveDownModPack(DEModPack modPack) {
             int currentIndex = _dEModPacks.IndexOf(modPack);
             if (currentIndex < 0) {
                 return;
@@ -104,25 +104,19 @@ namespace DEModLauncher_GUI.ViewModel {
             _dEModPacks[currentIndex] = _dEModPacks[newIndex];
             _dEModPacks[newIndex] = t;
         }
-        public void AddMod(string modName, string description) {
-            if (DOOMEternal.GameDirectory == null) {
-                throw new ArgumentException("请先选择游戏文件夹");
-            }
-            if (string.IsNullOrEmpty(modName)) {
+        public void AddModPack(DEModPack modPack) {
+            if (string.IsNullOrEmpty(modPack.PackName)) {
                 throw new ArgumentException("模组名不可为空");
             }
-            foreach (var modPack in _dEModPacks) {
-                if (modPack.PackName == modName) {
-                    throw new ArgumentException($"模组配置[{modName}]已存在，不可重复添加");
+            foreach (var mp in _dEModPacks) {
+                if (mp.PackName == modPack.PackName) {
+                    throw new ArgumentException($"模组配置[{modPack.PackName}]已存在，不可重复添加");
                 }
             }
-            DEModPack dmp = new DEModPack();
-            dmp.PackName = modName;
-            dmp.Description = description;
-            _dEModPacks.Add(dmp);
-            CurrentMod = dmp;
+            _dEModPacks.Add(modPack);
+            CurrentMod = modPack;
         }
-        public void RenameMod(DEModPack targetModPack, string newName, string description) {
+        public void RenameModPack(DEModPack targetModPack, string newName, string description) {
             if (targetModPack.PackName != newName) {
                 foreach (var modPack in _dEModPacks) {
                     if (modPack.PackName == newName) {
@@ -133,10 +127,10 @@ namespace DEModLauncher_GUI.ViewModel {
             targetModPack.PackName = newName;
             targetModPack.Description = description;
         }
-        public void DeleteMod(DEModPack modPack) {
+        public void DeleteModPack(DEModPack modPack) {
             _dEModPacks.Remove(modPack);
         }
-        public void DuplicateMod(DEModPack modPack) {
+        public void DuplicateModPack(DEModPack modPack) {
             // 获取已经使用过的模组包名
             List<string> usedPackNames = new List<string>();
             foreach (var dmp in _dEModPacks) {

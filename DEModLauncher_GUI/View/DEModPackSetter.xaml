@@ -7,7 +7,7 @@
         mc:Ignorable="d" ResizeMode="NoResize"
         WindowStartupLocation="CenterOwner"
         DataContext="{Binding RelativeSource={RelativeSource Mode=Self}}"
-        Title="{Binding Path=ModPack.PackName,Mode=OneWay}" Height="600" Width="440">
+        Title="{Binding Path=PackName,Mode=OneWay}" Height="600" Width="440">
     <Border BorderBrush="{StaticResource BorderColor}" BorderThickness="0">
         <Grid>
             <Grid.RowDefinitions>
@@ -36,12 +36,12 @@
                         </EventTrigger.Actions>
                     </EventTrigger>
                 </Grid.Triggers>
-                <Image Source="{Binding ModPack.ImagePath}" Stretch="UniformToFill" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                <Image Source="{Binding ImagePath}" Stretch="UniformToFill" VerticalAlignment="Center" HorizontalAlignment="Center"/>
                 <Border x:Name="ImageMask" Background="Black" Opacity="0" ToolTip="{StaticResource TEXT_OF_MOD_PACK_IMAGE}" MouseLeftButtonDown="ChangeImage_Click"/>
             </Grid>
             <Grid Grid.Row="1">
                 <ScrollViewer VerticalScrollBarVisibility="Auto">
-                    <TextBox Text="{Binding ModPack.Description}" ToolTip="{StaticResource TEXT_OF_MOD_PACK_DESCRIPTION}"
+                    <TextBox Text="{Binding Description}" ToolTip="{StaticResource TEXT_OF_MOD_PACK_DESCRIPTION}"
                              FontSize="13" AcceptsReturn="True" Padding="10" BorderThickness="0"/>
                 </ScrollViewer>
             </Grid>
@@ -50,7 +50,7 @@
                     <ColumnDefinition/>
                     <ColumnDefinition Width="80"/>
                 </Grid.ColumnDefinitions>
-                <TextBox Grid.Column="0" Text="{Binding ModPack.PackName}"
+                <TextBox Grid.Column="0" Text="{Binding PackName}"
                          ToolTip="{StaticResource TEXT_OF_MOD_PACK_NAME}" 
                          VerticalContentAlignment="Center" HorizontalContentAlignment="Center"
                          BorderBrush="{StaticResource BorderColor}" BorderThickness="0,1,0,0" FontSize="18"/>

@@ -1,5 +1,6 @@
 ﻿using DEModLauncher_GUI.ViewModel;
 using Microsoft.Win32;
+using System.IO;
 using System.Windows;
 using System.Windows.Input;
 
@@ -8,29 +9,52 @@ namespace DEModLauncher_GUI.View {
     /// TextInputWindow.xaml 的交互逻辑
     /// </summary>
     public partial class DEModPackSetter : Window {
-        private DEModPack _modPack;
+        private static string _preImagesDirectory = DOOMEternal.ModPackImagesDirectory;
 
-        public DEModPack ModPack {
+        public static readonly DependencyProperty PackNameProperty =
+            DependencyProperty.Register(nameof(PackName), typeof(string), typeof(DEModPackSetter), new PropertyMetadata(""));
+        public static readonly DependencyProperty DescriptionProperty =
+            DependencyProperty.Register(nameof(Description), typeof(string), typeof(DEModPackSetter), new PropertyMetadata(""));
+        public static readonly DependencyProperty ImagePathProperty =
+            DependencyProperty.Register(nameof(ImagePath), typeof(string), typeof(DEModPackSetter), new PropertyMetadata(""));
+
+        public string PackName {
             get {
-                return _modPack;
+                return (string)GetValue(PackNameProperty);
             }
             set {
-                _modPack = value;
+                SetValue(PackNameProperty, value);
+            }
+        }
+        public string Description {
+            get {
+                return (string)GetValue(DescriptionProperty);
+            }
+            set {
+                SetValue(DescriptionProperty, value);
+            }
+        }
+        public string ImagePath {
+            get {
+                return (string)GetValue(ImagePathProperty);
+            }
+            set {
+                SetValue(ImagePathProperty, value);
             }
         }
 
-        public DEModPackSetter(DEModPack modPack) {
-            _modPack = modPack;
+        public DEModPackSetter() {
             InitializeComponent();
         }
 
         private void ChangeImage_Click(object sender, MouseButtonEventArgs e) {
             OpenFileDialog ofd = new OpenFileDialog();
             ofd.Filter = "JPG图片|*.jpg|PNG图片|*.png|BMP图片|*.bmp|GIF图片|*.gif";
-            ofd.InitialDirectory = @"C:\";
+            ofd.InitialDirectory = _preImagesDirectory;
             ofd.Title = "选择模组图片";
             if (ofd.ShowDialog() == true) {
-                ModPack.SetImage(ofd.FileName);
+                ImagePath = ofd.FileName;
+                _preImagesDirectory = Path.GetDirectoryName(ofd.FileName);
             }
         }
         private void Ok_Click(object sender, RoutedEventArgs e) {
