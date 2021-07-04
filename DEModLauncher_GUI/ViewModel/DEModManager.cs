@@ -1,60 +1,22 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.ComponentModel;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Runtime.Serialization.Json;
 using System.Diagnostics;
+using System.IO;
+using System.IO.Compression;
+using System.Runtime.Serialization.Json;
 
 namespace DEModLauncher_GUI.ViewModel {
     using DEModPacks = ObservableCollection<DEModPack>;
-    public class DEModManager : INotifyPropertyChanged {
-        public event PropertyChangedEventHandler PropertyChanged;
-        public void OnPropertyChanged(string propertyName) {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        }
-
+    public class DEModManager : ViewModelBase {
+        private static readonly DEModManager _singletonIntance;
         private static readonly DataContractJsonSerializer _serializer = new DataContractJsonSerializer(typeof(Model.DEModManager));
-        private static readonly string _windowsExplorerExecutor = "explorer.exe";
-        private string _gameMainExecutor = "DOOMEternalx64vk.exe";
-        private string _modLoader = "EternalModInjector.bat";
-        private string _gameDirectory;
         private bool _isLaunching;
         private DEModPack _currentMod;
         private readonly DEModPacks _dEModPacks;
         private string _consoleStandardOutput;
 
-        public string GameDirectory {
-            get {
-                return _gameDirectory;
-            }
-            set {
-                _gameDirectory = value;
-                foreach (var modPack in _dEModPacks) {
-                    modPack.GameDirectroy = _gameDirectory;
-                }
-                if (!Directory.Exists(ModsDirectory)) {
-                    Directory.CreateDirectory(ModsDirectory);
-                }
-                if (!Directory.Exists(ModPacksDirectory)) {
-                    Directory.CreateDirectory(ModPacksDirectory);
-                }
-                OnPropertyChanged(nameof(GameDirectory));
-            }
-        }
-        public string ModsDirectory {
-            get {
-                return $@"{_gameDirectory}\Mods";
-            }
-        }
-        public string ModPacksDirectory {
-            get {
-                return $@"{_gameDirectory}\Mods\ModPacks";
-            }
-        }
+        #region 公共属性
         public bool IsLaunching {
             get {
                 return _isLaunching;
@@ -90,23 +52,33 @@ namespace DEModLauncher_GUI.ViewModel {
                 OnPropertyChanged(nameof(ConsoleStandardOutput));
             }
         }
+        #endregion
 
-        public DEModManager() {
+        #region 构造方法
+        static DEModManager() {
+            _singletonIntance = new DEModManager();
+        }
+        private DEModManager() {
             _currentMod = null;
             _dEModPacks = new DEModPacks();
         }
+        public static DEModManager GetInstance() {
+            if (_singletonIntance == null) {
+                throw new Exception("FATAL ERROR, RESTART REQUIRED");
+            }
+            return _singletonIntance;
+        }
+        #endregion
 
-        public StreamReader Launch() {
+        #region 公共方法
+        public StreamReader LaunchWithModLoader() {
             if (_currentMod == null) {
                 throw new InvalidOperationException("当前未选择有效模组");
             }
-            _currentMod.GameDirectroy = _gameDirectory;
-            return _currentMod.Launch(_modLoader);
+            return _currentMod.Launch();
         }
-        public void LaunchDirectly() {
-            Process p = new Process();
-            p.StartInfo.FileName = $@"{_gameDirectory}\{_gameMainExecutor}";
-            p.Start();
+        public void Launch() {
+            DOOMEternal.LaunchGame();
         }
         public void MoveUpMod(DEModPack modPack) {
             int currentIndex = _dEModPacks.IndexOf(modPack);
@@ -133,7 +105,7 @@ namespace DEModLauncher_GUI.ViewModel {
             _dEModPacks[newIndex] = t;
         }
         public void AddMod(string modName, string description) {
-            if (_gameDirectory == null) {
+            if (DOOMEternal.GameDirectory == null) {
                 throw new ArgumentException("请先选择游戏文件夹");
             }
             if (string.IsNullOrEmpty(modName)) {
@@ -147,7 +119,6 @@ namespace DEModLauncher_GUI.ViewModel {
             DEModPack dmp = new DEModPack();
             dmp.PackName = modName;
             dmp.Description = description;
-            dmp.GameDirectroy = _gameDirectory;
             _dEModPacks.Add(dmp);
             CurrentMod = dmp;
         }
@@ -166,44 +137,37 @@ namespace DEModLauncher_GUI.ViewModel {
             _dEModPacks.Remove(modPack);
         }
         public void DuplicateMod(DEModPack modPack) {
-            DEModPack copiedPack = new DEModPack();
+            // 获取已经使用过的模组包名
             List<string> usedPackNames = new List<string>();
             foreach (var dmp in _dEModPacks) {
                 usedPackNames.Add(dmp.PackName);
             }
+            // 获取模组包副本
+            DEModPack copiedPack = modPack.GetDeepCopy();
+            // 设置新模组包名，避免重复
             int cpyID = 1;
-            string testName = $"{modPack.PackName}({cpyID})";
-            while (usedPackNames.Contains(testName)) {
-                testName = $"{modPack.PackName}({cpyID})";
+            string testName = modPack.PackName;
+            while (usedPackNames.Contains(modPack.PackName)) {
+                modPack.PackName = $"{testName}({cpyID})";
                 ++cpyID;
-            }
-            copiedPack.PackName = testName;
-            copiedPack.Description = modPack.Description;
-            copiedPack.GameDirectroy = modPack.GameDirectroy;
-            foreach (var res in modPack.Resources) {
-                copiedPack.Resources.Add(res);
             }
             _dEModPacks.Insert(_dEModPacks.IndexOf(modPack) + 1, copiedPack);
         }
         public void SaveToFile(string fileName) {
             Model.DEModManager dm = new Model.DEModManager();
-            dm.GameDirectory = _gameDirectory;
-            dm.ModLoader = _modLoader;
-            dm.GameMainExecutor = _gameMainExecutor;
+            // 写入管理器属性
+            dm.GameDirectory = DOOMEternal.GameDirectory;
+            dm.ModLoader = DOOMEternal.ModLoader;
+            dm.GameMainExecutor = DOOMEternal.GameMainExecutor;
             dm.CurrentMod = _currentMod?.PackName;
+            // 写入ModPacks信息
             dm.ModPacks = new List<Model.DEModPack>();
             foreach (var modPack in _dEModPacks) {
-                Model.DEModPack dp = new Model.DEModPack();
-                dp.PackName = modPack.PackName;
-                dp.Description = modPack.Description;
-                dp.Resources = new List<string>();
-                foreach (var res in modPack.Resources) {
-                    dp.Resources.Add(res.Path);
-                }
+                var dp = modPack.GetDataModel();
                 dm.ModPacks.Add(dp);
             }
-            using (FileStream file = new FileStream(fileName, FileMode.Create, FileAccess.Write)) {
-                _serializer.WriteObject(file, dm);
+            using (FileStream fs = new FileStream(fileName, FileMode.Create, FileAccess.Write)) {
+                _serializer.WriteObject(fs, dm);
             }
         }
         public void LoadFromFile(string fileName) {
@@ -216,19 +180,19 @@ namespace DEModLauncher_GUI.ViewModel {
             }
 
             CurrentMod = null;
-            GameDirectory = dm.GameDirectory;
+            DOOMEternal.GameDirectory = dm.GameDirectory;
             if (!string.IsNullOrEmpty(dm.ModLoader)) {
-                _modLoader = dm.ModLoader;
+                DOOMEternal.ModLoader = dm.ModLoader;
             }
             if (!string.IsNullOrEmpty(dm.GameMainExecutor)) {
-                _gameMainExecutor = dm.GameMainExecutor;
+                DOOMEternal.GameMainExecutor = dm.GameMainExecutor;
             }
             _dEModPacks.Clear();
             foreach (var modPack in dm.ModPacks) {
                 DEModPack dp = new DEModPack();
                 dp.PackName = modPack.PackName;
                 dp.Description = modPack.Description;
-                dp.GameDirectroy = dm.GameDirectory;
+                dp.SetImage(modPack.ImagePath);
                 foreach (var res in modPack.Resources) {
                     DEModResource resource = new DEModResource(res);
                     dp.Resources.Add(resource);
@@ -239,21 +203,66 @@ namespace DEModLauncher_GUI.ViewModel {
                 }
             }
         }
-        public void OpenGameDirectory() {
-            Process p = new Process();
-            p.StartInfo.FileName = _windowsExplorerExecutor;
-            p.StartInfo.Arguments = $@"/e, {_gameDirectory}";
-            p.Start();
+        public List<string> ClearUnusedModFile() {
+            // 获取当前正在使用的模组列表
+            List<string> usedResources = new List<string>();
+            foreach (var modPack in _dEModPacks) {
+                foreach (var resource in modPack.Resources) {
+                    string filePath = $@"{DOOMEternal.ModPacksDirectory}\{resource.Path}";
+                    if (!usedResources.Contains(filePath)) {
+                        usedResources.Add(filePath);
+                    }
+                }
+            }
+            // 配置文件不能删
+            usedResources.Add(DOOMEternal.LauncherProfileFile);
+            // 查找未使用的模组文件并移除
+            var existedModFiles = Directory.GetFiles(DOOMEternal.ModPacksDirectory);
+            var removedFiles = FileCleaner(usedResources, existedModFiles);
+            return removedFiles;
         }
-        public void OpenResourceFile(string resourceName) {
+        public List<string> ClearUnusedImageFiles() {
+            // 获取当前正在使用的图片文件名
+            List<string> usedImageFiles = new List<string>();
+            foreach (var modPack in _dEModPacks) {
+                // 跳过默认图片
+                if (modPack.ImagePath == DOOMEternal.DefaultModPackImage) {
+                    continue;
+                }
+                string imageName = modPack.ImagePath;
+                if (!usedImageFiles.Contains(imageName)) {
+                    usedImageFiles.Add(imageName);
+                }
+            }
+            // 查找未使用的图片文件并移除
+            var existedImageFiles = Directory.GetFiles(DOOMEternal.ModPackImagesDirectory);
+            var removedFiles = FileCleaner(usedImageFiles, existedImageFiles);
+            return removedFiles;
+        }
+        public static void OpenResourceFile(string resourceName) {
             Process p = new Process();
-            string filePath = $@"{ModPacksDirectory}\{resourceName}";
+            string filePath = $@"{DOOMEternal.ModPacksDirectory}\{resourceName}";
             if (!File.Exists(filePath)) {
                 throw new FileNotFoundException($"无法找到文件：{filePath}");
             }
-            p.StartInfo.FileName = _windowsExplorerExecutor;
-            p.StartInfo.Arguments = $@"/select, {ModPacksDirectory}\{resourceName}";
+            p.StartInfo.FileName = "explorer.exe";
+            p.StartInfo.Arguments = $@"/select, {DOOMEternal.ModPacksDirectory}\{resourceName}";
             p.Start();
+        }
+        public static void ExportModPacks(string outputPath) {
+            ZipFile.CreateFromDirectory(DOOMEternal.ModPacksDirectory, outputPath, CompressionLevel.Optimal, true);
+        }
+        #endregion
+
+        private List<string> FileCleaner(ICollection<string> preservedFiles, IEnumerable<string> allFiles) {
+            var removedFiles = new List<string>();
+            foreach (var file in allFiles) {
+                if (!preservedFiles.Contains(file)) {
+                    File.Delete(file);
+                    removedFiles.Add(Path.GetFileName(file));
+                }
+            }
+            return removedFiles;
         }
     }
 }

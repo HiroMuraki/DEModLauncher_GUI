@@ -4,8 +4,8 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:DEModLauncher_GUI.View"
-        mc:Ignorable="d" x:Name="Self"
-        DataContext="{Binding ElementName=Self}"
+        mc:Ignorable="d"
+        DataContext="{Binding RelativeSource={RelativeSource Mode=Self}}"
         Title="{Binding Caption,Mode=OneWay}" Height="480" Width="700"
         WindowStartupLocation="CenterOwner">
     <Grid>

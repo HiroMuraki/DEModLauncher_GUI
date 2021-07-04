@@ -1,13 +1,6 @@
-﻿using System.ComponentModel;
+﻿namespace DEModLauncher_GUI.ViewModel {
 
-namespace DEModLauncher_GUI.ViewModel {
-
-    public class DEModPackSelector : INotifyPropertyChanged {
-        public event PropertyChangedEventHandler PropertyChanged;
-        public void OnPropertyChanged(string propertyName) {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        }
-
+    public class DEModPackSelector : ViewModelBase {
         private readonly DEModPack _dEModPack;
         private bool _isSelected;
 

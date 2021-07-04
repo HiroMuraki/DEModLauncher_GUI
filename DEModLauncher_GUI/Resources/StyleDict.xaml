@@ -1,5 +1,7 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:View="clr-namespace:DEModLauncher_GUI.View"
+                    xmlns:ValueConverter="clr-namespace:DEModLauncher_GUI.ViewModel.ValueConverter">
     <Style TargetType="MenuItem">
         <Setter Property="Background" Value="{StaticResource MainColor}" />
         <Setter Property="Foreground" Value="{StaticResource TextColor}" />
@@ -72,6 +74,29 @@
                         <Trigger Property="IsMouseOver" Value="True">
                             <Setter Property="Foreground" Value="{StaticResource MainColor}" />
                             <Setter Property="Background" Value="{StaticResource FocusColor}" />
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+    <Style x:Key="AGButton" TargetType="Button">
+        <Setter Property="Background" Value="{StaticResource MainColor}" />
+        <Setter Property="Foreground" Value="{StaticResource TextColor}" />
+        <Setter Property="BorderBrush" Value="{StaticResource BorderColor}" />
+        <Setter Property="FontSize" Value="14" />
+        <Setter Property="Padding" Value="0" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="Button">
+                    <Border Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" CornerRadius="5">
+                        <ContentPresenter VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                                          HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                          Margin="{TemplateBinding Padding}"/>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter Property="Background" Value="{StaticResource AccentColor}" />
                         </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
@@ -155,31 +180,47 @@
             </Trigger>
         </Style.Triggers>
     </Style>
-    <Style x:Key="GModPackButton" TargetType="RadioButton">
+    <Style TargetType="{x:Type View:ModPackButton}">
         <Setter Property="Background" Value="{StaticResource ModPackItemColor}" />
-        <Setter Property="Foreground" Value="{StaticResource TextColor}" />
-        <Setter Property="BorderBrush" Value="{StaticResource BorderColor}" />
-        <Setter Property="BorderThickness" Value="0,0,0,1" />
-        <Setter Property="VerticalContentAlignment" Value="Center" />
-        <Setter Property="HorizontalContentAlignment" Value="Center" />
+        <Setter Property="BorderBrush" Value="{StaticResource TextColor}" />
+        <Setter Property="BorderThickness" Value="0" />
         <Setter Property="FontSize" Value="12" />
-        <Setter Property="Height" Value="40" />
-        <Setter Property="Padding" Value="0" />
+        <Setter Property="Width" Value="150" />
+        <Setter Property="Height" Value="80" />
         <Setter Property="Template">
             <Setter.Value>
-                <ControlTemplate TargetType="RadioButton">
+                <ControlTemplate TargetType="{x:Type View:ModPackButton}">
                     <Grid>
-                        <Border Background="{StaticResource ItemShadowColor}"
-                                Opacity="0.5"
-                                Margin="1,1,-1,-1"
-                                CornerRadius="3"/>
-                        <Border Background="{TemplateBinding Background}"
-                                BorderBrush="{TemplateBinding BorderBrush}"
-                                BorderThickness="{TemplateBinding BorderThickness}"
-                                CornerRadius="3"/>
-                        <ContentPresenter VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
-                                          HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
-                                          Margin="{TemplateBinding Padding}"/>
+                        <Grid.Resources>
+                            <ValueConverter:DoubleGroupToRect x:Key="DoubleGroupToRect"/>
+                        </Grid.Resources>
+                        <Border Background="{StaticResource ItemShadowColor}" Opacity="0.5" Margin="2,2,-2,-2" CornerRadius="5"/>
+                        <Grid>
+                            <Grid.Clip>
+                                <RectangleGeometry RadiusX="5" RadiusY="5">
+                                    <RectangleGeometry.Rect>
+                                        <MultiBinding Converter="{StaticResource DoubleGroupToRect}">
+                                            <Binding Path="Width" RelativeSource="{RelativeSource Mode=TemplatedParent}"/>
+                                            <Binding Path="Height" RelativeSource="{RelativeSource Mode=TemplatedParent}"/>
+                                        </MultiBinding>
+                                    </RectangleGeometry.Rect>
+                                </RectangleGeometry>
+                            </Grid.Clip>
+                            <Grid.RowDefinitions>
+                                <RowDefinition/>
+                                <RowDefinition Height="25"/>
+                            </Grid.RowDefinitions>
+                            <Grid Grid.Row="0" Grid.RowSpan="2" >
+                                <Border Background="{TemplateBinding Background}"/>
+                                <Image Source="{Binding Path=ImagePath,RelativeSource={RelativeSource Mode=TemplatedParent}}" VerticalAlignment="Center" HorizontalAlignment="Center" Stretch="UniformToFill"/>
+                                <Border Background="Transparent" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" CornerRadius="3"/>
+                                <Border x:Name="MaskBackground" Background="Black" Opacity="0.50"/>
+                            </Grid>
+                            <Grid Grid.Row="1">
+                                <Border x:Name="TextMask" Background="Black" Opacity="0.70" VerticalAlignment="Bottom" Height="25"/>
+                                <Label x:Name="TextContent" Content="{Binding Path=PackName,RelativeSource={RelativeSource Mode=TemplatedParent}}" Foreground="{StaticResource TextColor}" VerticalContentAlignment="Center" HorizontalContentAlignment="Center"/>
+                            </Grid>
+                        </Grid>
                     </Grid>
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsMouseOver" Value="True">
@@ -196,6 +237,14 @@
                                                          By="10"/>
                                     </Storyboard>
                                 </BeginStoryboard>
+                                <BeginStoryboard>
+                                    <Storyboard Storyboard.TargetProperty="Width">
+                                        <DoubleAnimation AccelerationRatio="0.2"
+                                                         DecelerationRatio="0.8"
+                                                         Duration="0:0:0.1"
+                                                         By="50"/>
+                                    </Storyboard>
+                                </BeginStoryboard>
                             </EventTrigger.Actions>
                         </EventTrigger>
                         <EventTrigger RoutedEvent="RadioButton.Unchecked">
@@ -207,13 +256,22 @@
                                                          Duration="0:0:0.1"/>
                                     </Storyboard>
                                 </BeginStoryboard>
+                                <BeginStoryboard>
+                                    <Storyboard Storyboard.TargetProperty="Width">
+                                        <DoubleAnimation AccelerationRatio="0.2"
+                                                         DecelerationRatio="0.8"
+                                                         Duration="0:0:0.1"/>
+                                    </Storyboard>
+                                </BeginStoryboard>
                             </EventTrigger.Actions>
                         </EventTrigger>
                         <Trigger Property="IsChecked" Value="True" >
                             <Setter Property="FontSize" Value="14" />
                             <Setter Property="FontWeight" Value="Bold" />
-                            <Setter Property="Background" Value="{StaticResource FocusColor}" />
-                            <Setter Property="Foreground" Value="{StaticResource MainColor}" />
+                            <Setter TargetName="TextMask" Property="Visibility" Value="Hidden" />
+                            <Setter TargetName="MaskBackground" Property="Visibility" Value="Hidden" />
+                            <Setter TargetName="TextContent" Property="Visibility" Value="Hidden" />
+                            <Setter Property="BorderThickness" Value="2" />
                         </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
