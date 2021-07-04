@@ -229,7 +229,7 @@
                                                 <MenuItem Tag="{Binding}" Header="{StaticResource GENERATE_MERGED_FILE}" Click="GenerateMergedFile_ClicK"/>
                                             </ContextMenu>
                                         </Grid.ContextMenu>
-                                        <View:ModPackButton ToolTip="{Binding Description}" PackName="{Binding PackName}" ImagePath="{Binding ImagePath}" Tag="{Binding}" IsChecked="{Binding IsSelected}" Margin="5,0" 
+                                        <View:ModPackButton ToolTip="{Binding Description}" PackName="{Binding PackName}" ImagePath="{Binding ImagePath}" Tag="{Binding}" Margin="5,0" 
                                                             GroupName="PackNameSelected" Click="SelectModPack_Click" PreviewMouseLeftButtonDown="EditModPack_Click"/>
                                     </Grid>
                                 </DataTemplate>

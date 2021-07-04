@@ -32,9 +32,6 @@ namespace DEModLauncher_GUI.ViewModel {
             }
             set {
                 _currentMod = value;
-                if (value != null) {
-                    value.IsSelected = true;
-                }
                 OnPropertyChanged(nameof(CurrentMod));
             }
         }

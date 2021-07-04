@@ -139,7 +139,6 @@ namespace DEModLauncher_GUI {
                     modPack.PackName = setter.PackName;
                     modPack.Description = setter.Description;
                     modPack.SetImage(setter.ImagePath);
-                    modPack.IsSelected = false;
                     _dEModMananger.AddModPack(modPack);
                     ModPackDisplayer.ScrollToHorizontalOffset(ModPackDisplayer.ScrollableWidth * 2);
                 }

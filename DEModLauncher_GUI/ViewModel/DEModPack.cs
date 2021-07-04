@@ -12,7 +12,6 @@ namespace DEModLauncher_GUI.ViewModel {
         private string _description;
         private string _imagePath;
         private readonly Resources _resources;
-        private bool _isSelected;
 
         #region ¹«¹²ÊôÐÔ
         public string PackName {
@@ -49,15 +48,6 @@ namespace DEModLauncher_GUI.ViewModel {
         public Resources Resources {
             get {
                 return _resources;
-            }
-        }
-        public bool IsSelected {
-            get {
-                return _isSelected;
-            }
-            set {
-                _isSelected = value;
-                OnPropertyChanged(nameof(IsSelected));
             }
         }
         #endregion
@@ -233,7 +223,6 @@ namespace DEModLauncher_GUI.ViewModel {
             foreach (var res in _resources) {
                 copy.Resources.Add(res);
             }
-            copy._isSelected = false;
             return copy;
         }
         public override string ToString() {
