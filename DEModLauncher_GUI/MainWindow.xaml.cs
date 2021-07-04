@@ -33,12 +33,6 @@ namespace DEModLauncher_GUI {
 
         public MainWindow() {
             _dEModMananger = DEModManager.GetInstance();
-            if (File.Exists(DOOMEternal.LauncherProfileFile)) {
-                _dEModMananger.LoadFromFile(DOOMEternal.LauncherProfileFile);
-            }
-            foreach (var item in _dEModMananger.DEModPacks) {
-                item.SetImage(@"C:\Users\11717\Desktop\PIC\可爱\1iytyssdcn9n9m4wpgnbld1o1.jpg");
-            }
             InitializeComponent();
         }
 
@@ -118,16 +112,13 @@ namespace DEModLauncher_GUI {
                 MessageBox.Show(exp.Message, "读取配置文件出错", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
-        private void SelectGameDirectory_Click(object sender, RoutedEventArgs e) {
-            System.Windows.Forms.FolderBrowserDialog fbd = new System.Windows.Forms.FolderBrowserDialog();
-            fbd.SelectedPath = DOOMEternal.GameDirectory;
-            fbd.Description = "选择游戏文件夹";
-            if (fbd.ShowDialog() == System.Windows.Forms.DialogResult.OK) {
-                DOOMEternal.GameDirectory = fbd.SelectedPath;
-            }
+        private void OpenOptionMenu_Click(object sender, RoutedEventArgs e) {
+            ContextMenu menu = ((Button)sender).ContextMenu;
+            menu.IsOpen = !menu.IsOpen;
         }
-        private void OpenGameDirectory_Click(object sender, MouseButtonEventArgs e) {
-            _dEModMananger.OpenGameDirectory();
+        private void ShowAdvancedSetting_Click(object sender, RoutedEventArgs e) {
+            View.AdvancedSettingWindow window = new View.AdvancedSettingWindow() { Owner = this };
+            window.ShowDialog();
         }
         #endregion
 
@@ -148,7 +139,7 @@ namespace DEModLauncher_GUI {
         private void AddModPack_Click(object sender, RoutedEventArgs e) {
             try {
                 DEModPack copy = new DEModPack();
-                View.TextInputWindow textInput = new View.TextInputWindow(copy);
+                View.DEModPackSetter textInput = new View.DEModPackSetter(copy);
                 textInput.Owner = this;
                 if (textInput.ShowDialog() == true) {
                     _dEModMananger.AddMod(copy.PackName, copy.Description);
@@ -174,7 +165,7 @@ namespace DEModLauncher_GUI {
             copy.PackName = modPack.PackName;
             copy.Description = modPack.Description;
             copy.SetImage(modPack.ImagePath);
-            View.TextInputWindow textInput = new View.TextInputWindow(copy) { Owner = this };
+            View.DEModPackSetter textInput = new View.DEModPackSetter(copy) { Owner = this };
             if (textInput.ShowDialog() == true) {
                 try {
                     _dEModMananger.RenameMod(modPack, copy.PackName, copy.Description);
@@ -284,7 +275,6 @@ namespace DEModLauncher_GUI {
                 MessageBox.Show(exp.Message, "错误", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
-
         private void AddModPackReference_Click(object sender, RoutedEventArgs e) {
             try {
                 DEModPack current = GetDEModPackFromControl(sender);
@@ -307,7 +297,7 @@ namespace DEModLauncher_GUI {
         }
         private void OpenResourceFile_Click(object sender, RoutedEventArgs e) {
             try {
-                _dEModMananger.OpenResourceFile(GetResourceFromControl(sender).Path);
+                DEModManager.OpenResourceFile(GetResourceFromControl(sender).Path);
             }
             catch (Exception exp) {
                 MessageBox.Show(exp.Message, "打开错误", MessageBoxButton.OK, MessageBoxImage.Error);
@@ -325,19 +315,9 @@ namespace DEModLauncher_GUI {
         private void Window_Minimum(object sender, RoutedEventArgs e) {
             WindowState = WindowState.Minimized;
         }
-        #endregion
-
-        private static DEModResource GetResourceFromControl(object sender) {
-            return (sender as FrameworkElement).Tag as DEModResource;
-        }
-        private static DEModPack GetDEModPackFromControl(object sender) {
-            return (sender as FrameworkElement).Tag as DEModPack;
-        }
-
         private void Direction_MouseDown(object sender, MouseButtonEventArgs e) {
             _heldPoint = e.GetPosition(this);
         }
-
         private void Direction_MouseMove(object sender, MouseEventArgs e) {
             if (Mouse.LeftButton != MouseButtonState.Pressed) {
                 return;
@@ -354,10 +334,17 @@ namespace DEModLauncher_GUI {
             _heldPoint = newPont;
             e.Handled = true;
         }
-
         private void Direction_MouseWHeel(object sender, MouseWheelEventArgs e) {
             ModPackDisplayer.ScrollToHorizontalOffset(ModPackDisplayer.HorizontalOffset - e.Delta);
             e.Handled = true;
+        }
+        #endregion
+
+        private static DEModResource GetResourceFromControl(object sender) {
+            return (sender as FrameworkElement).Tag as DEModResource;
+        }
+        private static DEModPack GetDEModPackFromControl(object sender) {
+            return (sender as FrameworkElement).Tag as DEModPack;
         }
     }
 }

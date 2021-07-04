@@ -37,7 +37,10 @@ namespace DEModLauncher_GUI.ViewModel {
         }
         public string ImagePath {
             get {
-                return $@"{DOOMEternal.ModImagesDirectory}\{_imagePath}";
+                if (string.IsNullOrEmpty(_imagePath)) {
+                    return DOOMEternal.DefaultModPackImage;
+                }
+                return $@"{DOOMEternal.ModPackImagesDirectory}\{_imagePath}";
             }
         }
         public Resources Resources {
@@ -125,15 +128,19 @@ namespace DEModLauncher_GUI.ViewModel {
             _resources.Remove(resource);
         }
         public void SetImage(string imagePath) {
+            if (imagePath == DOOMEternal.DefaultModPackImage) {
+                _imagePath = null;
+                return;
+            }
             if (string.IsNullOrEmpty(imagePath)) {
                 return;
             }
             string fileName = Path.GetFileNameWithoutExtension(imagePath);
             string fileExt = Path.GetExtension(imagePath);
             string imageName = $@"{fileName}{fileExt}";
-            string destPath = $@"{DOOMEternal.ModImagesDirectory}\{imageName}";
-            if (!Directory.Exists(DOOMEternal.ModImagesDirectory)) {
-                Directory.CreateDirectory(DOOMEternal.ModImagesDirectory);
+            string destPath = $@"{DOOMEternal.ModPackImagesDirectory}\{imageName}";
+            if (!Directory.Exists(DOOMEternal.ModPackImagesDirectory)) {
+                Directory.CreateDirectory(DOOMEternal.ModPackImagesDirectory);
             }
             if (!File.Exists(destPath)) {
                 File.Copy(imagePath, destPath);

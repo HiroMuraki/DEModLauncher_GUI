@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 namespace DEModLauncher_GUI {
     public static class DOOMEternal {
         public static readonly string DefaultGameDirectory = @"C:\Program Files (x86)\Steam\steamapps\common\DOOMEternal";
+        public static readonly string DefaultModPackImage = @"\DEModLauncher_GUI;component\Resources\Images\header3.jpg";
         public static string GameMainExecutor = "DOOMEternalx64vk.exe";
         public static string ModLoader = "EternalModInjector.bat";
         public static string GameDirectory = "";
@@ -21,7 +22,7 @@ namespace DEModLauncher_GUI {
                 return $@"{GameDirectory}\Mods\ModPacks";
             }
         }
-        public static string ModImagesDirectory {
+        public static string ModPackImagesDirectory {
             get {
                 return $@"{GameDirectory}\Mods\ModPacks\Images";
             }
@@ -40,5 +41,13 @@ namespace DEModLauncher_GUI {
             p.StartInfo.FileName = $@"{DOOMEternal.GameDirectory}\{DOOMEternal.GameMainExecutor}";
             p.Start();
         }
+
+        public static void OpenGameDirectory() {
+            Process p = new Process();
+            p.StartInfo.FileName = "explorer.exe";
+            p.StartInfo.Arguments = $@"/e, {GameDirectory}";
+            p.Start();
+        }
+
     }
 }

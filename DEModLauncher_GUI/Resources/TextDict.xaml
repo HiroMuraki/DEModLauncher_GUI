@@ -2,11 +2,28 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:Sys="clr-namespace:System;assembly=mscorlib">
     <!--保存配置文件-->
-    <Sys:String x:Key="SAVE_PROFILE_FILE">保存</Sys:String>
+    <Sys:String x:Key="SAVE_PROFILE_FILE">保存配置</Sys:String>
     <Sys:String x:Key="SAVE_PROFILE_FILE_TOOLTIP">保存模组配置</Sys:String>
     <!--重新加载配置文件-->
-    <Sys:String x:Key="RELOAD_PROFILE_FILE">重新读取</Sys:String>
+    <Sys:String x:Key="RELOAD_PROFILE_FILE">读取配置</Sys:String>
     <Sys:String x:Key="RELOAD_PROFILE_FILE_TOOLTIP">重新读取模组配置</Sys:String>
+    
+    <!--高级选项-->
+    <Sys:String x:Key="ADVANCED_OPTION">高级选项</Sys:String>
+    <Sys:String x:Key="ADVANCED_OPTION_TOOLTIP">打开高级选项</Sys:String>
+    <!--打开游戏文件夹 打开游戏文件夹-->
+    <Sys:String x:Key="ADVANCED_OPTION_OPEN_GAME_DIRECTORY">打开游戏文件夹</Sys:String>
+    <Sys:String x:Key="ADVANCED_OPTION_OPEN_GAME_DIRECTORY_TOOLTIP"></Sys:String>
+    <!--高级选项 清理未使用的模组文件-->
+    <Sys:String x:Key="ADVANCED_OPTION_CLEAN_UNUSED_MOD_FILES">清理未使用的模组文件</Sys:String>
+    <Sys:String x:Key="ADVANCED_OPTION_CLEAN_UNUSED_MOD_FILES_TOOLTIP"></Sys:String>
+    <!--高级选项 清理未使用的模组图像-->
+    <Sys:String x:Key="ADVANCED_OPTION_CLEAN_UNUSED_IMAGE_FILES">清理未使用的模组图像</Sys:String>
+    <Sys:String x:Key="ADVANCED_OPTION_CLEAN_UNUSED_IMAGE_FILES_TOOLTIP"></Sys:String>
+    <!--高级选项 导出备份包-->
+    <Sys:String x:Key="ADVANCED_OPTION_EXPORT_MODPACKSS">导出备份包</Sys:String>
+    <Sys:String x:Key="ADVANCED_OPTION_EXPORT_MODPACKSS_TOOLTIP"></Sys:String>
+    
     <!--加载模组后启动游戏-->
     <Sys:String x:Key="LAUNCH_AFTER_LOAD_MOD">加载模组并启动</Sys:String>
     <Sys:String x:Key="LAUNCH_AFTER_LOAD_MOD_TOOLTIP">调用加载器加载模组并启动游戏</Sys:String>

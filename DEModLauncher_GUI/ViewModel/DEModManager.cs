@@ -8,13 +8,13 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Runtime.Serialization.Json;
 using System.Diagnostics;
+using System.IO.Compression;
 
 namespace DEModLauncher_GUI.ViewModel {
     using DEModPacks = ObservableCollection<DEModPack>;
     public class DEModManager : ViewModelBase {
         private static readonly DEModManager _singletonIntance;
         private static readonly DataContractJsonSerializer _serializer = new DataContractJsonSerializer(typeof(Model.DEModManager));
-        private static readonly string _windowsExplorerExecutor = "explorer.exe";
         private bool _isLaunching;
         private DEModPack _currentMod;
         private readonly DEModPacks _dEModPacks;
@@ -215,21 +215,62 @@ namespace DEModLauncher_GUI.ViewModel {
                 }
             }
         }
-        public void OpenGameDirectory() {
-            Process p = new Process();
-            p.StartInfo.FileName = _windowsExplorerExecutor;
-            p.StartInfo.Arguments = $@"/e, { DOOMEternal.GameDirectory}";
-            p.Start();
-        }
-        public void OpenResourceFile(string resourceName) {
+        public static void OpenResourceFile(string resourceName) {
             Process p = new Process();
             string filePath = $@"{DOOMEternal.ModPacksDirectory}\{resourceName}";
             if (!File.Exists(filePath)) {
                 throw new FileNotFoundException($"无法找到文件：{filePath}");
             }
-            p.StartInfo.FileName = _windowsExplorerExecutor;
+            p.StartInfo.FileName = "explorer.exe";
             p.StartInfo.Arguments = $@"/select, {DOOMEternal.ModPacksDirectory}\{resourceName}";
             p.Start();
+        }
+        public List<string> ClearUnusedModFile() {
+            // 获取当前正在使用的模组列表
+            List<string> usedResources = new List<string>();
+            foreach (var modPack in _dEModPacks) {
+                foreach (var resource in modPack.Resources) {
+                    string filePath = $@"{DOOMEternal.ModPacksDirectory}\{resource.Path}";
+                    if (!usedResources.Contains(filePath)) {
+                        usedResources.Add(filePath);
+                    }
+                }
+            }
+            // 查找未使用的模组文件并移除
+            var removedFiles = new List<string>();
+            var existedModFiles = Directory.GetFiles(DOOMEternal.ModPacksDirectory);
+            foreach (var file in existedModFiles) {
+                if (!usedResources.Contains(file)) {
+                    File.Delete(file);
+                    removedFiles.Add(file);
+                }
+            }
+
+            return removedFiles;
+        }
+        public List<string> ClearUnusedImageFiles() {
+            // 获取当前正在使用的图片文件名
+            List<string> usedImageFiles = new List<string>();
+            foreach (var modPack in _dEModPacks) {
+                string imageName = $@"{DOOMEternal.ModPackImagesDirectory}\{modPack.ImagePath}";
+                if (!usedImageFiles.Contains(imageName)) {
+                    usedImageFiles.Add(imageName);
+                }
+            }
+            // 查找未使用的图片文件并移除
+            var removedFiles = new List<string>();
+            var existedImageFiles = Directory.GetFiles(DOOMEternal.ModPackImagesDirectory);
+            foreach (var file in existedImageFiles) {
+                if (!usedImageFiles.Contains(file)) {
+                    File.Delete(file);
+                    removedFiles.Add(file);
+                }
+            }
+
+            return removedFiles;
+        }
+        public void ExportModPacks(string outputPath) {
+            ZipFile.CreateFromDirectory(DOOMEternal.ModPacksDirectory, outputPath, CompressionLevel.Optimal, false);
         }
         #endregion
     }

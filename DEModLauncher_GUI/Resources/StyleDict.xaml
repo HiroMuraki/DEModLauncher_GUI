@@ -80,6 +80,29 @@
             </Setter.Value>
         </Setter>
     </Style>
+    <Style x:Key="AGButton" TargetType="Button">
+        <Setter Property="Background" Value="{StaticResource MainColor}" />
+        <Setter Property="Foreground" Value="{StaticResource TextColor}" />
+        <Setter Property="BorderBrush" Value="{StaticResource BorderColor}" />
+        <Setter Property="FontSize" Value="14" />
+        <Setter Property="Padding" Value="0" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="Button">
+                    <Border Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" CornerRadius="5">
+                        <ContentPresenter VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                                          HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                          Margin="{TemplateBinding Padding}"/>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter Property="Background" Value="{StaticResource AccentColor}" />
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
     <Style x:Key="GButtonTitle" TargetType="Button">
         <Setter Property="Background" Value="Transparent" />
         <Setter Property="Foreground" Value="{StaticResource TextColor}" />
@@ -159,8 +182,8 @@
     </Style>
     <Style TargetType="{x:Type View:ModPackButton}">
         <Setter Property="Background" Value="{StaticResource ModPackItemColor}" />
-        <Setter Property="BorderBrush" Value="{StaticResource BorderColor}" />
-        <Setter Property="BorderThickness" Value="0,0,0,1" />
+        <Setter Property="BorderBrush" Value="{StaticResource TextColor}" />
+        <Setter Property="BorderThickness" Value="0" />
         <Setter Property="FontSize" Value="12" />
         <Setter Property="Width" Value="150" />
         <Setter Property="Height" Value="80" />
@@ -171,30 +194,32 @@
                         <Grid.Resources>
                             <ValueConverter:DoubleGroupToRect x:Key="DoubleGroupToRect"/>
                         </Grid.Resources>
-                        <Grid.Clip>
-                            <RectangleGeometry RadiusX="5" RadiusY="5">
-                                <RectangleGeometry.Rect>
-                                    <MultiBinding Converter="{StaticResource DoubleGroupToRect}">
-                                        <Binding Path="Width" RelativeSource="{RelativeSource Mode=TemplatedParent}"/>
-                                        <Binding Path="Height" RelativeSource="{RelativeSource Mode=TemplatedParent}"/>
-                                    </MultiBinding>
-                                </RectangleGeometry.Rect>
-                            </RectangleGeometry>
-                        </Grid.Clip>
-                        <Grid.RowDefinitions>
-                            <RowDefinition/>
-                            <RowDefinition Height="25"/>
-                        </Grid.RowDefinitions>
-                        <Grid Grid.Row="0" Grid.RowSpan="2" >
-                            <Border Background="{StaticResource ItemShadowColor}" Opacity="0.5" Margin="1,1,-1,-1"/>
-                            <Border Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}">
-                                <Image Source="{Binding Path=ImagePath,RelativeSource={RelativeSource Mode=TemplatedParent}}" Stretch="UniformToFill"/>
-                            </Border>
-                            <Border x:Name="MaskBackground" Background="Black" Opacity="0.50" CornerRadius="5"/>
-                        </Grid>
-                        <Grid Grid.Row="1">
-                            <Border x:Name="TextMask" Background="Black" Opacity="0.70" VerticalAlignment="Bottom" Height="25"/>
-                            <Label x:Name="TextContent" Content="{Binding Path=PackName,RelativeSource={RelativeSource Mode=TemplatedParent}}" Foreground="{StaticResource TextColor}" VerticalContentAlignment="Center" HorizontalContentAlignment="Center"/>
+                        <Border Background="{StaticResource ItemShadowColor}" Opacity="0.5" Margin="2,2,-2,-2" CornerRadius="5"/>
+                        <Grid>
+                            <Grid.Clip>
+                                <RectangleGeometry RadiusX="5" RadiusY="5">
+                                    <RectangleGeometry.Rect>
+                                        <MultiBinding Converter="{StaticResource DoubleGroupToRect}">
+                                            <Binding Path="Width" RelativeSource="{RelativeSource Mode=TemplatedParent}"/>
+                                            <Binding Path="Height" RelativeSource="{RelativeSource Mode=TemplatedParent}"/>
+                                        </MultiBinding>
+                                    </RectangleGeometry.Rect>
+                                </RectangleGeometry>
+                            </Grid.Clip>
+                            <Grid.RowDefinitions>
+                                <RowDefinition/>
+                                <RowDefinition Height="25"/>
+                            </Grid.RowDefinitions>
+                            <Grid Grid.Row="0" Grid.RowSpan="2" >
+                                <Border Background="{TemplateBinding Background}"/>
+                                <Image Source="{Binding Path=ImagePath,RelativeSource={RelativeSource Mode=TemplatedParent}}" VerticalAlignment="Center" HorizontalAlignment="Center" Stretch="UniformToFill"/>
+                                <Border Background="Transparent" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" CornerRadius="3"/>
+                                <Border x:Name="MaskBackground" Background="Black" Opacity="0.50"/>
+                            </Grid>
+                            <Grid Grid.Row="1">
+                                <Border x:Name="TextMask" Background="Black" Opacity="0.70" VerticalAlignment="Bottom" Height="25"/>
+                                <Label x:Name="TextContent" Content="{Binding Path=PackName,RelativeSource={RelativeSource Mode=TemplatedParent}}" Foreground="{StaticResource TextColor}" VerticalContentAlignment="Center" HorizontalContentAlignment="Center"/>
+                            </Grid>
                         </Grid>
                     </Grid>
                     <ControlTemplate.Triggers>
@@ -246,8 +271,7 @@
                             <Setter TargetName="TextMask" Property="Visibility" Value="Hidden" />
                             <Setter TargetName="MaskBackground" Property="Visibility" Value="Hidden" />
                             <Setter TargetName="TextContent" Property="Visibility" Value="Hidden" />
-                            <Setter Property="Background" Value="{StaticResource FocusColor}" />
-                            <Setter Property="Foreground" Value="{StaticResource MainColor}" />
+                            <Setter Property="BorderThickness" Value="2" />
                         </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>

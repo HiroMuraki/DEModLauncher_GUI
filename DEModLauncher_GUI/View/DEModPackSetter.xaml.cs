@@ -18,7 +18,7 @@ namespace DEModLauncher_GUI.View {
     /// <summary>
     /// TextInputWindow.xaml 的交互逻辑
     /// </summary>
-    public partial class TextInputWindow : Window {
+    public partial class DEModPackSetter : Window {
         private DEModPack _modPack;
 
         public DEModPack ModPack {
@@ -30,7 +30,7 @@ namespace DEModLauncher_GUI.View {
             }
         }
 
-        public TextInputWindow(DEModPack modPack) {
+        public DEModPackSetter(DEModPack modPack) {
             _modPack = modPack;
             InitializeComponent();
         }

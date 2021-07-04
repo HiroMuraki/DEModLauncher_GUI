@@ -10,7 +10,7 @@
         DataContext="{Binding Path=DEModManager,RelativeSource={RelativeSource Mode=Self}}"
         FontFamily="Microsoft YaHei UI"
         WindowStartupLocation="CenterScreen" ResizeMode="NoResize" MouseWheel="Direction_MouseWHeel"
-        Title="DEMODLauncher" Height="550" Width="800">
+        Title="DEMODLauncher" Height="550" Width="900">
     <WindowChrome.WindowChrome>
         <WindowChrome UseAeroCaptionButtons="False" CaptionHeight="0" ResizeBorderThickness="0"/>
     </WindowChrome.WindowChrome>
@@ -21,13 +21,14 @@
         <Grid>
             <Grid.RowDefinitions>
                 <RowDefinition/>
-                <RowDefinition Height="130"/>
+                <RowDefinition Height="3"/>
+                <RowDefinition Height="130" MinHeight="130"/>
             </Grid.RowDefinitions>
             <Grid Grid.Row="0">
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="1.5*"/>
-                    <ColumnDefinition Width="2"/>
-                    <ColumnDefinition Width="0.7*"/>
+                    <ColumnDefinition Width="1.5*" MinWidth="100"/>
+                    <ColumnDefinition Width="3"/>
+                    <ColumnDefinition Width="0.7*" MinWidth="100"/>
                 </Grid.ColumnDefinitions>
                 <Grid Grid.Column="0">
                     <Grid.RowDefinitions>
@@ -62,7 +63,9 @@
                             <MenuItem Tag="{Binding CurrentMod}" Header="{StaticResource GENERATE_MERGED_FILE}" Click="GenerateMergedFile_ClicK"/>
                         </ContextMenu>
                     </Grid.ContextMenu>
-                    <Image Grid.Row="0" Grid.RowSpan="2" Source="{Binding CurrentMod.ImagePath}" Stretch="UniformToFill" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                    <Grid Grid.Row="0" Grid.RowSpan="2" MouseLeftButtonDown="Window_Move">
+                        <Image Source="{Binding CurrentMod.ImagePath}" Stretch="UniformToFill" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                    </Grid>
                     <Grid Grid.Row="1">
                         <Border Background="Black" Opacity="0.70"/>
                         <Label Content="{Binding CurrentMod.PackName}" Foreground="{StaticResource TextColor}" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" FontSize="18"/>
@@ -85,19 +88,29 @@
                 <GridSplitter Grid.Column="1" Width="5" HorizontalAlignment="Center" Background="{StaticResource AccentColor}"/>
                 <Grid Grid.Column="2">
                     <Grid.RowDefinitions>
-                        <RowDefinition Height="30"/>
+                        <RowDefinition Height="35"/>
                         <RowDefinition/>
                     </Grid.RowDefinitions>
                     <Grid Grid.Row="0">
-                        <Border Grid.Column="0" Background="{StaticResource AccentColor}" MouseLeftButtonDown="Window_Move">
-                        </Border>
-                        <Grid HorizontalAlignment="Right" VerticalAlignment="Center" Width="70" Height="30">
+                        <Border Grid.Column="0" Background="{StaticResource AccentColor}" MouseLeftButtonDown="Window_Move"/>
+                        <Grid VerticalAlignment="Center">
                             <Grid.ColumnDefinitions>
-                                <ColumnDefinition/>
-                                <ColumnDefinition/>
+                                <ColumnDefinition Width="35"/>
+                                <ColumnDefinition />
+                                <ColumnDefinition Width="35"/>
+                                <ColumnDefinition Width="35"/>
                             </Grid.ColumnDefinitions>
-                            <Button Grid.Column="0" Content="━" Style="{StaticResource GButtonTitle}" Click="Window_Minimum"/>
-                            <Button Grid.Column="1" Content="&#x2573;" Style="{StaticResource GButtonTitle}" Click="Window_Close"/>
+                            <Button Grid.Column="0" Content="[E]" Style="{StaticResource GButtonTitle}" Click="OpenOptionMenu_Click">
+                                <Button.ContextMenu>
+                                    <ContextMenu>
+                                        <MenuItem Header="{StaticResource SAVE_PROFILE_FILE}" ToolTip="{StaticResource SAVE_PROFILE_FILE_TOOLTIP}" Click="SaveToFile_Click"/>
+                                        <MenuItem Header="{StaticResource RELOAD_PROFILE_FILE}" ToolTip="{StaticResource RELOAD_PROFILE_FILE_TOOLTIP}" Click="LoadFromFile_Click"/>
+                                        <MenuItem Header="{StaticResource ADVANCED_OPTION}" ToolTip="{StaticResource ADVANCED_OPTION_TOOLTIP}" Click="ShowAdvancedSetting_Click"/>
+                                    </ContextMenu>
+                                </Button.ContextMenu>
+                            </Button>
+                            <Button Grid.Column="2" Content="━" Style="{StaticResource GButtonTitle}" Click="Window_Minimum"/>
+                            <Button Grid.Column="3" Content="&#x2573;" Style="{StaticResource GButtonTitle}" Click="Window_Close"/>
                         </Grid>
                     </Grid>
                     <Grid Grid.Row="1">
@@ -188,7 +201,8 @@
                     </Grid>
                 </Grid>
             </Grid>
-            <Grid Grid.Row="1">
+            <Border Grid.Row="1" Height="3" HorizontalAlignment="Stretch" Background="{StaticResource AccentColor}"/>
+            <Grid Grid.Row="2">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition/>
                     <ColumnDefinition Width="Auto"/>
@@ -269,7 +283,6 @@
                                         <ControlTemplate.Triggers>
                                             <Trigger Property="IsMouseOver" Value="True">
                                                 <Setter Property="FontSize" Value="50" />
-                                                <Setter Property="Background" Value="{StaticResource AccentColor}" />
                                             </Trigger>
                                         </ControlTemplate.Triggers>
                                     </ControlTemplate>
@@ -322,43 +335,3 @@
         </Grid>
     </Border>
 </Window>
-
-<!--Grid Grid.Row="1">
-    <Grid Grid.Row="0">
-        <Grid>
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="Auto"/>
-                <ColumnDefinition/>
-                <ColumnDefinition Width="Auto"/>
-            </Grid.ColumnDefinitions>
-            <Label Grid.Column="0" Content="{StaticResource GAME_DIRECTORY}" 
-                               ToolTip="{StaticResource GAME_DIRECTORY_TOOLTIP}" Width="80" VerticalContentAlignment="Center" HorizontalContentAlignment="Center"
-                               BorderThickness="0,1,0,0" BorderBrush="{StaticResource BorderColor}" 
-                               Background="{StaticResource MainColor}" Foreground="{StaticResource TextColor}"/>
-            <TextBox Grid.Column="1" Text="{Binding GameDirectory,Mode=OneWay}" ToolTip="{Binding GameDirectory}" IsReadOnly="True" 
-                                 VerticalContentAlignment="Center" BorderThickness="0,1,0,0" BorderBrush="{StaticResource BorderColor}"  
-                                 Background="{StaticResource MainColor}" Foreground="{StaticResource TextColor}"
-                                 MouseDoubleClick="OpenGameDirectory_Click">
-                <TextBox.Style>
-                    <Style TargetType="TextBox">
-                        <Setter Property="Template">
-                            <Setter.Value>
-                                <ControlTemplate TargetType="TextBox">
-                                    <Border Background="{TemplateBinding Background}"
-                                                        BorderBrush="{TemplateBinding BorderBrush}"
-                                                        BorderThickness="{TemplateBinding BorderThickness}">
-                                        <ScrollViewer x:Name="PART_ContentHost"/>
-                                    </Border>
-                                </ControlTemplate>
-                            </Setter.Value>
-                        </Setter>
-                    </Style>
-                </TextBox.Style>
-            </TextBox>
-            <Button Grid.Column="2" Content="{StaticResource SELECT_GAME_FOLDER}" 
-                                ToolTip="{StaticResource SELECT_GAME_FOLDER_TOOLTIP}"
-                                Width="60" Click="SelectGameDirectory_Click"
-                                BorderThickness="1,1,0,0" Style="{StaticResource GButton}"/>
-        </Grid>
-    </Grid>
-</Grid-->
