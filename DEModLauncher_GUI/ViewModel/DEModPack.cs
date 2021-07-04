@@ -61,6 +61,16 @@ namespace DEModLauncher_GUI.ViewModel {
         public DEModPack() {
             _resources = new Resources();
         }
+        public DEModPack(Model.DEModPack model) {
+            _packName = model.PackName;
+            _description = model.Description;
+            _imagePath = model.ImagePath;
+            _resources = new Resources();
+            foreach (var res in model.Resources) {
+                DEModResource resource = new DEModResource(res);
+                _resources.Add(resource);
+            }
+        }
         #endregion
 
         #region 公共方法
@@ -133,11 +143,9 @@ namespace DEModLauncher_GUI.ViewModel {
             if (string.IsNullOrEmpty(imagePath)) {
                 return;
             }
-            string fileName = Path.GetFileNameWithoutExtension(imagePath);
-            string fileExt = Path.GetExtension(imagePath);
-            string imageName = $@"{fileName}{fileExt}";
+            string imageName = Path.GetFileName(imagePath);
             string destPath = $@"{DOOMEternal.ModPackImagesDirectory}\{imageName}";
-            if (!File.Exists(destPath)) {
+            if (!File.Exists(destPath) && File.Exists(imagePath)) {
                 File.Copy(imagePath, destPath);
             }
             _imagePath = imageName;

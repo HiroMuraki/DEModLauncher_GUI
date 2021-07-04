@@ -171,6 +171,7 @@ namespace DEModLauncher_GUI.ViewModel {
             }
         }
         public void LoadFromFile(string fileName) {
+            // 读取文件
             Model.DEModManager dm;
             using (FileStream file = new FileStream(fileName, FileMode.Open, FileAccess.Read)) {
                 dm = _serializer.ReadObject(file) as Model.DEModManager;
@@ -178,25 +179,20 @@ namespace DEModLauncher_GUI.ViewModel {
             if (dm == null) {
                 throw new InvalidDataException();
             }
-
-            CurrentMod = null;
+            // 设置游戏目录，这条暂时无效
             DOOMEternal.GameDirectory = dm.GameDirectory;
+            // 如果指定了ModLoader与游戏主程序，修改
             if (!string.IsNullOrEmpty(dm.ModLoader)) {
                 DOOMEternal.ModLoader = dm.ModLoader;
             }
             if (!string.IsNullOrEmpty(dm.GameMainExecutor)) {
                 DOOMEternal.GameMainExecutor = dm.GameMainExecutor;
             }
+            // 读取模组包，同时设置CurrentMod
+            CurrentMod = null;
             _dEModPacks.Clear();
             foreach (var modPack in dm.ModPacks) {
-                DEModPack dp = new DEModPack();
-                dp.PackName = modPack.PackName;
-                dp.Description = modPack.Description;
-                dp.SetImage(modPack.ImagePath);
-                foreach (var res in modPack.Resources) {
-                    DEModResource resource = new DEModResource(res);
-                    dp.Resources.Add(resource);
-                }
+                DEModPack dp = new DEModPack(modPack);
                 _dEModPacks.Add(dp);
                 if (CurrentMod == null && modPack.PackName == dm.CurrentMod) {
                     CurrentMod = dp;
