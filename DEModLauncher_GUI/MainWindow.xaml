@@ -67,7 +67,7 @@
                         <Image Source="{Binding CurrentMod.ImagePath}" Stretch="UniformToFill" VerticalAlignment="Center" HorizontalAlignment="Center" MouseDown="EditModPack_Click" Tag="{Binding CurrentMod}"/>
                     </Grid>
                     <Grid Grid.Row="1">
-                        <Border Background="Black" Opacity="0.70"/>
+                        <Border Background="Black" Opacity="0.85"/>
                         <Label Content="{Binding CurrentMod.PackName}" Foreground="{StaticResource TextColor}" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" FontSize="18"/>
                     </Grid>
                     <Grid x:Name="LaunchOptionBar" Grid.Row="1" Opacity="0">
@@ -100,7 +100,7 @@
                                 <ColumnDefinition Width="35"/>
                                 <ColumnDefinition Width="35"/>
                             </Grid.ColumnDefinitions>
-                            <Button Grid.Column="0" Content="E" Style="{StaticResource GButtonTitle}" Click="OpenOptionMenu_Click">
+                            <Button Grid.Column="0" Content="{StaticResource EXTRA_OPTION}" Style="{StaticResource GButtonTitle}" ToolTip="{StaticResource EXTRA_OPTION_TOOLTIP}" Click="OpenOptionMenu_Click">
                                 <Button.ContextMenu>
                                     <ContextMenu>
                                         <MenuItem Header="{StaticResource SAVE_PROFILE_FILE}" ToolTip="{StaticResource SAVE_PROFILE_FILE_TOOLTIP}" Click="SaveToFile_Click"/>
@@ -269,7 +269,7 @@
                         <Style TargetType="Button">
                             <Setter Property="Background" Value="Transparent" />
                             <Setter Property="Foreground" Value="{StaticResource TextColor}" />
-                            <Setter Property="BorderBrush" Value="{StaticResource BorderColor}" />
+                            <Setter Property="BorderBrush" Value="{StaticResource AccentColor}" />
                             <Setter Property="BorderThickness" Value="0" />
                             <Setter Property="FontSize" Value="18" />
                             <Setter Property="FontWeight" Value="Bold" />
@@ -283,6 +283,7 @@
                                         <ControlTemplate.Triggers>
                                             <Trigger Property="IsMouseOver" Value="True">
                                                 <Setter Property="FontSize" Value="50" />
+                                                <Setter Property="BorderThickness" Value="2,0,0,0" />
                                             </Trigger>
                                         </ControlTemplate.Triggers>
                                     </ControlTemplate>

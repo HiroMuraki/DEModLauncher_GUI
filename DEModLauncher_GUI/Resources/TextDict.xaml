@@ -7,6 +7,9 @@
     <!--重新加载配置文件-->
     <Sys:String x:Key="RELOAD_PROFILE_FILE">读取配置</Sys:String>
     <Sys:String x:Key="RELOAD_PROFILE_FILE_TOOLTIP">重新读取模组配置</Sys:String>
+    <!--重新加载配置文件-->
+    <Sys:String x:Key="EXTRA_OPTION">E</Sys:String>
+    <Sys:String x:Key="EXTRA_OPTION_TOOLTIP">打开额外选项</Sys:String>
     
     <!--高级选项-->
     <Sys:String x:Key="ADVANCED_OPTION">高级选项</Sys:String>

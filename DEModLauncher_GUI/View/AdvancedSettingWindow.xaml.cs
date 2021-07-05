@@ -32,12 +32,12 @@ namespace DEModLauncher_GUI.View {
             }
         }
         private void ExportModPacks_Click(object sender, RoutedEventArgs e) {
+            System.Windows.Forms.SaveFileDialog sfd = new System.Windows.Forms.SaveFileDialog();
+            sfd.InitialDirectory = DOOMEternal.GameDirectory;
+            sfd.FileName = $@"ModPacks.zip";
+            sfd.Filter = "ZIP压缩包|*.zip";
+            sfd.Title = "选择导出的文件";
             try {
-                System.Windows.Forms.SaveFileDialog sfd = new System.Windows.Forms.SaveFileDialog();
-                sfd.InitialDirectory = DOOMEternal.GameDirectory;
-                sfd.FileName = $@"ModPacks.zip";
-                sfd.Filter = "ZIP压缩包|*.zip";
-                sfd.Title = "选择导出的文件";
                 if (sfd.ShowDialog() == System.Windows.Forms.DialogResult.OK) {
                     DEModManager.ExportModPacks(sfd.FileName);
                     MessageBox.Show("模组包导出完成");
@@ -48,23 +48,29 @@ namespace DEModLauncher_GUI.View {
             }
         }
         private void ClearUnusedImageFiles_Click(object sender, RoutedEventArgs e) {
-            try {
-                var removedFiles = DEModManager.GetInstance().ClearUnusedImageFiles();
-                string outputInf = "清理完成，以下文件被移除:\n" + string.Join('\n', removedFiles);
-                InformationWindow.Show(outputInf, "清理完成", this);
-            }
-            catch (Exception exp) {
-                MessageBox.Show(exp.Message, "文件清理出错", MessageBoxButton.OK, MessageBoxImage.Error);
+            var result = MessageBox.Show("该操作将会移除被使用的图片文件，是否继续?", "警告", MessageBoxButton.YesNo, MessageBoxImage.Warning);
+            if (result == MessageBoxResult.Yes) {
+                try {
+                    var removedFiles = DEModManager.GetInstance().ClearUnusedImageFiles();
+                    string outputInf = "清理完成，以下文件被移除:\n" + string.Join('\n', removedFiles);
+                    InformationWindow.Show(outputInf, "清理完成", this);
+                }
+                catch (Exception exp) {
+                    MessageBox.Show(exp.Message, "文件清理出错", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
             }
         }
         private void ClearUnusedModFiles_Click(object sender, RoutedEventArgs e) {
-            try {
-                var removedFiles = DEModManager.GetInstance().ClearUnusedModFile();
-                string outputInf = "清理完成，以下文件被移除:\n" + string.Join('\n', removedFiles);
-                InformationWindow.Show(outputInf, "清理完成", this);
-            }
-            catch (Exception exp) {
-                MessageBox.Show(exp.Message, "文件清理出错", MessageBoxButton.OK, MessageBoxImage.Error);
+            var result = MessageBox.Show("该操作将会移除被使用的模组文件，是否继续?", "警告", MessageBoxButton.YesNo, MessageBoxImage.Warning);
+            if (result == MessageBoxResult.Yes) {
+                try {
+                    var removedFiles = DEModManager.GetInstance().ClearUnusedModFile();
+                    string outputInf = "清理完成，以下文件被移除:\n" + string.Join('\n', removedFiles);
+                    InformationWindow.Show(outputInf, "清理完成", this);
+                }
+                catch (Exception exp) {
+                    MessageBox.Show(exp.Message, "文件清理出错", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
             }
         }
     }
