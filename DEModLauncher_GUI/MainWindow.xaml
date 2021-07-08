@@ -135,7 +135,7 @@
                                                     <MenuItem Tag="{Binding}" Header="{StaticResource REMOVE_MOD_RESOURCE}" Click="DeleteResource_Click"/>
                                                 </ContextMenu>
                                             </Grid.ContextMenu>
-                                            <ToggleButton Content="{Binding Path}" ToolTip="{Binding Path}" Tag="{Binding}" IsChecked="{Binding Status,Converter={StaticResource ResourceStatusToBoolean}}"
+                                            <ToggleButton Content="{Binding Path}" ToolTip="{Binding}" Tag="{Binding}" IsChecked="{Binding Status,Converter={StaticResource ResourceStatusToBoolean}}"
                                                           Style="{StaticResource GResourceItemButton}"/>
                                         </Grid>
                                     </DataTemplate>
