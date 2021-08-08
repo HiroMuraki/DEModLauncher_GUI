@@ -27,6 +27,7 @@
     <Sys:String x:Key="ADVANCED_OPTION_EXPORT_MODPACKSS">导出备份包</Sys:String>
     <Sys:String x:Key="ADVANCED_OPTION_EXPORT_MODPACKSS_TOOLTIP">导出备份的模组包</Sys:String>
     <!--高级选项 模组替换-->
+    <Sys:String x:Key="UPDATE_MOD_FILE_TITLE">点击模组以进行替换</Sys:String>
     <Sys:String x:Key="ADVANCED_OPTION_UPDATE_MODS">替换模组文件</Sys:String>
     <Sys:String x:Key="ADVANCED_OPTION_UPDATE_MODS_TOOLTIP">全局替换指定模组文件</Sys:String>
     
@@ -43,6 +44,8 @@
     <Sys:String x:Key="SELECT_GAME_FOLDER">选择</Sys:String>
     <Sys:String x:Key="SELECT_GAME_FOLDER_TOOLTIP">手动设置游戏文件夹</Sys:String>
 
+    <!--选择模组包以添加-->
+    <Sys:String x:Key="ADD_MOD_RESOURES_FROM_MOD_PACK_TITLE">选择模组包以添加</Sys:String>
     <!--添加自现有模组配置ToolTip-->
     <Sys:String x:Key="ADD_MOD_RESOURCES_FROM_MOD_PACK_TOOLTIP">添加自现有模组配置</Sys:String>
     <!--添加模组文件ToolTip-->

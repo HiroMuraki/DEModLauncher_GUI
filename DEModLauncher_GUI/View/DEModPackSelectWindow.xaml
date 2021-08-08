@@ -22,7 +22,7 @@
             </Grid.RowDefinitions>
             <Grid Grid.Row="0">
                 <Border Background="{StaticResource AccentColor}" MouseLeftButtonDown="Window_Move"/>
-                <Label Content="当前可选模组配置" FontSize="14" Foreground="{StaticResource TextColor}" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" IsHitTestVisible="False"/>
+                <Label Content="{StaticResource ADD_MOD_RESOURES_FROM_MOD_PACK_TITLE}" FontSize="14" Foreground="{StaticResource TextColor}" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" IsHitTestVisible="False"/>
                 <Button Grid.Column="1" Content="&#x2573;" Width="40" FontSize="18" Style="{StaticResource GButtonTitle}" BorderThickness="0" HorizontalAlignment="Right" Click="Window_Close"/>
             </Grid>
             <Grid Grid.Row="1">

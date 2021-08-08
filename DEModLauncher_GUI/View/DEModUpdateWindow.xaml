@@ -19,7 +19,7 @@
             </Grid.RowDefinitions>
             <Grid Grid.Row="0">
                 <Border Background="{StaticResource AccentColor}" MouseLeftButtonDown="Window_Move"/>
-                <Label Content="点击模组名以进行替换" FontSize="14" Foreground="{StaticResource TextColor}" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" IsHitTestVisible="False"/>
+                <Label Content="{StaticResource UPDATE_MOD_FILE_TITLE}" FontSize="14" Foreground="{StaticResource TextColor}" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" IsHitTestVisible="False"/>
                 <Button Grid.Column="1" Content="&#x2573;" Width="40" FontSize="18" Style="{StaticResource GButtonTitle}" BorderThickness="0" HorizontalAlignment="Right" Click="Window_Close"/>
             </Grid>
             <Grid Grid.Row="1">
@@ -28,7 +28,7 @@
                         <ItemsControl.ItemTemplate>
                             <DataTemplate>
                                 <Grid>
-                                    <Button Content="{Binding}" Height="40" Padding="10,0" ToolTip="{Binding}" Tag="{Binding}" Style="{StaticResource AGButton}" Click="UpdateMod_Click"/>
+                                    <Button Content="{Binding}" HorizontalContentAlignment="Left" Height="40" Padding="10,0" ToolTip="{Binding}" Tag="{Binding}" Style="{StaticResource AGButton}" Click="UpdateMod_Click"/>
                                 </Grid>
                             </DataTemplate>
                         </ItemsControl.ItemTemplate>
