@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:DEModLauncher_GUI"
         mc:Ignorable="d" ResizeMode="NoResize"
         WindowStartupLocation="CenterOwner"
-        Title="{StaticResource ADVANCED_OPTION}" Height="330" Width="400">
+        Title="{StaticResource ADVANCED_OPTION}" Height="360" Width="400">
     <Grid Background="{StaticResource MainColor}">
         <Grid Margin="10" VerticalAlignment="Center">
             <Grid.RowDefinitions>
@@ -17,11 +17,9 @@
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="Auto"/>
                     <ColumnDefinition/>
-                    <!--ColumnDefinition Width="Auto"/-->
                 </Grid.ColumnDefinitions>
                 <Label Grid.Column="0" Content="{StaticResource GAME_DIRECTORY}" ToolTip="{StaticResource GAME_DIRECTORY_TOOLTIP}" Width="65" VerticalContentAlignment="Center" HorizontalContentAlignment="Center"
-                               BorderThickness="0,1,0,0" BorderBrush="{StaticResource BorderColor}" 
-                               Background="{StaticResource MainColor}" Foreground="{StaticResource TextColor}"/>
+                       BorderThickness="0,1,0,0" BorderBrush="{StaticResource BorderColor}" Background="{StaticResource MainColor}" Foreground="{StaticResource TextColor}"/>
                 <TextBox Grid.Column="1" x:Name="GameDirectory" IsReadOnly="True" VerticalContentAlignment="Center" BorderThickness="0,1,0,0" BorderBrush="{StaticResource BorderColor}"  
                          Background="{StaticResource MainColor}" Foreground="{StaticResource TextColor}">
                     <TextBox.Style>
@@ -40,15 +38,14 @@
                         </Style>
                     </TextBox.Style>
                 </TextBox>
-                <!--Button Grid.Column="2" Content="{StaticResource SELECT_GAME_FOLDER}" ToolTip="{StaticResource SELECT_GAME_FOLDER_TOOLTIP}"
-                        Width="60" Click="SelectGameDirectory_Click" Style="{StaticResource GButton}"/-->
             </Grid>
             <Grid Grid.Row="1">
                 <StackPanel>
-                    <Button Height="50" Content="{StaticResource ADVANCED_OPTION_OPEN_GAME_DIRECTORY}" Style="{StaticResource AGButton}"  Click="OpenGameDirectory_Click"/>
-                    <Button Height="50" Content="{StaticResource ADVANCED_OPTION_CLEAN_UNUSED_MOD_FILES}" Style="{StaticResource AGButton}" Click="ClearUnusedModFiles_Click"/>
-                    <Button Height="50" Content="{StaticResource ADVANCED_OPTION_CLEAN_UNUSED_IMAGE_FILES}" Style="{StaticResource AGButton}" Click="ClearUnusedImageFiles_Click"/>
-                    <Button Height="50" Content="{StaticResource ADVANCED_OPTION_EXPORT_MODPACKSS}" Style="{StaticResource AGButton}" Click="ExportModPacks_Click"/>
+                    <Button Height="50" Content="{StaticResource ADVANCED_OPTION_OPEN_GAME_DIRECTORY}" ToolTip="{StaticResource ADVANCED_OPTION_OPEN_GAME_DIRECTORY_TOOLTIP}" Style="{StaticResource AGButton}"  Click="OpenGameDirectory_Click"/>
+                    <Button Height="50" Content="{StaticResource ADVANCED_OPTION_CLEAN_UNUSED_MOD_FILES}" ToolTip="{StaticResource ADVANCED_OPTION_CLEAN_UNUSED_MOD_FILES_TOOLTIP}" Style="{StaticResource AGButton}" Click="ClearUnusedModFiles_Click"/>
+                    <Button Height="50" Content="{StaticResource ADVANCED_OPTION_CLEAN_UNUSED_IMAGE_FILES}" ToolTip="{StaticResource ADVANCED_OPTION_CLEAN_UNUSED_IMAGE_FILES_TOOLTIP}" Style="{StaticResource AGButton}" Click="ClearUnusedImageFiles_Click"/>
+                    <Button Height="50" Content="{StaticResource ADVANCED_OPTION_UPDATE_MODS}" ToolTip="{StaticResource ADVANCED_OPTION_UPDATE_MODS_TOOLTIP}" Style="{StaticResource AGButton}" Click="UpdateModFile_Click"/>
+                    <Button Height="50" Content="{StaticResource ADVANCED_OPTION_EXPORT_MODPACKSS}" ToolTip="{StaticResource ADVANCED_OPTION_EXPORT_MODPACKSS_TOOLTIP}" Style="{StaticResource AGButton}" Click="ExportModPacks_Click"/>
                 </StackPanel>
             </Grid>
         </Grid>

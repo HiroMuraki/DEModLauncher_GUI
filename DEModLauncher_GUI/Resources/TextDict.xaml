@@ -26,6 +26,9 @@
     <!--高级选项 导出备份包-->
     <Sys:String x:Key="ADVANCED_OPTION_EXPORT_MODPACKSS">导出备份包</Sys:String>
     <Sys:String x:Key="ADVANCED_OPTION_EXPORT_MODPACKSS_TOOLTIP"></Sys:String>
+    <!--高级选项 模组替换-->
+    <Sys:String x:Key="ADVANCED_OPTION_UPDATE_MODS">替换模组文件</Sys:String>
+    <Sys:String x:Key="ADVANCED_OPTION_UPDATE_MODS_TOOLTIP"></Sys:String>
     
     <!--加载模组后启动游戏-->
     <Sys:String x:Key="LAUNCH_AFTER_LOAD_MOD">加载模组并启动</Sys:String>

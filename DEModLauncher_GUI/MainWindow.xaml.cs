@@ -29,7 +29,7 @@ namespace DEModLauncher_GUI {
         }
 
         #region 启动与保存
-        private async void LaunchMod_Click(object sender, RoutedEventArgs e) {
+        private void LaunchMod_Click(object sender, RoutedEventArgs e) {
             // 弹出提示窗口，避免误操作
             var result = MessageBox.Show($"加载模组将需要一定时间，在此期间请勿关闭本程序。是否继续?",
                                          $"加载模组：{_dEModMananger.CurrentMod.PackName}",
@@ -41,32 +41,17 @@ namespace DEModLauncher_GUI {
             // 进入启动程序
             _dEModMananger.IsLaunching = true;
             _dEModMananger.ConsoleStandardOutput = string.Empty;
-            StreamReader reader;
             try {
-                reader = _dEModMananger.LaunchWithModLoader();
+                _dEModMananger.LaunchModLoader();
             }
             catch (Exception exp) {
                 MessageBox.Show(exp.Message, "模组启动错误", MessageBoxButton.OK, MessageBoxImage.Error);
                 _dEModMananger.IsLaunching = false;
                 return;
             }
-            // 从StreamReader中读取控制台输出信息
-            StringBuilder sb = new StringBuilder(256);
-            await Task.Run(async () => {
-                while (!reader.EndOfStream) {
-                    await Task.Delay(TimeSpan.FromMilliseconds(100));
-                    for (int i = 0; i < 5; i++) {
-                        sb.Append($"{reader.ReadLine()}\n");
-                    }
-                    Application.Current.Dispatcher.Invoke(() => {
-                        _dEModMananger.ConsoleStandardOutput = sb.ToString();
-                        // StandardOutPutHandlerArea.ScrollToBottom();
-                    });
-                }
-            });
             _dEModMananger.IsLaunching = false;
             // 启动后关闭启动器
-            Application.Current.Shutdown();
+            // Application.Current.Shutdown();
         }
         private void LaunchGame_Click(object sender, RoutedEventArgs e) {
             try {

@@ -68,11 +68,12 @@ namespace DEModLauncher_GUI.ViewModel {
         #endregion
 
         #region 公共方法
-        public StreamReader LaunchWithModLoader() {
+        public void LaunchModLoader() {
             if (_currentMod == null) {
                 throw new InvalidOperationException("当前未选择有效模组");
             }
-            return _currentMod.Launch();
+            _currentMod.Deploy();
+            DOOMEternal.LaunchModLoader();
         }
         public void Launch() {
             DOOMEternal.LaunchGame();
@@ -143,6 +144,18 @@ namespace DEModLauncher_GUI.ViewModel {
                 ++cpyID;
             }
             _dEModPacks.Insert(_dEModPacks.IndexOf(modPack) + 1, copiedPack);
+        }
+        public void UpdateModFile(string oldModFile, string newModFile) {
+            DOOMEternal.AddModFile(newModFile);
+            DOOMEternal.RemoveModFile(oldModFile);
+            string newResource = Path.GetFileName(newModFile);
+            foreach (var modPack in _dEModPacks) {
+                foreach (var res in modPack.Resources) {
+                    if (res.Path == oldModFile) {
+                        res.Path = newResource;
+                    }
+                }
+            }
         }
         public void SaveToFile(string fileName) {
             Model.DEModManager dm = new Model.DEModManager();
@@ -225,6 +238,17 @@ namespace DEModLauncher_GUI.ViewModel {
             var existedImageFiles = Directory.GetFiles(DOOMEternal.ModPackImagesDirectory);
             var removedFiles = FileCleaner(usedImageFiles, existedImageFiles);
             return removedFiles;
+        }
+        public List<string> GetUsedMods() {
+            List<string> existedMod = new List<string>();
+            foreach (var modPack in _dEModPacks) {
+                foreach (var res in modPack.Resources) {
+                    if (!existedMod.Contains(res.Path)) {
+                        existedMod.Add(res.Path);
+                    }
+                }
+            }
+            return existedMod;
         }
         public static void OpenResourceFile(string resourceName) {
             Process p = new Process();

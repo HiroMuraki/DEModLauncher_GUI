@@ -1,12 +1,9 @@
-﻿<Window x:Class="DEModLauncher_GUI.View.DEModPackSelectWindow"
+﻿<Window x:Class="DEModLauncher_GUI.View.DEModUpdateWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:DEModLauncher_GUI.View"
-        xmlns:ViewModel="clr-namespace:DEModLauncher_GUI.ViewModel"
-        xmlns:View="clr-namespace:DEModLauncher_GUI.View"
-        mc:Ignorable="d"
         DataContext="{Binding RelativeSource={RelativeSource Mode=Self}}"
         WindowStartupLocation="CenterOwner"
         Title="DEModPackSelectWindow" Height="600" Width="500">
@@ -22,16 +19,16 @@
             </Grid.RowDefinitions>
             <Grid Grid.Row="0">
                 <Border Background="{StaticResource AccentColor}" MouseLeftButtonDown="Window_Move"/>
-                <Label Content="当前可选模组配置" FontSize="14" Foreground="{StaticResource TextColor}" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" IsHitTestVisible="False"/>
+                <Label Content="点击模组名以进行替换" FontSize="14" Foreground="{StaticResource TextColor}" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" IsHitTestVisible="False"/>
                 <Button Grid.Column="1" Content="&#x2573;" Width="40" FontSize="18" Style="{StaticResource GButtonTitle}" BorderThickness="0" HorizontalAlignment="Right" Click="Window_Close"/>
             </Grid>
             <Grid Grid.Row="1">
                 <ScrollViewer VerticalScrollBarVisibility="Auto">
-                    <ItemsControl ItemsSource="{Binding ModPackSelectors}" Margin="10,5">
+                    <ItemsControl ItemsSource="{Binding ModList}" Margin="10,5">
                         <ItemsControl.ItemTemplate>
-                            <DataTemplate DataType="{x:Type ViewModel:DEModPackSelector}">
+                            <DataTemplate>
                                 <Grid>
-                                    <ToggleButton Content="{Binding DEModPack.PackName}" ToolTip="{Binding DEModPack.Description}" Tag="{Binding}" IsChecked="{Binding IsSelected}" Style="{StaticResource GResourceSelectorButton}"/>
+                                    <Button Content="{Binding}" Height="40" Padding="10,0" ToolTip="{Binding}" Tag="{Binding}" Style="{StaticResource AGButton}" Click="UpdateMod_Click"/>
                                 </Grid>
                             </DataTemplate>
                         </ItemsControl.ItemTemplate>
@@ -44,9 +41,6 @@
                         </ItemsControl.ItemsPanel>
                     </ItemsControl>
                 </ScrollViewer>
-            </Grid>
-            <Grid Grid.Row="2">
-                <Button Content="添加" FontSize="18" Style="{StaticResource GButton}" Click="Confirm_Click" BorderThickness="0"/>
             </Grid>
         </Grid>
     </Border>

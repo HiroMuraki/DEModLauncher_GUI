@@ -73,5 +73,9 @@ namespace DEModLauncher_GUI.View {
                 }
             }
         }
+        private void UpdateModFile_Click(object sender, RoutedEventArgs e) {
+            DEModUpdateWindow modList = new DEModUpdateWindow() { Owner = this };
+            modList.ShowDialog();
+        }
     }
 }

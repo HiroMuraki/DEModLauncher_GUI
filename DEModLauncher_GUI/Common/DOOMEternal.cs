@@ -1,4 +1,5 @@
-﻿using System.Diagnostics;
+﻿using System;
+using System.Diagnostics;
 using System.IO;
 
 namespace DEModLauncher_GUI {
@@ -35,9 +36,16 @@ namespace DEModLauncher_GUI {
         public static void LaunchGame() {
             Process p = new Process();
             p.StartInfo.FileName = $@"{GameDirectory}\{GameMainExecutor}";
+            if (!File.Exists(p.StartInfo.FileName)) {
+                throw new FileNotFoundException($"无法找到游戏主程序{GameMainExecutor}");
+            }
             p.Start();
         }
-
+        public static void LaunchModLoader() {
+            Process p = new Process();
+            p.StartInfo.FileName = $@"{GameDirectory}\{ModLoader}";
+            p.Start();
+        }
         public static void OpenGameDirectory() {
             Process p = new Process();
             p.StartInfo.FileName = "explorer.exe";
@@ -54,6 +62,22 @@ namespace DEModLauncher_GUI {
             if (!Directory.Exists(ModPackImagesDirectory)) {
                 Directory.CreateDirectory(ModPackImagesDirectory);
             }
+        }
+        public static void AddModFile(string filePath) {
+            if (GameDirectory == null) {
+                throw new ArgumentException("请先选择游戏文件夹");
+            }
+            if (!Directory.Exists(ModPacksDirectory)) {
+                Directory.CreateDirectory(ModPacksDirectory);
+            }
+            string resourceName = Path.GetFileName(filePath);
+            string modPackBackup = $@"{ModPacksDirectory}\{resourceName}";
+            if (!File.Exists(modPackBackup)) {
+                File.Copy(filePath, modPackBackup);
+            }
+        }
+        public static void RemoveModFile(string modName) {
+            File.Delete($"{ModPacksDirectory}\\{modName}");
         }
 
     }

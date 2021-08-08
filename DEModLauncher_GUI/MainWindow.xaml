@@ -10,7 +10,7 @@
         DataContext="{Binding Path=DEModManager,RelativeSource={RelativeSource Mode=Self}}"
         FontFamily="Microsoft YaHei UI"
         WindowStartupLocation="CenterScreen" ResizeMode="NoResize" MouseWheel="Direction_MouseWHeel"
-        Title="DEMODLauncher" Height="550" Width="900">
+        Title="DEMODLauncher" Height="600" Width="950">
     <WindowChrome.WindowChrome>
         <WindowChrome UseAeroCaptionButtons="False" CaptionHeight="0" ResizeBorderThickness="0"/>
     </WindowChrome.WindowChrome>
@@ -26,9 +26,9 @@
             </Grid.RowDefinitions>
             <Grid Grid.Row="0">
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="1.5*" MinWidth="100"/>
+                    <ColumnDefinition Width="1.6*" MinWidth="100"/>
                     <ColumnDefinition Width="3"/>
-                    <ColumnDefinition Width="0.7*" MinWidth="100"/>
+                    <ColumnDefinition Width="0.9*" MinWidth="100"/>
                 </Grid.ColumnDefinitions>
                 <Grid Grid.Column="0">
                     <Grid.RowDefinitions>
@@ -85,7 +85,7 @@
                             Click="LaunchGame_Click"/>
                     </Grid>
                 </Grid>
-                <GridSplitter Grid.Column="1" Width="5" HorizontalAlignment="Center" Background="{StaticResource AccentColor}"/>
+                <GridSplitter Grid.Column="1" Width="2" HorizontalAlignment="Center" Background="{StaticResource AccentColor}"/>
                 <Grid Grid.Column="2">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="35"/>
@@ -201,7 +201,7 @@
                     </Grid>
                 </Grid>
             </Grid>
-            <Border Grid.Row="1" Height="3" HorizontalAlignment="Stretch" Background="{StaticResource AccentColor}"/>
+            <Border Grid.Row="1" Height="2" HorizontalAlignment="Stretch" Background="{StaticResource AccentColor}"/>
             <Grid Grid.Row="2">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition/>
@@ -293,7 +293,7 @@
                     </Button.Style>
                 </Button>
             </Grid>
-            <Grid Grid.RowSpan="3">
+            <!--Grid Grid.RowSpan="3">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="30"/>
                     <RowDefinition/>
@@ -312,14 +312,6 @@
                         </Style.Triggers>
                     </Style>
                 </Grid.Style>
-                <Button Content="{StaticResource SAVE_PROFILE_FILE}" 
-                            ToolTip="{StaticResource SAVE_PROFILE_FILE_TOOLTIP}" FontSize="14" Width="80" Grid.Column="0"
-                            Style="{StaticResource GButton}" BorderThickness="0,1,0,0"
-                            Click="SaveToFile_Click"/>
-                <Button Content="{StaticResource RELOAD_PROFILE_FILE}" 
-                    ToolTip="{StaticResource RELOAD_PROFILE_FILE_TOOLTIP}" FontSize="14" Width="80" Grid.Column="1" 
-                    Style="{StaticResource GButton}" BorderThickness="1,1,1,0"
-                    Click="LoadFromFile_Click"/>
                 <Grid Grid.Row="0">
                     <Border Grid.Row="0" Background="{StaticResource AccentColor}" MouseLeftButtonDown="Window_Move"/>
                     <Button Content="━" VerticalAlignment="Center" HorizontalAlignment="Right"
@@ -332,7 +324,7 @@
                              BorderThickness="0" FontSize="12" Margin="50,30" IsReadOnly="True" 
                              MouseLeftButtonDown="Window_Move"/>
                 </ScrollViewer>
-            </Grid>
+            </Grid-->
         </Grid>
     </Border>
 </Window>

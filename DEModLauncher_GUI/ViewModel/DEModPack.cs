@@ -69,13 +69,10 @@ namespace DEModLauncher_GUI.ViewModel {
         #endregion
 
         #region 公共方法
-        public StreamReader Launch() {
+        public void Deploy() {
             LaunchCheck();
             ClearResources();
-            SetResources();
-            Process p = GenerateProcess(DOOMEternal.ModLoader);
-            p.Start();
-            return p.StandardOutput;
+            DeployResources();
         }
         public void AddResourcesReference(DEModPack modPack) {
             foreach (var item in modPack.Resources) {
@@ -251,6 +248,9 @@ namespace DEModLauncher_GUI.ViewModel {
             }
         }
         private void LaunchCheck() {
+            if (!File.Exists(DOOMEternal.ModLoader)) {
+                throw new FileNotFoundException($"无法找到模组加载器{DOOMEternal.ModLoader}");
+            }
             foreach (var resource in _resources) {
                 if (resource.Status == ResourceStatus.Disabled) {
                     continue;
@@ -269,7 +269,7 @@ namespace DEModLauncher_GUI.ViewModel {
                 File.Delete(file);
             }
         }
-        private void SetResources() {
+        private void DeployResources() {
             foreach (var resource in _resources) {
                 if (resource.Status == ResourceStatus.Disabled) {
                     continue;
@@ -279,14 +279,6 @@ namespace DEModLauncher_GUI.ViewModel {
                 string destFile = $@"{DOOMEternal.ModDirectory}\{fileName}";
                 File.Copy(sourceFile, destFile);
             }
-        }
-        private Process GenerateProcess(string modLoadder) {
-            Process p = new Process();
-            p.StartInfo.UseShellExecute = false;
-            p.StartInfo.CreateNoWindow = true;
-            p.StartInfo.RedirectStandardOutput = true;
-            p.StartInfo.FileName = $@"{DOOMEternal.GameDirectory}\{modLoadder}";
-            return p;
         }
         private string GetImageID() {
             Random rnd = new Random();
