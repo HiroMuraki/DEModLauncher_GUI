@@ -240,15 +240,16 @@ namespace DEModLauncher_GUI.ViewModel {
             return removedFiles;
         }
         public List<string> GetUsedMods() {
-            List<string> existedMod = new List<string>();
+            List<string> usedMods = new List<string>();
             foreach (var modPack in _dEModPacks) {
                 foreach (var res in modPack.Resources) {
-                    if (!existedMod.Contains(res.Path)) {
-                        existedMod.Add(res.Path);
+                    if (!usedMods.Contains(res.Path)) {
+                        usedMods.Add(res.Path);
                     }
                 }
             }
-            return existedMod;
+            usedMods.Sort();
+            return usedMods;
         }
         public static void OpenResourceFile(string resourceName) {
             Process p = new Process();
