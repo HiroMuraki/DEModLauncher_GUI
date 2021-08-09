@@ -3,6 +3,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Text;
 using System.Text.RegularExpressions;
+using System.IO;
 
 namespace DEModLauncher_GUI {
     public static class DOOMEternal {
@@ -83,6 +84,9 @@ namespace DEModLauncher_GUI {
             File.Delete($"{ModPacksDirectory}\\{modName}");
         }
         public static void SetModLoaderProfile(string option, object value) {
+            if (!File.Exists(ModLoaderProfileFile)) {
+                return;
+            }
             Regex reg = new Regex(@$"(?<=:{option}=)[0-9\.]+");
             StringBuilder text = new StringBuilder();
             using (StreamReader reader = new StreamReader(ModLoaderProfileFile)) {
