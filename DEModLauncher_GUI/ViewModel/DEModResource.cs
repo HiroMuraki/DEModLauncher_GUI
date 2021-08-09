@@ -35,7 +35,7 @@
             _path = path;
             _status = ResourceStatus.Enabled;
             try {
-                _attribute = DEModAttribute.Get($"{DOOMEternal.ModPacksDirectory}\\{path}");
+                _attribute = DEModAttribute.Read($"{DOOMEternal.ModPacksDirectory}\\{path}");
             }
             catch {
                 _attribute = new DEModAttribute();

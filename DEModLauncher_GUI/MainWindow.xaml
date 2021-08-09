@@ -72,14 +72,19 @@
                     </Grid>
                     <Grid x:Name="LaunchOptionBar" Grid.Row="1" Opacity="0">
                         <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="1*"/>
                             <ColumnDefinition Width="3*"/>
                             <ColumnDefinition Width="1*"/>
                         </Grid.ColumnDefinitions>
-                        <Button Grid.Column="0" Content="{StaticResource LAUNCH_AFTER_LOAD_MOD}" 
+                        <Button Grid.Column="0" Content="{StaticResource LOAD_MOD}" 
+                            ToolTip="{StaticResource LAUNCH_AFTER_LOAD_MOD_TOOLTIP}" FontSize="14"
+                            Style="{StaticResource GButton}" BorderThickness="0,1,1,0"
+                            Click="LoadMod_Click"/>
+                        <Button Grid.Column="1" Content="{StaticResource LAUNCH_AFTER_LOAD_MOD}" 
                             ToolTip="{StaticResource LAUNCH_AFTER_LOAD_MOD_TOOLTIP}" FontSize="14"
                             Style="{StaticResource GButton}" BorderThickness="0,1,1,0"
                             Click="LaunchMod_Click"/>
-                        <Button Grid.Column="1" Content="{StaticResource LAUNCH_DIRECTLY}" 
+                        <Button Grid.Column="2" Content="{StaticResource LAUNCH_DIRECTLY}" 
                             ToolTip="{StaticResource LAUNCH_DIRECTLY_TOOLTIP}" FontSize="14"
                             Style="{StaticResource GButton}" BorderThickness="0,1,0,0"
                             Click="LaunchGame_Click"/>

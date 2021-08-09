@@ -29,6 +29,26 @@ namespace DEModLauncher_GUI {
         }
 
         #region 启动与保存
+        private void LoadMod_Click(object sender, RoutedEventArgs e) {
+            // 弹出提示窗口，避免误操作
+            var result = MessageBox.Show($"加载模组将需要一定时间，在此期间请勿关闭本程序。是否继续?",
+                                         $"加载模组：{_dEModMananger.CurrentMod.PackName}",
+                                         MessageBoxButton.YesNo,
+                                         MessageBoxImage.Question);
+            if (result != MessageBoxResult.Yes) {
+                return;
+            }
+            // 进入启动程序
+            _dEModMananger.IsLaunching = true;
+            try {
+                DOOMEternal.SetModLoaderProfile("AUTO_LAUNCH_GAME", 0);
+                _dEModMananger.LaunchModLoader();
+            }
+            catch (Exception exp) {
+                MessageBox.Show(exp.Message, "模组加载错误", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+            _dEModMananger.IsLaunching = false;
+        }
         private void LaunchMod_Click(object sender, RoutedEventArgs e) {
             // 弹出提示窗口，避免误操作
             var result = MessageBox.Show($"加载模组将需要一定时间，在此期间请勿关闭本程序。是否继续?",
@@ -40,18 +60,14 @@ namespace DEModLauncher_GUI {
             }
             // 进入启动程序
             _dEModMananger.IsLaunching = true;
-            _dEModMananger.ConsoleStandardOutput = string.Empty;
             try {
+                DOOMEternal.SetModLoaderProfile("AUTO_LAUNCH_GAME", 1);
                 _dEModMananger.LaunchModLoader();
             }
             catch (Exception exp) {
                 MessageBox.Show(exp.Message, "模组启动错误", MessageBoxButton.OK, MessageBoxImage.Error);
-                _dEModMananger.IsLaunching = false;
-                return;
             }
             _dEModMananger.IsLaunching = false;
-            // 启动后关闭启动器
-            // Application.Current.Shutdown();
         }
         private void LaunchGame_Click(object sender, RoutedEventArgs e) {
             try {
@@ -212,7 +228,7 @@ namespace DEModLauncher_GUI {
         private void AddResource_Click(object sender, RoutedEventArgs e) {
             try {
                 System.Windows.Forms.OpenFileDialog ofd = new System.Windows.Forms.OpenFileDialog();
-                ofd.Title = "选择模组包文件";
+                ofd.Title = "选择模组文件";
                 ofd.Filter = "zip压缩包|*.zip";
                 ofd.InitialDirectory = _preOpenModDirector ?? DOOMEternal.ModPacksDirectory;
                 ofd.Multiselect = true;

@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Diagnostics;
 using System.IO;
+using System.Text;
+using System.Text.RegularExpressions;
 
 namespace DEModLauncher_GUI {
     public static class DOOMEternal {
@@ -8,6 +10,7 @@ namespace DEModLauncher_GUI {
         public static readonly string DefaultModPackImage = @"\DEModLauncher_GUI;component\Resources\Images\header3.jpg";
         public static string GameMainExecutor = "DOOMEternalx64vk.exe";
         public static string ModLoader = "EternalModInjector.bat";
+        public static string ModLoaderProfileFile = "EternalModInjector Settings.txt";
         public static string GameDirectory = "";
         public static string ModDirectory {
             get {
@@ -79,6 +82,21 @@ namespace DEModLauncher_GUI {
         public static void RemoveModFile(string modName) {
             File.Delete($"{ModPacksDirectory}\\{modName}");
         }
-
+        public static void SetModLoaderProfile(string option, object value) {
+            Regex reg = new Regex(@$"(?<=:{option}=)[0-9\.]+");
+            StringBuilder text = new StringBuilder();
+            using (StreamReader reader = new StreamReader(ModLoaderProfileFile)) {
+                while (!reader.EndOfStream) {
+                    string currentLine = reader.ReadLine();
+                    if (reg.IsMatch(currentLine)) {
+                        currentLine = reg.Replace(currentLine, value.ToString());
+                    }
+                    text.AppendLine(currentLine);
+                }
+            }
+            using (StreamWriter writer = new StreamWriter(ModLoaderProfileFile)) {
+                writer.Write(text);
+            }
+        }
     }
 }

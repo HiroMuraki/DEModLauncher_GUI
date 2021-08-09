@@ -30,7 +30,10 @@
     <Sys:String x:Key="UPDATE_MOD_FILE_TITLE">点击模组以进行替换</Sys:String>
     <Sys:String x:Key="ADVANCED_OPTION_UPDATE_MODS">替换模组文件</Sys:String>
     <Sys:String x:Key="ADVANCED_OPTION_UPDATE_MODS_TOOLTIP">全局替换指定模组文件</Sys:String>
-    
+
+    <!--仅加载模组-->
+    <Sys:String x:Key="LOAD_MOD">加载</Sys:String>
+    <Sys:String x:Key="LOAD_MOD_TOOLTIP">仅加载模组文件，不启动游戏</Sys:String>
     <!--加载模组后启动游戏-->
     <Sys:String x:Key="LAUNCH_AFTER_LOAD_MOD">加载模组并启动</Sys:String>
     <Sys:String x:Key="LAUNCH_AFTER_LOAD_MOD_TOOLTIP">调用加载器加载模组并启动游戏</Sys:String>

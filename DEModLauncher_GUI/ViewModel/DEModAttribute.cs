@@ -46,12 +46,12 @@ namespace DEModLauncher_GUI.ViewModel {
 
         public override string ToString() {
             string output = $"名称：{Name}\n";
-            output += $"描述：{Description}\n";
             output += $"作者：{Author}";
+            output += $"描述：{Description}\n";
             return output;
         }
 
-        public static DEModAttribute Get(string path) {
+        public static DEModAttribute Read(string path) {
             // 读取压缩包中的EternalMod.json
             ZipArchive zipArchive = ZipFile.Open(path, ZipArchiveMode.Read);
             ZipArchiveEntry entry = zipArchive.GetEntry("EternalMod.json");
