@@ -67,7 +67,7 @@ namespace DEModLauncher_GUI {
                 Directory.CreateDirectory(ModPackImagesDirectory);
             }
         }
-        public static void AddModFile(string filePath) {
+        public static void AddModResourceFile(string filePath) {
             if (GameDirectory == null) {
                 throw new ArgumentException("请先选择游戏文件夹");
             }
@@ -80,7 +80,7 @@ namespace DEModLauncher_GUI {
                 File.Copy(filePath, modPackBackup);
             }
         }
-        public static void RemoveModFile(string modName) {
+        public static void RemoveModResourceFile(string modName) {
             File.Delete($"{ModPacksDirectory}\\{modName}");
         }
         public static void SetModLoaderProfile(string option, object value) {

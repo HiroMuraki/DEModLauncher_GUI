@@ -10,11 +10,10 @@ namespace DEModLauncher_GUI.ViewModel {
     using DEModPacks = ObservableCollection<DEModPack>;
     public class DEModManager : ViewModelBase {
         private static readonly DEModManager _singletonIntance;
-        private static readonly DataContractJsonSerializer _serializer = new DataContractJsonSerializer(typeof(Model.DEModManager));
+        private static readonly DataContractJsonSerializer _serializer;
         private bool _isLaunching;
         private DEModPack _currentMod;
         private readonly DEModPacks _dEModPacks;
-        private string _consoleStandardOutput;
 
         #region 公共属性
         public bool IsLaunching {
@@ -40,20 +39,12 @@ namespace DEModLauncher_GUI.ViewModel {
                 return _dEModPacks;
             }
         }
-        public string ConsoleStandardOutput {
-            get {
-                return _consoleStandardOutput;
-            }
-            set {
-                _consoleStandardOutput = value;
-                OnPropertyChanged(nameof(ConsoleStandardOutput));
-            }
-        }
         #endregion
 
         #region 构造方法
         static DEModManager() {
             _singletonIntance = new DEModManager();
+            _serializer = new DataContractJsonSerializer(typeof(Model.DEModManager));
         }
         private DEModManager() {
             _currentMod = null;
@@ -125,7 +116,7 @@ namespace DEModLauncher_GUI.ViewModel {
             targetModPack.PackName = newName;
             targetModPack.Description = description;
         }
-        public void DeleteModPack(DEModPack modPack) {
+        public void RemoveModPack(DEModPack modPack) {
             _dEModPacks.Remove(modPack);
         }
         public void DuplicateModPack(DEModPack modPack) {
@@ -145,21 +136,28 @@ namespace DEModLauncher_GUI.ViewModel {
             }
             // 设置新模组包名，避免重复
             int cpyID = 1;
-            string testName = modPack.PackName;
-            while (usedPackNames.Contains(modPack.PackName)) {
-                modPack.PackName = $"{testName}({cpyID})";
+            string testName = copiedPack.PackName;
+            while (usedPackNames.Contains(copiedPack.PackName)) {
+                copiedPack.PackName = $"{testName}({cpyID})";
                 ++cpyID;
             }
-            _dEModPacks.Insert(_dEModPacks.IndexOf(modPack) + 1, copiedPack);
+            _dEModPacks.Insert(_dEModPacks.IndexOf(modPack), copiedPack);
         }
-        public void UpdateModFile(string oldModFile, string newModFile) {
-            DOOMEternal.AddModFile(newModFile);
-            string resourceName = Path.GetFileName(newModFile);
+        public void UpdateModResourceFile(string oldResourceName, string newResourceFile) {
+            string newResourceName = Path.GetFileName(newResourceFile);
+            // 如果新旧模组名同名，直接替换文件即可
+            if (oldResourceName == newResourceName) {
+                DOOMEternal.RemoveModResourceFile(oldResourceName);
+                DOOMEternal.AddModResourceFile(newResourceFile);
+                return;
+            }
+            // 否则逐一对模组配置中的相关文件进行修改
+            DOOMEternal.AddModResourceFile(newResourceFile);
             foreach (var modPack in _dEModPacks) {
                 // 如果模组列表中已有该模组，则将旧模组移除即可
-                if (modPack.ExistsResource(resourceName)) {
+                if (modPack.ExistsResource(newResourceName)) {
                     for (int i = 0; i < modPack.Resources.Count; i++) {
-                        if (modPack.Resources[i].Path == oldModFile) {
+                        if (modPack.Resources[i].Path == oldResourceName) {
                             modPack.DeleteResource(modPack.Resources[i]);
                             --i;
                         }
@@ -168,8 +166,8 @@ namespace DEModLauncher_GUI.ViewModel {
                 // 否则将所有旧模组名替换为新模组名即可
                 else {
                     foreach (var res in modPack.Resources) {
-                        if (res.Path == oldModFile) {
-                            res.Path = resourceName;
+                        if (res.Path == oldResourceName) {
+                            res.Path = newResourceName;
                         }
                     }
                 }

@@ -161,7 +161,7 @@ namespace DEModLauncher_GUI {
             if (result != MessageBoxResult.Yes) {
                 return;
             }
-            _dEModMananger.DeleteModPack(dmp);
+            _dEModMananger.RemoveModPack(dmp);
         }
         private void EditModPack_Click(object sender, RoutedEventArgs e) {
             DEModPack modPack = GetDEModPackFromControl(sender);
