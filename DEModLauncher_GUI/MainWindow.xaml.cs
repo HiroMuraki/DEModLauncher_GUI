@@ -3,6 +3,7 @@ using System;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -49,7 +50,7 @@ namespace DEModLauncher_GUI {
             }
             _dEModMananger.IsLaunching = false;
         }
-        private void LaunchMod_Click(object sender, RoutedEventArgs e) {
+        private async void LaunchMod_Click(object sender, RoutedEventArgs e) {
             // 弹出提示窗口，避免误操作
             var result = MessageBox.Show($"加载模组将需要一定时间，在此期间请勿关闭本程序。是否继续?",
                                          $"加载模组：{_dEModMananger.CurrentMod.PackName}",
@@ -62,12 +63,15 @@ namespace DEModLauncher_GUI {
             _dEModMananger.IsLaunching = true;
             try {
                 DOOMEternal.SetModLoaderProfile("AUTO_LAUNCH_GAME", 1);
-                _dEModMananger.LaunchModLoader();
+                await Task.Run(() => {
+                    _dEModMananger.LaunchModLoader();
+                });
             }
             catch (Exception exp) {
                 MessageBox.Show(exp.Message, "模组启动错误", MessageBoxButton.OK, MessageBoxImage.Error);
             }
             _dEModMananger.IsLaunching = false;
+            Application.Current.Shutdown();
         }
         private void LaunchGame_Click(object sender, RoutedEventArgs e) {
             try {

@@ -49,6 +49,7 @@ namespace DEModLauncher_GUI {
             Process p = new Process();
             p.StartInfo.FileName = $@"{GameDirectory}\{ModLoader}";
             p.Start();
+            p.WaitForExit();
         }
         public static void OpenGameDirectory() {
             Process p = new Process();
