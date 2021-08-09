@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.IO;
 using System.Windows;
 using System.Windows.Forms;
 using System.Windows.Input;
@@ -8,6 +9,7 @@ namespace DEModLauncher_GUI.View {
     /// DEModListWindow.xaml 的交互逻辑
     /// </summary>
     public partial class DEModUpdateWindow : Window {
+        private string _preOpenDirectory = null;
         public List<string> ModList {
             get { return (List<string>)GetValue(ModListProperty); }
             set { SetValue(ModListProperty, value); }
@@ -30,12 +32,13 @@ namespace DEModLauncher_GUI.View {
         private void UpdateMod_Click(object sender, RoutedEventArgs e) {
             string oldModName = (string)(sender as FrameworkElement).Tag;
             OpenFileDialog ofd = new OpenFileDialog();
-            ofd.InitialDirectory = DOOMEternal.ModPacksDirectory;
+            ofd.InitialDirectory = _preOpenDirectory ?? DOOMEternal.ModPacksDirectory;
             ofd.Title = $"替换{oldModName}";
             if (ofd.ShowDialog() == System.Windows.Forms.DialogResult.OK) {
                 string newFileName = ofd.FileName;
                 ViewModel.DEModManager.GetInstance().UpdateModFile(oldModName, newFileName);
                 ModList = ViewModel.DEModManager.GetInstance().GetUsedMods();
+                _preOpenDirectory = Path.GetDirectoryName(newFileName);
             }
         }
     }

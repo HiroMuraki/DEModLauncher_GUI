@@ -75,7 +75,6 @@ namespace DEModLauncher_GUI.ViewModel {
                     }
                 }
             }
-
             // 读取数据并实例化，返回
             return attribute;
         }

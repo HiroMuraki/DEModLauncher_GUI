@@ -113,8 +113,8 @@
                             <Button Grid.Column="3" Content="&#x2573;" Style="{StaticResource GButtonTitle}" Click="Window_Close"/>
                         </Grid>
                     </Grid>
-                    <Grid Grid.Row="1">
-                        <ScrollViewer VerticalScrollBarVisibility="Hidden" AllowDrop="True" DragDrop.Drop="AddFile_FileDrop">
+                    <Grid Grid.Row="1" AllowDrop="True" DragDrop.DragEnter="ModList_DragEnter" DragDrop.DragLeave="ModList_DragLeave"  DragDrop.Drop="ModList_FileDrop">
+                        <ScrollViewer VerticalScrollBarVisibility="Hidden">
                             <ScrollViewer.ContextMenu>
                                 <ContextMenu>
                                     <MenuItem Tag="{Binding CurrentMod}" Header="{StaticResource ADD_MOD_RESOURCE_TOOLTIP}" Click="AddResource_Click"/>
@@ -198,6 +198,7 @@
                                     Click="AddResource_Click" Style="{StaticResource GAddButtonStatic}" BorderThickness="0" Width="Auto">
                             </Button>
                         </StackPanel>
+                        <View:FileDragControl x:Name="FileDragArea" IsHitTestVisible="False"/>
                     </Grid>
                 </Grid>
             </Grid>

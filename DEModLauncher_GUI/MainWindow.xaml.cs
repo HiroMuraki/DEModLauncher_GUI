@@ -1,5 +1,6 @@
 ﻿using DEModLauncher_GUI.ViewModel;
 using System;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Windows;
@@ -12,6 +13,7 @@ namespace DEModLauncher_GUI {
     /// </summary>
     public partial class MainWindow : Window {
         private Point _heldPoint;
+        private string _preOpenModDirector;
 
         private DEModManager _dEModMananger;
 
@@ -212,7 +214,7 @@ namespace DEModLauncher_GUI {
                 System.Windows.Forms.OpenFileDialog ofd = new System.Windows.Forms.OpenFileDialog();
                 ofd.Title = "选择模组包文件";
                 ofd.Filter = "zip压缩包|*.zip";
-                ofd.InitialDirectory = DOOMEternal.ModPacksDirectory;
+                ofd.InitialDirectory = _preOpenModDirector ?? DOOMEternal.ModPacksDirectory;
                 ofd.Multiselect = true;
                 if (ofd.ShowDialog() == System.Windows.Forms.DialogResult.OK) {
                     foreach (var fileName in ofd.FileNames) {
@@ -224,13 +226,14 @@ namespace DEModLauncher_GUI {
                                             MessageBoxButton.OK, MessageBoxImage.Warning);
                         }
                     }
+                    _preOpenModDirector = Path.GetDirectoryName(ofd.FileName);
                 }
             }
             catch (Exception exp) {
                 MessageBox.Show(exp.Message, "错误", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
-        private void AddFile_FileDrop(object sender, DragEventArgs e) {
+        private void ModList_FileDrop(object sender, DragEventArgs e) {
             try {
                 string[] fileList = e.Data.GetData(DataFormats.FileDrop) as string[];
                 foreach (var fileName in fileList) {
@@ -246,6 +249,13 @@ namespace DEModLauncher_GUI {
             catch (Exception exp) {
                 MessageBox.Show(exp.Message, "错误", MessageBoxButton.OK, MessageBoxImage.Error);
             }
+            FileDragArea.IsHitTestVisible = false;
+        }
+        private void ModList_DragEnter(object sender, DragEventArgs e) {
+            FileDragArea.IsHitTestVisible = true;
+        }
+        private void ModList_DragLeave(object sender, DragEventArgs e) {
+            FileDragArea.IsHitTestVisible = false;
         }
         private void AddModPackReference_Click(object sender, RoutedEventArgs e) {
             try {

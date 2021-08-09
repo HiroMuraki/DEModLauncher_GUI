@@ -147,12 +147,23 @@ namespace DEModLauncher_GUI.ViewModel {
         }
         public void UpdateModFile(string oldModFile, string newModFile) {
             DOOMEternal.AddModFile(newModFile);
-            DOOMEternal.RemoveModFile(oldModFile);
-            string newResource = Path.GetFileName(newModFile);
+            string resourceName = Path.GetFileName(newModFile);
             foreach (var modPack in _dEModPacks) {
-                foreach (var res in modPack.Resources) {
-                    if (res.Path == oldModFile) {
-                        res.Path = newResource;
+                // 如果模组列表中已有该模组，则将旧模组移除即可
+                if (modPack.ExistsResource(resourceName)) {
+                    for (int i = 0; i < modPack.Resources.Count; i++) {
+                        if (modPack.Resources[i].Path == oldModFile) {
+                            modPack.DeleteResource(modPack.Resources[i]);
+                            --i;
+                        }
+                    }
+                }
+                // 否则将所有旧模组名替换为新模组名即可
+                else {
+                    foreach (var res in modPack.Resources) {
+                        if (res.Path == oldModFile) {
+                            res.Path = resourceName;
+                        }
                     }
                 }
             }

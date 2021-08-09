@@ -106,22 +106,27 @@ namespace DEModLauncher_GUI.ViewModel {
             _resources[currentIndex] = _resources[newIndex];
             _resources[newIndex] = t;
         }
-        public void AddResource(string resourcePath) {
-            string resourceName = Path.GetFileName(resourcePath);
-            foreach (var existedResource in _resources) {
-                if (existedResource.Path == resourceName) {
-                    throw new ArgumentException($"模组包[{resourceName}]已添加，不可重复添加");
+        public bool ExistsResource(string resourceName) {
+            foreach (var item in _resources) {
+                if (item.Path == resourceName) {
+                    return true;
                 }
             }
+            return false;
+        }
+        public void AddResource(string resourcePath) {
             if (DOOMEternal.GameDirectory == null) {
                 throw new ArgumentException("请先选择游戏文件夹");
             }
+            string resourceName = Path.GetFileName(resourcePath);
             string modPackBackup = $@"{DOOMEternal.ModPacksDirectory}\{resourceName}";
             if (!File.Exists(modPackBackup)) {
                 File.Copy(resourcePath, modPackBackup);
             }
-            DEModResource resource = new DEModResource(resourceName);
-            _resources.Add(resource);
+            if (ExistsResource(resourceName)) {
+                throw new ArgumentException($"模组包[{resourceName}]已添加，不可重复添加");
+            }
+            _resources.Add(new DEModResource(resourceName));
         }
         public void DeleteResource(DEModResource resource) {
             _resources.Remove(resource);
