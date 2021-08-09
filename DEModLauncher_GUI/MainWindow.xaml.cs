@@ -30,7 +30,7 @@ namespace DEModLauncher_GUI {
         }
 
         #region 启动与保存
-        private void LoadMod_Click(object sender, RoutedEventArgs e) {
+        private async void LoadMod_Click(object sender, RoutedEventArgs e) {
             // 弹出提示窗口，避免误操作
             var result = MessageBox.Show($"加载模组将需要一定时间，在此期间请勿关闭本程序。是否继续?",
                                          $"加载模组：{_dEModMananger.CurrentMod.PackName}",
@@ -43,7 +43,9 @@ namespace DEModLauncher_GUI {
             _dEModMananger.IsLaunching = true;
             try {
                 DOOMEternal.SetModLoaderProfile("AUTO_LAUNCH_GAME", 0);
-                _dEModMananger.LaunchModLoader();
+                await Task.Run(() => {
+                    _dEModMananger.LaunchModLoader();
+                });
             }
             catch (Exception exp) {
                 MessageBox.Show(exp.Message, "模组加载错误", MessageBoxButton.OK, MessageBoxImage.Error);

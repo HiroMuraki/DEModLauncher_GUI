@@ -136,6 +136,13 @@ namespace DEModLauncher_GUI.ViewModel {
             }
             // 获取模组包副本
             DEModPack copiedPack = modPack.GetDeepCopy();
+            // 移除被临时禁用的模组
+            for (int i = 0; i < copiedPack.Resources.Count; i++) {
+                if (copiedPack.Resources[i].Status == ResourceStatus.Disabled) {
+                    copiedPack.Resources.Remove(copiedPack.Resources[i]);
+                    --i;
+                }
+            }
             // 设置新模组包名，避免重复
             int cpyID = 1;
             string testName = modPack.PackName;
