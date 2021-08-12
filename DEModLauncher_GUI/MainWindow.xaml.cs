@@ -73,7 +73,7 @@ namespace DEModLauncher_GUI {
                 MessageBox.Show(exp.Message, "模组启动错误", MessageBoxButton.OK, MessageBoxImage.Error);
             }
             _dEModMananger.IsLaunching = false;
-            Application.Current.Shutdown();
+            Window_Close(null, null);
         }
         private void LaunchGame_Click(object sender, RoutedEventArgs e) {
             try {
@@ -83,7 +83,7 @@ namespace DEModLauncher_GUI {
                 MessageBox.Show(exp.Message, "模组启动错误", MessageBoxButton.OK, MessageBoxImage.Error);
                 return;
             }
-            Application.Current.Shutdown();
+            Window_Close(null, null);
         }
         private void SaveToFile_Click(object sender, RoutedEventArgs e) {
             SaveToFileHelper();
