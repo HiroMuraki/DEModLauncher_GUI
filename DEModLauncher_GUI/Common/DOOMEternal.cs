@@ -6,12 +6,14 @@ using System.Text.RegularExpressions;
 
 namespace DEModLauncher_GUI {
     public static class DOOMEternal {
+
         public static readonly string DefaultGameDirectory = @"C:\Program Files (x86)\Steam\steamapps\common\DOOMEternal";
         public static readonly string DefaultModPackImage = @"\DEModLauncher_GUI;component\Resources\Images\header3.jpg";
-        public static string GameMainExecutor = "DOOMEternalx64vk.exe";
-        public static string ModLoader = "EternalModInjector.bat";
-        public static string ModLoaderProfileFile = "EternalModInjector Settings.txt";
-        public static string GameDirectory = "";
+        public static string GameMainExecutor { get; set; } = "DOOMEternalx64vk.exe";
+        public static string ModLoader { get; set; } = "EternalModInjector.bat";
+        public static string ModLoaderProfileFile { get; set; } = "EternalModInjector Settings.txt";
+        public static string GameDirectory { get; set; } = "";
+        public static bool ModificationSaved { get; set; } = true;
         public static string ModDirectory {
             get {
                 return $@"{GameDirectory}\Mods";

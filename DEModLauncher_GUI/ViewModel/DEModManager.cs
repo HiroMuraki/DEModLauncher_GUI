@@ -5,9 +5,9 @@ using System.Diagnostics;
 using System.IO;
 using System.IO.Compression;
 using System.Runtime.Serialization.Json;
+using DEModPacks = System.Collections.ObjectModel.ObservableCollection<DEModLauncher_GUI.ViewModel.DEModPack>;
 
 namespace DEModLauncher_GUI.ViewModel {
-    using DEModPacks = ObservableCollection<DEModPack>;
     public class DEModManager : ViewModelBase {
         private static readonly DEModManager _singletonIntance;
         private static readonly DataContractJsonSerializer _serializer;
@@ -59,6 +59,9 @@ namespace DEModLauncher_GUI.ViewModel {
         #endregion
 
         #region 公共方法
+        /// <summary>
+        /// 启动魔族加载器
+        /// </summary>
         public void LaunchModLoader() {
             if (_currentMod == null) {
                 throw new InvalidOperationException("当前未选择有效模组");
@@ -66,9 +69,16 @@ namespace DEModLauncher_GUI.ViewModel {
             _currentMod.Deploy();
             DOOMEternal.LaunchModLoader();
         }
+        /// <summary>
+        /// 直接启动游戏
+        /// </summary>
         public void Launch() {
             DOOMEternal.LaunchGame();
         }
+        /// <summary>
+        /// 上移模组配置
+        /// </summary>
+        /// <param name="modPack">要上移的模组配置</param>
         public void MoveUpModPack(DEModPack modPack) {
             int currentIndex = _dEModPacks.IndexOf(modPack);
             if (currentIndex <= 0) {
@@ -78,8 +88,12 @@ namespace DEModLauncher_GUI.ViewModel {
             var t = _dEModPacks[currentIndex];
             _dEModPacks[currentIndex] = _dEModPacks[newIndex];
             _dEModPacks[newIndex] = t;
-
+            DOOMEternal.ModificationSaved = false;
         }
+        /// <summary>
+        /// 下移模组配置
+        /// </summary>
+        /// <param name="modPack">要下移的模组配置</param>
         public void MoveDownModPack(DEModPack modPack) {
             int currentIndex = _dEModPacks.IndexOf(modPack);
             if (currentIndex < 0) {
@@ -92,7 +106,12 @@ namespace DEModLauncher_GUI.ViewModel {
             var t = _dEModPacks[currentIndex];
             _dEModPacks[currentIndex] = _dEModPacks[newIndex];
             _dEModPacks[newIndex] = t;
+            DOOMEternal.ModificationSaved = false;
         }
+        /// <summary>
+        /// 添加模组配置
+        /// </summary>
+        /// <param name="modPack">要添加的模组配置</param>
         public void AddModPack(DEModPack modPack) {
             if (string.IsNullOrEmpty(modPack.PackName)) {
                 throw new ArgumentException("模组名不可为空");
@@ -104,7 +123,14 @@ namespace DEModLauncher_GUI.ViewModel {
             }
             _dEModPacks.Add(modPack);
             CurrentMod = modPack;
+            DOOMEternal.ModificationSaved = false;
         }
+        /// <summary>
+        /// 修改模组配置
+        /// </summary>
+        /// <param name="targetModPack">要修改的模组配置></param>
+        /// <param name="newName">新名称</param>
+        /// <param name="description">描述</param>
         public void RenameModPack(DEModPack targetModPack, string newName, string description) {
             if (targetModPack.PackName != newName) {
                 foreach (var modPack in _dEModPacks) {
@@ -115,7 +141,12 @@ namespace DEModLauncher_GUI.ViewModel {
             }
             targetModPack.PackName = newName;
             targetModPack.Description = description;
+            DOOMEternal.ModificationSaved = false;
         }
+        /// <summary>
+        /// 移除指定模组配置
+        /// </summary>
+        /// <param name="modPack">要移除的模组配置</param>
         public void RemoveModPack(DEModPack modPack) {
             _dEModPacks.Remove(modPack);
             if (_currentMod == modPack) {
@@ -128,7 +159,12 @@ namespace DEModLauncher_GUI.ViewModel {
                     OnPropertyChanged(nameof(CurrentMod));
                 }
             }
+            DOOMEternal.ModificationSaved = false;
         }
+        /// <summary>
+        /// 制作模组文件副本
+        /// </summary>
+        /// <param name="modPack">要拷贝的模组</param>
         public void DuplicateModPack(DEModPack modPack) {
             // 获取已经使用过的模组包名
             List<string> usedPackNames = new List<string>();
@@ -152,8 +188,14 @@ namespace DEModLauncher_GUI.ViewModel {
                 ++cpyID;
             }
             _dEModPacks.Insert(_dEModPacks.IndexOf(modPack), copiedPack);
+            DOOMEternal.ModificationSaved = false;
         }
-        public void UpdateModResourceFile(string oldResourceName, string newResourceFile) {
+        /// <summary>
+        /// 更新指定资源文件
+        /// </summary>
+        /// <param name="oldResourceName">要修改的模组名</param>
+        /// <param name="newResourceFile">用以替换的模组路径</param>
+        public void UpdateResourceFile(string oldResourceName, string newResourceFile) {
             string newResourceName = Path.GetFileName(newResourceFile);
             // 如果新旧模组名同名，直接替换文件即可
             if (oldResourceName == newResourceName) {
@@ -182,7 +224,12 @@ namespace DEModLauncher_GUI.ViewModel {
                     }
                 }
             }
+            DOOMEternal.ModificationSaved = false;
         }
+        /// <summary>
+        /// 保存配置至文件
+        /// </summary>
+        /// <param name="fileName">保存的文件位置</param>
         public void SaveToFile(string fileName) {
             Model.DEModManager dm = new Model.DEModManager();
             // 写入管理器属性
@@ -199,7 +246,13 @@ namespace DEModLauncher_GUI.ViewModel {
             using (FileStream fs = new FileStream(fileName, FileMode.Create, FileAccess.Write)) {
                 _serializer.WriteObject(fs, dm);
             }
+            // 重置保存状态
+            DOOMEternal.ModificationSaved = true;
         }
+        /// <summary>
+        /// 从文件中读取配置
+        /// </summary>
+        /// <param name="fileName">读取的文件路径</param>
         public void LoadFromFile(string fileName) {
             // 读取文件
             Model.DEModManager dm;
@@ -228,7 +281,12 @@ namespace DEModLauncher_GUI.ViewModel {
                     CurrentMod = dp;
                 }
             }
+            DOOMEternal.ModificationSaved = true;
         }
+        /// <summary>
+        /// 清理未使用的MOD文件
+        /// </summary>
+        /// <returns>被清除的文件列表</returns>
         public List<string> ClearUnusedModFile() {
             // 获取当前正在使用的模组列表
             List<string> usedResources = new List<string>();
@@ -247,6 +305,10 @@ namespace DEModLauncher_GUI.ViewModel {
             var removedFiles = FileCleaner(usedResources, existedModFiles);
             return removedFiles;
         }
+        /// <summary>
+        /// 清理未使用的图像文件
+        /// </summary>
+        /// <returns>被清除的图像列表</returns>
         public List<string> ClearUnusedImageFiles() {
             // 获取当前正在使用的图片文件名
             List<string> usedImageFiles = new List<string>();
@@ -265,6 +327,10 @@ namespace DEModLauncher_GUI.ViewModel {
             var removedFiles = FileCleaner(usedImageFiles, existedImageFiles);
             return removedFiles;
         }
+        /// <summary>
+        /// 获取使用中的模组列表
+        /// </summary>
+        /// <returns>使用中的模组列表</returns>
         public List<string> GetUsedMods() {
             List<string> usedMods = new List<string>();
             foreach (var modPack in _dEModPacks) {
@@ -277,6 +343,10 @@ namespace DEModLauncher_GUI.ViewModel {
             usedMods.Sort();
             return usedMods;
         }
+        /// <summary>
+        /// 打开指定的模组资源
+        /// </summary>
+        /// <param name="resourceName">要打开的模组资源</param>
         public static void OpenResourceFile(string resourceName) {
             Process p = new Process();
             string filePath = $@"{DOOMEternal.ModPacksDirectory}\{resourceName}";
@@ -287,6 +357,10 @@ namespace DEModLauncher_GUI.ViewModel {
             p.StartInfo.Arguments = $@"/select, {DOOMEternal.ModPacksDirectory}\{resourceName}";
             p.Start();
         }
+        /// <summary>
+        /// 导出模组包
+        /// </summary>
+        /// <param name="outputPath">导出的路径</param>
         public static void ExportModPacks(string outputPath) {
             ZipFile.CreateFromDirectory(DOOMEternal.ModPacksDirectory, outputPath, CompressionLevel.Optimal, true);
         }

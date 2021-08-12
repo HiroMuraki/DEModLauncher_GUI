@@ -169,21 +169,17 @@ namespace DEModLauncher_GUI {
             StringBuilder sb = new StringBuilder();
             try {
                 var checkResult = dmp.GetConflictInformation();
-                int totalCount = checkResult.Item1;
-                int validCount = checkResult.Item2;
-                int conflictedCount = checkResult.Item3;
-                var conflictedFiles = checkResult.Item4;
                 string title = "";
-                sb.Append($"总文件数: {totalCount}, 无冲突文件数: {validCount}, 冲突文件数: {conflictedCount}\n");
-                if (conflictedCount <= 0) {
+                sb.Append($"总文件数: {checkResult.TotalCount}, 无冲突文件数: {checkResult.ValidCount}, 冲突文件数: {checkResult.ConflictedCount}\n");
+                if (checkResult.ConflictedCount <= 0) {
                     title = "检查结果 - 无冲突";
                 }
                 else {
                     title = "检查结果 - 以下文件存在冲突";
                     int conflictID = 1;
-                    foreach (var conflictedFile in conflictedFiles.Keys) {
+                    foreach (var conflictedFile in checkResult.ConflictedFiles.Keys) {
                         sb.Append($"[{conflictID}]{conflictedFile}\n");
-                        foreach (var relatedFile in conflictedFiles[conflictedFile]) {
+                        foreach (var relatedFile in checkResult.ConflictedFiles[conflictedFile]) {
                             sb.Append($"   > {relatedFile}\n");
                         }
                         sb.Append('\n');
@@ -292,6 +288,12 @@ namespace DEModLauncher_GUI {
             DragMove();
         }
         private void Window_Close(object sender, RoutedEventArgs e) {
+            if (!DOOMEternal.ModificationSaved) {
+                var result = MessageBox.Show("有更改尚未保存，是否关闭？", "警告", MessageBoxButton.OKCancel, MessageBoxImage.Warning);
+                if (result != MessageBoxResult.OK) {
+                    return;
+                }
+            }
             Application.Current.Shutdown();
         }
         private void Window_Minimum(object sender, RoutedEventArgs e) {

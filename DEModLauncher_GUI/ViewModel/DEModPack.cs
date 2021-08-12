@@ -68,21 +68,18 @@ namespace DEModLauncher_GUI.ViewModel {
         #endregion
 
         #region 公共方法
+        /// <summary>
+        /// 部署模组配置中的文件
+        /// </summary>
         public void Deploy() {
             LaunchCheck();
             ClearResources();
             DeployResources();
         }
-        public void AddResourcesReference(DEModPack modPack) {
-            foreach (var item in modPack.Resources) {
-                try {
-                    AddResource(item.Path);
-                }
-                catch {
-                    continue;
-                }
-            }
-        }
+        /// <summary>
+        /// 上移模组资源
+        /// </summary>
+        /// <param name="resourcePath">要上移的模组资源</param>
         public void MoveUpResource(DEModResource resourcePath) {
             int currentIndex = _resources.IndexOf(resourcePath);
             if (currentIndex <= 0) {
@@ -92,7 +89,12 @@ namespace DEModLauncher_GUI.ViewModel {
             var t = _resources[currentIndex];
             _resources[currentIndex] = _resources[newIndex];
             _resources[newIndex] = t;
+            DOOMEternal.ModificationSaved = false;
         }
+        /// <summary>
+        /// 下移模组资源
+        /// </summary>
+        /// <param name="resourcePath">要下移的模组资源</param>
         public void MoveDownResource(DEModResource resourcePath) {
             int currentIndex = _resources.IndexOf(resourcePath);
             if (currentIndex < 0) {
@@ -105,15 +107,12 @@ namespace DEModLauncher_GUI.ViewModel {
             var t = _resources[currentIndex];
             _resources[currentIndex] = _resources[newIndex];
             _resources[newIndex] = t;
+            DOOMEternal.ModificationSaved = false;
         }
-        public bool ExistsResource(string resourceName) {
-            foreach (var item in _resources) {
-                if (item.Path == resourceName) {
-                    return true;
-                }
-            }
-            return false;
-        }
+        /// <summary>
+        /// 添加模组资源
+        /// </summary>
+        /// <param name="resourcePath">模组资源路径</param>
         public void AddResource(string resourcePath) {
             if (DOOMEternal.GameDirectory == null) {
                 throw new ArgumentException("请先选择游戏文件夹");
@@ -127,10 +126,35 @@ namespace DEModLauncher_GUI.ViewModel {
                 throw new ArgumentException($"模组包[{resourceName}]已添加，不可重复添加");
             }
             _resources.Add(new DEModResource(resourceName));
+            DOOMEternal.ModificationSaved = false;
         }
+        /// <summary>
+        /// 添加特定模组配置的内容
+        /// </summary>
+        /// <param name="modPack">要添加的模组配置</param>
+        public void AddResourcesReference(DEModPack modPack) {
+            foreach (var item in modPack.Resources) {
+                try {
+                    AddResource(item.Path);
+                }
+                catch {
+                    continue;
+                }
+            }
+            DOOMEternal.ModificationSaved = false;
+        }
+        /// <summary>
+        /// 移除模组资源
+        /// </summary>
+        /// <param name="resource">要移除的模组资源</param>
         public void DeleteResource(DEModResource resource) {
             _resources.Remove(resource);
+            DOOMEternal.ModificationSaved = false;
         }
+        /// <summary>
+        /// 设置模组配置图像
+        /// </summary>
+        /// <param name="imagePath">图像路径</param>
         public void SetImage(string imagePath) {
             if (imagePath == DOOMEternal.DefaultModPackImage) {
                 _imagePath = null;
@@ -153,9 +177,14 @@ namespace DEModLauncher_GUI.ViewModel {
             }
             _imagePath = imageName;
             OnPropertyChanged(nameof(ImagePath));
+            DOOMEternal.ModificationSaved = false;
         }
+        /// <summary>
+        /// 创建合并包
+        /// </summary>
+        /// <param name="outputFile">输出路径</param>
         public void GenerateMergedFile(string outputFile) {
-            int conflictedItems = GetConflictInformation().Item3;
+            int conflictedItems = GetConflictInformation().ConflictedCount;
             string fileName = Path.GetFileNameWithoutExtension(outputFile);
             string mergeWorkingFolder = $@"{DOOMEternal.ModPacksDirectory}\MERGE_WORKING_FOLDER_{fileName}";
             if (conflictedItems > 0) {
@@ -180,7 +209,11 @@ namespace DEModLauncher_GUI.ViewModel {
                 Directory.Delete(mergeWorkingFolder, true);
             }
         }
-        public Tuple<int, int, int, Dictionary<string, List<string>>> GetConflictInformation() {
+        /// <summary>
+        /// 获取模组冲突信息
+        /// </summary>
+        /// <returns></returns>
+        public ModPackConflictInformation GetConflictInformation() {
             Dictionary<string, List<string>> resourceDict = new Dictionary<string, List<string>>();
             int totalCount = 0;
             int validCount = 0;
@@ -199,8 +232,12 @@ namespace DEModLauncher_GUI.ViewModel {
                 }
             }
             int conflictedCount = totalCount - validCount;
-            return Tuple.Create(totalCount, validCount, conflictedCount, GetConflictedFiles(resourceDict));
+            return new ModPackConflictInformation(totalCount, validCount, conflictedCount, GetConflictedFiles(resourceDict));
         }
+        /// <summary>
+        /// 获取数据MODEL
+        /// </summary>
+        /// <returns></returns>
         public Model.DEModPack GetDataModel() {
             Model.DEModPack mp = new Model.DEModPack();
             mp.PackName = _packName;
@@ -212,6 +249,10 @@ namespace DEModLauncher_GUI.ViewModel {
             }
             return mp;
         }
+        /// <summary>
+        /// 获取深度复制
+        /// </summary>
+        /// <returns></returns>
         public DEModPack GetDeepCopy() {
             DEModPack copy = new DEModPack();
             // 设置新模组包名
@@ -225,6 +266,19 @@ namespace DEModLauncher_GUI.ViewModel {
                 copy.Resources.Add(res);
             }
             return copy;
+        }
+        /// <summary>
+        /// 检查是否已存在某个模组资源
+        /// </summary>
+        /// <param name="resourceName">要检查的模组资源</param>
+        /// <returns></returns>
+        public bool ExistsResource(string resourceName) {
+            foreach (var item in _resources) {
+                if (item.Path == resourceName) {
+                    return true;
+                }
+            }
+            return false;
         }
         public override string ToString() {
             int resourceCount = _resources.Count;

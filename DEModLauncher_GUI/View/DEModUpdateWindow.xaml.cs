@@ -36,7 +36,7 @@ namespace DEModLauncher_GUI.View {
             ofd.Title = $"替换{oldModName}";
             if (ofd.ShowDialog() == System.Windows.Forms.DialogResult.OK) {
                 string newFileName = ofd.FileName;
-                ViewModel.DEModManager.GetInstance().UpdateModResourceFile(oldModName, newFileName);
+                ViewModel.DEModManager.GetInstance().UpdateResourceFile(oldModName, newFileName);
                 ModList = ViewModel.DEModManager.GetInstance().GetUsedMods();
                 _preOpenDirectory = Path.GetDirectoryName(newFileName);
             }
