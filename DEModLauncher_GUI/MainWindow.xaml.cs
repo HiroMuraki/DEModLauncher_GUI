@@ -1,5 +1,6 @@
 ﻿using DEModLauncher_GUI.ViewModel;
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -14,8 +15,7 @@ namespace DEModLauncher_GUI {
     /// </summary>
     public partial class MainWindow : Window {
         private Point _heldPoint;
-        private string _preOpenModDirector;
-
+        private string _preOpenModDirectory;
         private DEModManager _dEModMananger;
 
         public DEModManager DEModManager {
@@ -86,16 +86,7 @@ namespace DEModLauncher_GUI {
             Application.Current.Shutdown();
         }
         private void SaveToFile_Click(object sender, RoutedEventArgs e) {
-            var result = MessageBox.Show("是否保存当前模组配置？", "保存配置", MessageBoxButton.YesNo, MessageBoxImage.Question);
-            if (result != MessageBoxResult.Yes) {
-                return;
-            }
-            try {
-                _dEModMananger.SaveToFile(DOOMEternal.LauncherProfileFile);
-            }
-            catch (Exception exp) {
-                MessageBox.Show(exp.Message, "保存配置文件出错", MessageBoxButton.OK, MessageBoxImage.Error);
-            }
+            SaveToFileHelper();
         }
         private void LoadFromFile_Click(object sender, RoutedEventArgs e) {
             var result = MessageBox.Show("此操作将会重新读取模组配置文件，并丢弃当前设置，是否继续？", "重新读取", MessageBoxButton.YesNo, MessageBoxImage.Warning);
@@ -232,41 +223,25 @@ namespace DEModLauncher_GUI {
             _dEModMananger.CurrentMod.MoveDownResource(GetResourceFromControl(sender));
         }
         private void AddResource_Click(object sender, RoutedEventArgs e) {
-            try {
-                System.Windows.Forms.OpenFileDialog ofd = new System.Windows.Forms.OpenFileDialog();
-                ofd.Title = "选择模组文件";
-                ofd.Filter = "zip压缩包|*.zip";
-                ofd.InitialDirectory = _preOpenModDirector ?? DOOMEternal.ModPacksDirectory;
-                ofd.Multiselect = true;
-                if (ofd.ShowDialog() == System.Windows.Forms.DialogResult.OK) {
-                    foreach (var fileName in ofd.FileNames) {
-                        try {
-                            _dEModMananger.CurrentMod.AddResource(fileName);
-                        }
-                        catch (Exception exp) {
-                            MessageBox.Show($"无法添加模组文件：{fileName}\n\n原因：{exp.Message}", "添加模组文件错误",
-                                            MessageBoxButton.OK, MessageBoxImage.Warning);
-                        }
-                    }
-                    _preOpenModDirector = Path.GetDirectoryName(ofd.FileName);
+            System.Windows.Forms.OpenFileDialog ofd = new System.Windows.Forms.OpenFileDialog();
+            ofd.Title = "选择模组文件";
+            ofd.Filter = "zip压缩包|*.zip";
+            ofd.InitialDirectory = _preOpenModDirectory ?? DOOMEternal.ModPacksDirectory;
+            ofd.Multiselect = true;
+            if (ofd.ShowDialog() == System.Windows.Forms.DialogResult.OK) {
+                _preOpenModDirectory = Path.GetDirectoryName(ofd.FileName);
+                try {
+                    AddModResourcesHelper(ofd.FileNames);
                 }
-            }
-            catch (Exception exp) {
-                MessageBox.Show(exp.Message, "错误", MessageBoxButton.OK, MessageBoxImage.Error);
+                catch (Exception exp) {
+                    MessageBox.Show(exp.Message, "错误", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
             }
         }
         private void ModList_FileDrop(object sender, DragEventArgs e) {
             try {
                 string[] fileList = e.Data.GetData(DataFormats.FileDrop) as string[];
-                foreach (var fileName in fileList) {
-                    try {
-                        _dEModMananger.CurrentMod.AddResource(fileName);
-                    }
-                    catch (Exception exp) {
-                        MessageBox.Show($"无法添加模组文件：{fileName}\n\n原因{exp.Message}", "错误",
-                                          MessageBoxButton.OK, MessageBoxImage.Warning);
-                    }
-                }
+                AddModResourcesHelper(fileList);
             }
             catch (Exception exp) {
                 MessageBox.Show(exp.Message, "错误", MessageBoxButton.OK, MessageBoxImage.Error);
@@ -322,6 +297,15 @@ namespace DEModLauncher_GUI {
         private void Window_Minimum(object sender, RoutedEventArgs e) {
             WindowState = WindowState.Minimized;
         }
+        private void Window_KeyDown(object sender, KeyEventArgs e) {
+            if (Keyboard.IsKeyDown(Key.LeftCtrl)) {
+                switch (e.Key) {
+                    case Key.S:
+                        SaveToFileHelper();
+                        break;
+                }
+            }
+        }
         private void Direction_MouseDown(object sender, MouseButtonEventArgs e) {
             _heldPoint = e.GetPosition(this);
         }
@@ -370,5 +354,37 @@ namespace DEModLauncher_GUI {
                 }
             }
         }
+        private void AddModResourcesHelper(IEnumerable<string> fileList) {
+            if (_dEModMananger.DEModPacks.Count == 0) {
+                DEModPack modPack = new DEModPack();
+                modPack.PackName = "默认模组";
+                modPack.Description = "描述信息";
+                modPack.SetImage(DOOMEternal.DefaultModPackImage);
+                _dEModMananger.DEModPacks.Add(modPack);
+                _dEModMananger.CurrentMod = modPack;
+            }
+            foreach (var fileName in fileList) {
+                try {
+                    _dEModMananger.CurrentMod.AddResource(fileName);
+                }
+                catch (Exception exp) {
+                    MessageBox.Show($"无法添加模组文件：{fileName}\n\n原因{exp.Message}", "错误",
+                                      MessageBoxButton.OK, MessageBoxImage.Warning);
+                }
+            }
+        }
+        private void SaveToFileHelper() {
+            var result = MessageBox.Show("是否保存当前模组配置？", "保存配置", MessageBoxButton.YesNo, MessageBoxImage.Question);
+            if (result != MessageBoxResult.Yes) {
+                return;
+            }
+            try {
+                _dEModMananger.SaveToFile(DOOMEternal.LauncherProfileFile);
+            }
+            catch (Exception exp) {
+                MessageBox.Show(exp.Message, "保存配置文件出错", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+
     }
 }

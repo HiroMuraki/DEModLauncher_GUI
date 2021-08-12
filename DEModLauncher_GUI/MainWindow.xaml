@@ -9,7 +9,7 @@
         mc:Ignorable="d"
         DataContext="{Binding Path=DEModManager,RelativeSource={RelativeSource Mode=Self}}"
         FontFamily="Microsoft YaHei UI"
-        WindowStartupLocation="CenterScreen" ResizeMode="NoResize" MouseWheel="Direction_MouseWHeel"
+        WindowStartupLocation="CenterScreen" ResizeMode="NoResize" MouseWheel="Direction_MouseWHeel" KeyDown="Window_KeyDown"
         Title="DEMODLauncher" Height="600" Width="950">
     <WindowChrome.WindowChrome>
         <WindowChrome UseAeroCaptionButtons="False" CaptionHeight="0" ResizeBorderThickness="0"/>

@@ -1,4 +1,5 @@
 ﻿using Microsoft.Win32;
+using System;
 using System.IO;
 using System.Windows;
 using System.Windows.Input;
@@ -48,12 +49,18 @@ namespace DEModLauncher_GUI.View {
 
         private void ChangeImage_Click(object sender, MouseButtonEventArgs e) {
             OpenFileDialog ofd = new OpenFileDialog();
-            ofd.Filter = "JPG图片|*.jpg|PNG图片|*.png|BMP图片|*.bmp|GIF图片|*.gif";
+            ofd.Filter = "图像文件|*.jpg;*.png;*.bmp;*.gif|JPG图片|*.jpg|PNG图片|*.png|BMP图片|*.bmp|GIF图片|*.gif";
             ofd.InitialDirectory = _preImagesDirectory;
             ofd.Title = "选择模组图片";
             if (ofd.ShowDialog() == true) {
-                ImagePath = ofd.FileName;
-                _preImagesDirectory = Path.GetDirectoryName(ofd.FileName);
+                try {
+                    ImagePath = ofd.FileName;
+                    _preImagesDirectory = Path.GetDirectoryName(ofd.FileName);
+                }
+                catch (Exception exp) {
+                    MessageBox.Show($"图片修改出错，原因：{exp.Message}", "", MessageBoxButton.OK, MessageBoxImage.Error);
+                    throw;
+                }
             }
         }
         private void Ok_Click(object sender, RoutedEventArgs e) {

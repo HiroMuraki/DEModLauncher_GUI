@@ -118,6 +118,16 @@ namespace DEModLauncher_GUI.ViewModel {
         }
         public void RemoveModPack(DEModPack modPack) {
             _dEModPacks.Remove(modPack);
+            if (_currentMod == modPack) {
+                if (_dEModPacks.Count > 0) {
+                    _currentMod = _dEModPacks[0];
+                    OnPropertyChanged(nameof(CurrentMod));
+                }
+                else {
+                    _currentMod = null;
+                    OnPropertyChanged(nameof(CurrentMod));
+                }
+            }
         }
         public void DuplicateModPack(DEModPack modPack) {
             // 获取已经使用过的模组包名

@@ -252,16 +252,22 @@ namespace DEModLauncher_GUI.ViewModel {
             }
         }
         private void LaunchCheck() {
+            // 检查模组加载器是否存在
             if (!File.Exists(DOOMEternal.ModLoader)) {
                 throw new FileNotFoundException($"无法找到模组加载器{DOOMEternal.ModLoader}");
             }
+            // 检查模组资源是否缺失
+            List<string> lackedFiles = new List<string>();
             foreach (var resource in _resources) {
                 if (resource.Status == ResourceStatus.Disabled) {
                     continue;
                 }
                 if (!File.Exists($@"{DOOMEternal.ModPacksDirectory}\{resource.Path}")) {
-                    throw new FileNotFoundException($"无法找到模组包{resource.Path}\n请检查{DOOMEternal.ModPacksDirectory}\\{resource.Path}");
+                    lackedFiles.Add(resource.Path);
                 }
+            }
+            if (lackedFiles.Count > 0) {
+                throw new FileNotFoundException($"无法找到以下模组：\n{string.Join('\n', lackedFiles)}");
             }
         }
         private void ClearResources() {
