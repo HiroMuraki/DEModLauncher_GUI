@@ -77,39 +77,6 @@ namespace DEModLauncher_GUI.ViewModel {
             DeployResources();
         }
         /// <summary>
-        /// 上移模组资源
-        /// </summary>
-        /// <param name="resourcePath">要上移的模组资源</param>
-        public void MoveUpResource(DEModResource resourcePath) {
-            int currentIndex = _resources.IndexOf(resourcePath);
-            if (currentIndex <= 0) {
-                return;
-            }
-            int newIndex = currentIndex - 1;
-            var t = _resources[currentIndex];
-            _resources[currentIndex] = _resources[newIndex];
-            _resources[newIndex] = t;
-            DOOMEternal.ModificationSaved = false;
-        }
-        /// <summary>
-        /// 下移模组资源
-        /// </summary>
-        /// <param name="resourcePath">要下移的模组资源</param>
-        public void MoveDownResource(DEModResource resourcePath) {
-            int currentIndex = _resources.IndexOf(resourcePath);
-            if (currentIndex < 0) {
-                return;
-            }
-            if (currentIndex >= _resources.Count - 1) {
-                return;
-            }
-            int newIndex = currentIndex + 1;
-            var t = _resources[currentIndex];
-            _resources[currentIndex] = _resources[newIndex];
-            _resources[newIndex] = t;
-            DOOMEternal.ModificationSaved = false;
-        }
-        /// <summary>
         /// 添加模组资源
         /// </summary>
         /// <param name="resourcePath">模组资源路径</param>
@@ -147,8 +114,21 @@ namespace DEModLauncher_GUI.ViewModel {
         /// 移除模组资源
         /// </summary>
         /// <param name="resource">要移除的模组资源</param>
-        public void DeleteResource(DEModResource resource) {
+        public void RemoveResource(DEModResource resource) {
             _resources.Remove(resource);
+            DOOMEternal.ModificationSaved = false;
+        }
+        /// <summary>
+        /// 将指定模组插入到指定模组之前
+        /// </summary>
+        /// <param name="source">要插入的模组资源</param>
+        /// <param name="target">目标模组资源</param>
+        public void InsertResource(DEModResource source, DEModResource target) {
+            if (ReferenceEquals(source, target)) {
+                return;
+            }
+            _resources.Remove(source);
+            _resources.Insert(_resources.IndexOf(target), source);
             DOOMEternal.ModificationSaved = false;
         }
         /// <summary>
@@ -354,4 +334,39 @@ namespace DEModLauncher_GUI.ViewModel {
         }
     }
 }
+
+///// <summary>
+///// 上移模组资源
+///// </summary>
+///// <param name="resourcePath">要上移的模组资源</param>
+//public void MoveUpResource(DEModResource resourcePath) {
+//    int currentIndex = _resources.IndexOf(resourcePath);
+//    if (currentIndex <= 0) {
+//        return;
+//    }
+//    int newIndex = currentIndex - 1;
+//    var t = _resources[currentIndex];
+//    _resources[currentIndex] = _resources[newIndex];
+//    _resources[newIndex] = t;
+//    DOOMEternal.ModificationSaved = false;
+//}
+///// <summary>
+///// 下移模组资源
+///// </summary>
+///// <param name="resourcePath">要下移的模组资源</param>
+//public void MoveDownResource(DEModResource resourcePath) {
+//    int currentIndex = _resources.IndexOf(resourcePath);
+//    if (currentIndex < 0) {
+//        return;
+//    }
+//    if (currentIndex >= _resources.Count - 1) {
+//        return;
+//    }
+//    int newIndex = currentIndex + 1;
+//    var t = _resources[currentIndex];
+//    _resources[currentIndex] = _resources[newIndex];
+//    _resources[newIndex] = t;
+//    DOOMEternal.ModificationSaved = false;
+//}
+
 

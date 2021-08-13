@@ -30,7 +30,7 @@
                     <ColumnDefinition Width="3"/>
                     <ColumnDefinition Width="0.9*" MinWidth="100"/>
                 </Grid.ColumnDefinitions>
-                <Grid Grid.Column="0">
+                <Grid Grid.Column="0" AllowDrop="True" x:Name="CurrentModDisplayer" DragEnter="CurrentModDisplayer_DragEnter" DragLeave="CurrentModDisplayer_DragLeave" Drop="CurrentModDisplayer_FileDrop">
                     <Grid.RowDefinitions>
                         <RowDefinition/>
                         <RowDefinition Height="40"/>
@@ -65,6 +65,7 @@
                     </Grid.ContextMenu>
                     <Grid Grid.Row="0" Grid.RowSpan="2" MouseLeftButtonDown="Window_Move">
                         <Image Source="{Binding CurrentMod.ImagePath}" Stretch="UniformToFill" VerticalAlignment="Center" HorizontalAlignment="Center" MouseDown="EditModPack_Click" Tag="{Binding CurrentMod}"/>
+                        <View:FileDragControl x:Name="FileDragArea" IsHitTestVisible="False"/>
                     </Grid>
                     <Grid Grid.Row="1">
                         <Border Background="Black" Opacity="0.85"/>
@@ -118,8 +119,8 @@
                             <Button Grid.Column="3" Content="&#x2573;" Style="{StaticResource GButtonTitle}" Click="Window_Close"/>
                         </Grid>
                     </Grid>
-                    <Grid Grid.Row="1" AllowDrop="True" DragDrop.DragEnter="ModList_DragEnter" DragDrop.DragLeave="ModList_DragLeave"  DragDrop.Drop="ModList_FileDrop">
-                        <ScrollViewer VerticalScrollBarVisibility="Hidden">
+                    <Grid Grid.Row="1" AllowDrop="True">
+                        <ScrollViewer x:Name="ResourcesDisplayer" VerticalScrollBarVisibility="Hidden">
                             <ScrollViewer.ContextMenu>
                                 <ContextMenu>
                                     <MenuItem Tag="{Binding CurrentMod}" Header="{StaticResource ADD_MOD_RESOURCE_TOOLTIP}" Click="AddResource_Click"/>
@@ -128,20 +129,21 @@
                                     <MenuItem Tag="{Binding CurrentMod}" Header="{StaticResource GENERATE_MERGED_FILE}" Click="GenerateMergedFile_ClicK"/>
                                 </ContextMenu>
                             </ScrollViewer.ContextMenu>
-                            <ItemsControl ItemsSource="{Binding CurrentMod.Resources}" Margin="8">
+                            <ItemsControl x:Name="ResourceList" DragOver="ResourceList_DragOver" ItemsSource="{Binding CurrentMod.Resources}" Margin="8">
                                 <ItemsControl.ItemTemplate>
                                     <DataTemplate DataType="{x:Type ViewModel:DEModResource}">
                                         <Grid>
                                             <Grid.ContextMenu>
                                                 <ContextMenu>
                                                     <MenuItem Tag="{Binding}" Header="{StaticResource VIEW_MOD_RESOURCE}" Click="OpenResourceFile_Click"/>
-                                                    <MenuItem Tag="{Binding}" Header="{StaticResource MOVE_UP_MOD_RESOURCE}" Click="MoveUpResource_Click"/>
-                                                    <MenuItem Tag="{Binding}" Header="{StaticResource MOVE_DOWN_MOD_RESOURCE}" Click="MoveDownResource_Click"/>
                                                     <MenuItem Tag="{Binding}" Header="{StaticResource REMOVE_MOD_RESOURCE}" Click="DeleteResource_Click"/>
                                                 </ContextMenu>
                                             </Grid.ContextMenu>
                                             <ToggleButton Content="{Binding Path}" ToolTip="{Binding}" Tag="{Binding}" IsChecked="{Binding Status,Converter={StaticResource ResourceStatusToBoolean}}"
-                                                          Style="{StaticResource GResourceItemButton}"/>
+                                                          Style="{StaticResource GResourceItemButton}"
+                                                          PreviewMouseDown="ModResource_PreviewMouseDown"
+                                                          Drop="ModResource_Drop">
+                                            </ToggleButton>
                                         </Grid>
                                     </DataTemplate>
                                 </ItemsControl.ItemTemplate>
@@ -203,7 +205,6 @@
                                     Click="AddResource_Click" Style="{StaticResource GAddButtonStatic}" BorderThickness="0" Width="Auto">
                             </Button>
                         </StackPanel>
-                        <View:FileDragControl x:Name="FileDragArea" IsHitTestVisible="False"/>
                     </Grid>
                 </Grid>
             </Grid>
@@ -220,15 +221,14 @@
                         </ContextMenu>
                     </ScrollViewer.ContextMenu>
                     <Grid Margin="10,0" VerticalAlignment="Center">
-                        <ItemsControl ItemsSource="{Binding DEModPacks}">
+                        <ItemsControl x:Name="ModPacksList" ItemsSource="{Binding DEModPacks}" AllowDrop="True"
+                                      DragOver="ModPacksList_DragOver">
                             <ItemsControl.ItemTemplate>
                                 <DataTemplate DataType="{x:Type ViewModel:DEModPack}">
                                     <Grid>
                                         <Grid.ContextMenu>
                                             <ContextMenu>
                                                 <MenuItem Tag="{Binding}" Header="{StaticResource EDIT_MOD_PACK}" Click="EditModPack_Click"/>
-                                                <MenuItem Tag="{Binding}" Header="{StaticResource MOVE_UP_MOD_PACK}" Click="MoveUpModPack_Click"/>
-                                                <MenuItem Tag="{Binding}" Header="{StaticResource MOVE_DOWN_MOD_PACK}" Click="MoveDownModPack_Click"/>
                                                 <MenuItem Tag="{Binding}" Header="{StaticResource REMOVE_MOD_PACK}" Click="DeleteModPack_Click"/>
                                                 <MenuItem Tag="{Binding}" Header="{StaticResource DUPLICATE_MOD_PACK}" Click="DuplicateModPack_Click"/>
                                                 <MenuItem Tag="{Binding}" Header="{StaticResource CHECK_MOD_PACK_CONFLICT}" Click="CheckConflict_Click"/>
@@ -236,7 +236,9 @@
                                             </ContextMenu>
                                         </Grid.ContextMenu>
                                         <View:ModPackButton ToolTip="{Binding Description}" PackName="{Binding PackName}" ImagePath="{Binding ImagePath}" Tag="{Binding}" Margin="5,0" 
-                                                            GroupName="PackNameSelected" Click="SelectModPack_Click" PreviewMouseLeftButtonDown="EditModPack_Click"/>
+                                                            GroupName="PackNameSelected" Click="SelectModPack_Click" PreviewMouseLeftButtonDown="EditModPack_Click"
+                                                            PreviewMouseDown="ModPack_PreviewMouseDown"
+                                                            Drop="ModPack_Drop"/>
                                     </Grid>
                                 </DataTemplate>
                             </ItemsControl.ItemTemplate>

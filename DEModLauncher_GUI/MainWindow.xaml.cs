@@ -1,13 +1,17 @@
 ﻿using DEModLauncher_GUI.ViewModel;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Controls.Primitives;
 using System.Windows.Input;
+using System.Windows.Media;
+using System.Windows.Threading;
 
 namespace DEModLauncher_GUI {
     /// <summary>
@@ -112,16 +116,10 @@ namespace DEModLauncher_GUI {
         }
         #endregion
 
-        #region 模组操作
+        #region 模组配置操作
         private void SelectModPack_Click(object sender, RoutedEventArgs e) {
             DEModPack selectedMod = GetDEModPackFromControl(sender);
             _dEModMananger.CurrentMod = selectedMod;
-        }
-        private void MoveUpModPack_Click(object sender, RoutedEventArgs e) {
-            _dEModMananger.MoveUpModPack(GetDEModPackFromControl(sender));
-        }
-        private void MoveDownModPack_Click(object sender, RoutedEventArgs e) {
-            _dEModMananger.MoveDownModPack(GetDEModPackFromControl(sender));
         }
         private void DuplicateModPack_Click(object sender, RoutedEventArgs e) {
             _dEModMananger.DuplicateModPack(GetDEModPackFromControl(sender));
@@ -212,12 +210,6 @@ namespace DEModLauncher_GUI {
         #endregion
 
         #region 资源操作
-        private void MoveUpResource_Click(object sender, RoutedEventArgs e) {
-            _dEModMananger.CurrentMod.MoveUpResource(GetResourceFromControl(sender));
-        }
-        private void MoveDownResource_Click(object sender, RoutedEventArgs e) {
-            _dEModMananger.CurrentMod.MoveDownResource(GetResourceFromControl(sender));
-        }
         private void AddResource_Click(object sender, RoutedEventArgs e) {
             System.Windows.Forms.OpenFileDialog ofd = new System.Windows.Forms.OpenFileDialog();
             ofd.Title = "选择模组文件";
@@ -234,7 +226,7 @@ namespace DEModLauncher_GUI {
                 }
             }
         }
-        private void ModList_FileDrop(object sender, DragEventArgs e) {
+        private void CurrentModDisplayer_FileDrop(object sender, DragEventArgs e) {
             try {
                 string[] fileList = e.Data.GetData(DataFormats.FileDrop) as string[];
                 AddModResourcesHelper(fileList);
@@ -244,10 +236,10 @@ namespace DEModLauncher_GUI {
             }
             FileDragArea.IsHitTestVisible = false;
         }
-        private void ModList_DragEnter(object sender, DragEventArgs e) {
+        private void CurrentModDisplayer_DragEnter(object sender, DragEventArgs e) {
             FileDragArea.IsHitTestVisible = true;
         }
-        private void ModList_DragLeave(object sender, DragEventArgs e) {
+        private void CurrentModDisplayer_DragLeave(object sender, DragEventArgs e) {
             FileDragArea.IsHitTestVisible = false;
         }
         private void AddModPackReference_Click(object sender, RoutedEventArgs e) {
@@ -268,7 +260,7 @@ namespace DEModLauncher_GUI {
             }
         }
         private void DeleteResource_Click(object sender, RoutedEventArgs e) {
-            _dEModMananger.CurrentMod.DeleteResource(GetResourceFromControl(sender));
+            _dEModMananger.CurrentMod.RemoveResource(GetResourceFromControl(sender));
         }
         private void OpenResourceFile_Click(object sender, RoutedEventArgs e) {
             try {
@@ -312,7 +304,7 @@ namespace DEModLauncher_GUI {
             _heldPoint = e.GetPosition(this);
         }
         private void Direction_MouseMove(object sender, MouseEventArgs e) {
-            if (Mouse.LeftButton != MouseButtonState.Pressed) {
+            if (e.LeftButton != MouseButtonState.Pressed && e.MiddleButton != MouseButtonState.Pressed) {
                 return;
             }
             Point newPont = e.GetPosition(this);
@@ -325,7 +317,7 @@ namespace DEModLauncher_GUI {
                 ModPackDisplayer.ScrollToHorizontalOffset(ModPackDisplayer.HorizontalOffset - movedDistanceAbs);
             }
             _heldPoint = newPont;
-            e.Handled = true;
+            //e.Handled = true;
         }
         private void Direction_MouseWHeel(object sender, MouseWheelEventArgs e) {
             ModPackDisplayer.ScrollToHorizontalOffset(ModPackDisplayer.HorizontalOffset - e.Delta);
@@ -333,6 +325,16 @@ namespace DEModLauncher_GUI {
         }
         #endregion
 
+        private static T FindVisualParent<T>(DependencyObject obj) where T : class {
+            while (obj != null) {
+                if (obj is T) {
+                    return obj as T;
+                }
+
+                obj = VisualTreeHelper.GetParent(obj);
+            }
+            return null;
+        }
         private static DEModResource GetResourceFromControl(object sender) {
             return (sender as FrameworkElement).Tag as DEModResource;
         }
@@ -388,5 +390,234 @@ namespace DEModLauncher_GUI {
             }
         }
 
+        #region 模组配置列表拖动排序实现
+        private async void ModPack_PreviewMouseDown(object sender, MouseButtonEventArgs e) {
+            // 拖拽触发检测
+            DateTime heldTimeForResource = DateTime.Now;
+            bool isOk = await Task.Run(() => {
+                while ((DateTime.Now - heldTimeForResource).TotalMilliseconds <= 200) {
+                    if (e.LeftButton != MouseButtonState.Pressed) {
+                        return false;
+                    }
+                }
+                return true;
+            });
+
+            if (isOk) {
+                View.ModPackButton source = sender as View.ModPackButton;
+                source.IsChecked = true;
+                DataObject dataObj = new DataObject(source.Tag);
+                DragDrop.DoDragDrop(ResourceList, dataObj, DragDropEffects.Move);
+            }
+        }
+        private void ModPacksList_DragOver(object sender, DragEventArgs e) {
+            Point hoverPos = e.GetPosition(ModPackDisplayer);
+            if (hoverPos.X <= 40) {
+                ModPackDisplayer.ScrollToHorizontalOffset(ModPackDisplayer.HorizontalOffset - hoverPos.X - 40);
+            }
+            else if (hoverPos.X >= 850) {
+                ModPackDisplayer.ScrollToHorizontalOffset(ModPackDisplayer.HorizontalOffset + hoverPos.X - 850);
+            }
+        }
+        private void ModPack_Drop(object sender, DragEventArgs e) {
+            DEModPack source = e.Data.GetData(typeof(DEModPack)) as DEModPack;
+            if (source == null) {
+                return;
+            }
+            DEModPack target = (sender as FrameworkElement).Tag as DEModPack;
+            if (target == null) {
+                return;
+            }
+
+            // 如果源和目标相同，跳过
+            if (ReferenceEquals(source, target)) {
+                return;
+            }
+
+            // 否则将源移除，重新插入到target前
+            _dEModMananger.InsetModPack(source, target);
+        }
+        // 方案2
+        //private async void ModPacksList_PreviewMouseDown(object sender, MouseButtonEventArgs e) {
+        //    // 命中测试该pos下的元素
+        //    Point pos = e.GetPosition(ModPacksList);
+        //    HitTestResult result = VisualTreeHelper.HitTest(ModPacksList, pos);
+        //    if (result == null) {
+        //        return;
+        //    }
+        //    View.ModPackButton item = FindVisualParent<View.ModPackButton>(result.VisualHit);
+        //    if (item == null) {
+        //        return;
+        //    }
+
+        //    // 拖拽触发计时
+        //    DateTime heldTimeForModPack = DateTime.Now;
+        //    bool isOk = await Task.Run(() => {
+        //        while ((DateTime.Now - heldTimeForModPack).TotalMilliseconds <= 200) {
+        //            if (e.LeftButton != MouseButtonState.Pressed) {
+        //                return false;
+        //            }
+        //        }
+        //        return true;
+        //    });
+
+        //    // 如果触发成功，则启用拖拽
+        //    if (isOk) {
+        //        DataObject dataObj = new DataObject(item.Tag);
+        //        DragDrop.DoDragDrop(ModPacksList, dataObj, DragDropEffects.Move);
+        //    }
+        //}
+        //private void ModPacksList_PreviewMouseMove(object sender, MouseEventArgs e) {
+        //    Debug.WriteLine(e.GetPosition(ModPacksList));
+        //}
+        //private void ModPacksList_Drop(object sender, DragEventArgs e) {
+        //    DEModPack source = e.Data.GetData(typeof(DEModPack)) as DEModPack;
+        //    if (source == null) {
+        //        return;
+        //    }
+
+        //    // 获取落点位置的数据
+        //    Point pos = e.GetPosition(ModPacksList);
+        //    HitTestResult result = VisualTreeHelper.HitTest(ModPacksList, pos);
+        //    if (result == null) {
+        //        return;
+        //    }
+        //    View.ModPackButton item = FindVisualParent<View.ModPackButton>(result.VisualHit);
+        //    if (item == null) {
+        //        return;
+        //    }
+        //    DEModPack target = item.Tag as DEModPack;
+        //    if (target == null) {
+        //        return;
+        //    }
+
+        //    // 如果源和目标相同，跳过
+        //    if (ReferenceEquals(source, target)) {
+        //        return;
+        //    }
+
+        //    // 否则将源移除，重新插入到target前
+        //    _dEModMananger.InsetModPack(source, target);
+        //}
+        #endregion
+
+        #region 资源列表拖动排序实现
+        private async void ModResource_PreviewMouseDown(object sender, MouseButtonEventArgs e) {
+            // 拖拽触发检测
+            DateTime heldTimeForResource = DateTime.Now;
+            bool isOk = await Task.Run(() => {
+                while ((DateTime.Now - heldTimeForResource).TotalMilliseconds <= 200) {
+                    if (e.LeftButton != MouseButtonState.Pressed) {
+                        return false;
+                    }
+                }
+                return true;
+            });
+
+            if (isOk) {
+                DataObject dataObj = new DataObject((sender as FrameworkElement).Tag);
+                DragDrop.DoDragDrop(ResourceList, dataObj, DragDropEffects.Move);
+            }
+        }
+        private void ResourceList_DragOver(object sender, DragEventArgs e) {
+            Point hoverPos = e.GetPosition(ResourcesDisplayer);
+            if (hoverPos.Y <= 30) {
+                ResourcesDisplayer.ScrollToVerticalOffset(ResourcesDisplayer.VerticalOffset - hoverPos.Y - 30);
+            }
+            else if (hoverPos.Y >= 390) {
+                ResourcesDisplayer.ScrollToVerticalOffset(ResourcesDisplayer.VerticalOffset + hoverPos.Y - 390);
+            }
+            return;
+            // 命中测试该pos下的元素
+            Point pos = e.GetPosition(ResourceList);
+            HitTestResult result = VisualTreeHelper.HitTest(ResourceList, pos);
+            if (result == null) {
+                return;
+            }
+            ToggleButton item = FindVisualParent<ToggleButton>(result.VisualHit);
+            if (item == null) {
+                return;
+            }
+        }
+        private void ModResource_Drop(object sender, DragEventArgs e) {
+            DEModResource source = e.Data.GetData(typeof(DEModResource)) as DEModResource;
+            if (source == null) {
+                return;
+            }
+            DEModResource target = (sender as FrameworkElement).Tag as DEModResource;
+            if (target == null) {
+                return;
+            }
+
+            // 如果源和目标相同，跳过
+            if (ReferenceEquals(source, target)) {
+                return;
+            }
+
+            // 否则将源移除，重新插入到target前
+            _dEModMananger.CurrentMod.InsertResource(source, target);
+        }
+        //// 方案2
+        //private async void ResourceList_PreviewMouseDown(object sender, MouseButtonEventArgs e) {
+        //    // 命中测试该pos下的元素
+        //    Point pos = e.GetPosition(ResourceList);
+        //    HitTestResult result = VisualTreeHelper.HitTest(ResourceList, pos);
+        //    if (result == null) {
+        //        return;
+        //    }
+        //    ToggleButton item = FindVisualParent<ToggleButton>(result.VisualHit);
+        //    if (item == null) {
+        //        return;
+        //    }
+
+        //    // 拖拽触发检测
+        //    DateTime heldTimeForResource = DateTime.Now;
+        //    bool isOk = await Task.Run(() => {
+        //        while ((DateTime.Now - heldTimeForResource).TotalMilliseconds <= 200) {
+        //            if (e.LeftButton != MouseButtonState.Pressed) {
+        //                return false;
+        //            }
+        //        }
+        //        return true;
+        //    });
+
+        //    if (isOk) {
+        //        DataObject dataObj = new DataObject(item.Tag);
+        //        DragDrop.DoDragDrop(ResourceList, dataObj, DragDropEffects.Move);
+        //    }
+        //}
+        //private void ResourcesList_PreviewMouseMove(object sender, MouseEventArgs e) {
+
+        //}
+        //private void ResourceList_Drop(object sender, DragEventArgs e) {
+        //    DEModResource source = e.Data.GetData(typeof(DEModResource)) as DEModResource;
+        //    if (source == null) {
+        //        return;
+        //    }
+
+        //    // 获取落点位置的数据
+        //    Point pos = e.GetPosition(ResourceList);
+        //    HitTestResult result = VisualTreeHelper.HitTest(ResourceList, pos);
+        //    if (result == null) {
+        //        return;
+        //    }
+        //    ToggleButton item = FindVisualParent<ToggleButton>(result.VisualHit);
+        //    if (item == null) {
+        //        return;
+        //    }
+        //    DEModResource target = item.Tag as DEModResource;
+        //    if (target == null) {
+        //        return;
+        //    }
+
+        //    // 如果源和目标相同，跳过
+        //    if (ReferenceEquals(source, target)) {
+        //        return;
+        //    }
+
+        //    // 否则将源移除，重新插入到target前
+        //    _dEModMananger.CurrentMod.InsertResource(source, target);
+        //}
+        #endregion
     }
 }

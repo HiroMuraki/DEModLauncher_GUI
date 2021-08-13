@@ -76,39 +76,6 @@ namespace DEModLauncher_GUI.ViewModel {
             DOOMEternal.LaunchGame();
         }
         /// <summary>
-        /// 上移模组配置
-        /// </summary>
-        /// <param name="modPack">要上移的模组配置</param>
-        public void MoveUpModPack(DEModPack modPack) {
-            int currentIndex = _dEModPacks.IndexOf(modPack);
-            if (currentIndex <= 0) {
-                return;
-            }
-            int newIndex = currentIndex - 1;
-            var t = _dEModPacks[currentIndex];
-            _dEModPacks[currentIndex] = _dEModPacks[newIndex];
-            _dEModPacks[newIndex] = t;
-            DOOMEternal.ModificationSaved = false;
-        }
-        /// <summary>
-        /// 下移模组配置
-        /// </summary>
-        /// <param name="modPack">要下移的模组配置</param>
-        public void MoveDownModPack(DEModPack modPack) {
-            int currentIndex = _dEModPacks.IndexOf(modPack);
-            if (currentIndex < 0) {
-                return;
-            }
-            if (currentIndex >= _dEModPacks.Count - 1) {
-                return;
-            }
-            int newIndex = currentIndex + 1;
-            var t = _dEModPacks[currentIndex];
-            _dEModPacks[currentIndex] = _dEModPacks[newIndex];
-            _dEModPacks[newIndex] = t;
-            DOOMEternal.ModificationSaved = false;
-        }
-        /// <summary>
         /// 添加模组配置
         /// </summary>
         /// <param name="modPack">要添加的模组配置</param>
@@ -162,6 +129,19 @@ namespace DEModLauncher_GUI.ViewModel {
             DOOMEternal.ModificationSaved = false;
         }
         /// <summary>
+        /// 将指定模组配置插入到指定模组之前
+        /// </summary>
+        /// <param name="source">要插入的模组配置</param>
+        /// <param name="target">目标模组配置</param>
+        public void InsetModPack(DEModPack source, DEModPack target) {
+            if (ReferenceEquals(source, target)) {
+                return;
+            }
+            _dEModPacks.Remove(source);
+            _dEModPacks.Insert(_dEModPacks.IndexOf(target), source);
+            DOOMEternal.ModificationSaved = false;
+        }
+        /// <summary>
         /// 制作模组文件副本
         /// </summary>
         /// <param name="modPack">要拷贝的模组</param>
@@ -210,7 +190,7 @@ namespace DEModLauncher_GUI.ViewModel {
                 if (modPack.ExistsResource(newResourceName)) {
                     for (int i = 0; i < modPack.Resources.Count; i++) {
                         if (modPack.Resources[i].Path == oldResourceName) {
-                            modPack.DeleteResource(modPack.Resources[i]);
+                            modPack.RemoveResource(modPack.Resources[i]);
                             --i;
                         }
                     }
@@ -378,3 +358,36 @@ namespace DEModLauncher_GUI.ViewModel {
         }
     }
 }
+///// <summary>
+///// 上移模组配置
+///// </summary>
+///// <param name="modPack">要上移的模组配置</param>
+//public void MoveUpModPack(DEModPack modPack) {
+//    int currentIndex = _dEModPacks.IndexOf(modPack);
+//    if (currentIndex <= 0) {
+//        return;
+//    }
+//    int newIndex = currentIndex - 1;
+//    var t = _dEModPacks[currentIndex];
+//    _dEModPacks[currentIndex] = _dEModPacks[newIndex];
+//    _dEModPacks[newIndex] = t;
+//    DOOMEternal.ModificationSaved = false;
+//}
+///// <summary>
+///// 下移模组配置
+///// </summary>
+///// <param name="modPack">要下移的模组配置</param>
+//public void MoveDownModPack(DEModPack modPack) {
+//    int currentIndex = _dEModPacks.IndexOf(modPack);
+//    if (currentIndex < 0) {
+//        return;
+//    }
+//    if (currentIndex >= _dEModPacks.Count - 1) {
+//        return;
+//    }
+//    int newIndex = currentIndex + 1;
+//    var t = _dEModPacks[currentIndex];
+//    _dEModPacks[currentIndex] = _dEModPacks[newIndex];
+//    _dEModPacks[newIndex] = t;
+//    DOOMEternal.ModificationSaved = false;
+//}

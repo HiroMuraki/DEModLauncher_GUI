@@ -220,6 +220,7 @@
                                 <Border x:Name="TextMask" Background="Black" Opacity="0.70" VerticalAlignment="Bottom" Height="25"/>
                                 <Label x:Name="TextContent" Content="{Binding Path=PackName,RelativeSource={RelativeSource Mode=TemplatedParent}}" Foreground="{StaticResource TextColor}" VerticalContentAlignment="Center" HorizontalContentAlignment="Center"/>
                             </Grid>
+                            <Border Grid.RowSpan="2" x:Name="DragTip" BorderBrush="{StaticResource FocusColor}" IsHitTestVisible="False" BorderThickness="5,0,0,0" Opacity="0"/>
                         </Grid>
                     </Grid>
                     <ControlTemplate.Triggers>
@@ -265,6 +266,33 @@
                                 </BeginStoryboard>
                             </EventTrigger.Actions>
                         </EventTrigger>
+                        <EventTrigger RoutedEvent="DragDrop.DragEnter">
+                            <EventTrigger.Actions>
+                                <BeginStoryboard>
+                                    <Storyboard Storyboard.TargetName="DragTip" Storyboard.TargetProperty="Opacity">
+                                        <DoubleAnimation To="0.75" AccelerationRatio="0.2" DecelerationRatio="0.8" Duration="0:0:0.1"/>
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </EventTrigger.Actions>
+                        </EventTrigger>
+                        <EventTrigger RoutedEvent="DragDrop.DragLeave">
+                            <EventTrigger.Actions>
+                                <BeginStoryboard>
+                                    <Storyboard Storyboard.TargetName="DragTip" Storyboard.TargetProperty="Opacity">
+                                        <DoubleAnimation AccelerationRatio="0.2" DecelerationRatio="0.8" Duration="0:0:0.1"/>
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </EventTrigger.Actions>
+                        </EventTrigger>
+                        <EventTrigger RoutedEvent="DragDrop.Drop">
+                            <EventTrigger.Actions>
+                                <BeginStoryboard>
+                                    <Storyboard Storyboard.TargetName="DragTip" Storyboard.TargetProperty="Opacity">
+                                        <DoubleAnimation AccelerationRatio="0.2" DecelerationRatio="0.8" Duration="0:0:0.1"/>
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </EventTrigger.Actions>
+                        </EventTrigger>
                         <Trigger Property="IsChecked" Value="True" >
                             <Setter Property="FontSize" Value="14" />
                             <Setter Property="FontWeight" Value="Bold" />
@@ -299,8 +327,8 @@
                         <Border Background="{TemplateBinding Background}"
                                 BorderBrush="{TemplateBinding BorderBrush}" 
                                 BorderThickness="{TemplateBinding BorderThickness}"
-                                CornerRadius="2">
-                        </Border>
+                                CornerRadius="2"/>
+                        <Border x:Name="DragTip" CornerRadius="2" BorderBrush="{StaticResource FocusColor}" BorderThickness="0,2,0,0" Opacity="0"/>
                         <ContentPresenter VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
                                           HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
                                           Margin="{TemplateBinding Padding}"/>
@@ -313,6 +341,33 @@
                         <Trigger Property="IsChecked" Value="False" >
                             <Setter Property="Foreground" Value="{StaticResource TextDisabledColor}" />
                         </Trigger>
+                        <EventTrigger RoutedEvent="DragDrop.DragEnter">
+                            <EventTrigger.Actions>
+                                <BeginStoryboard>
+                                    <Storyboard Storyboard.TargetName="DragTip" Storyboard.TargetProperty="Opacity">
+                                        <DoubleAnimation To="0.75" AccelerationRatio="0.2" DecelerationRatio="0.8" Duration="0:0:0.1"/>
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </EventTrigger.Actions>
+                        </EventTrigger>
+                        <EventTrigger RoutedEvent="DragDrop.DragLeave">
+                            <EventTrigger.Actions>
+                                <BeginStoryboard>
+                                    <Storyboard Storyboard.TargetName="DragTip" Storyboard.TargetProperty="Opacity">
+                                        <DoubleAnimation AccelerationRatio="0.2" DecelerationRatio="0.8" Duration="0:0:0.1"/>
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </EventTrigger.Actions>
+                        </EventTrigger>
+                        <EventTrigger RoutedEvent="DragDrop.Drop">
+                            <EventTrigger.Actions>
+                                <BeginStoryboard>
+                                    <Storyboard Storyboard.TargetName="DragTip" Storyboard.TargetProperty="Opacity">
+                                        <DoubleAnimation AccelerationRatio="0.2" DecelerationRatio="0.8" Duration="0:0:0.1"/>
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </EventTrigger.Actions>
+                        </EventTrigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
             </Setter.Value>
