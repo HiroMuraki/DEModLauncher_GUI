@@ -1,17 +1,14 @@
 ﻿using DEModLauncher_GUI.ViewModel;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Controls.Primitives;
 using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Threading;
 
 namespace DEModLauncher_GUI {
     /// <summary>
@@ -526,17 +523,6 @@ namespace DEModLauncher_GUI {
             }
             else if (hoverPos.Y >= 390) {
                 ResourcesDisplayer.ScrollToVerticalOffset(ResourcesDisplayer.VerticalOffset + hoverPos.Y - 390);
-            }
-            return;
-            // 命中测试该pos下的元素
-            Point pos = e.GetPosition(ResourceList);
-            HitTestResult result = VisualTreeHelper.HitTest(ResourceList, pos);
-            if (result == null) {
-                return;
-            }
-            ToggleButton item = FindVisualParent<ToggleButton>(result.VisualHit);
-            if (item == null) {
-                return;
             }
         }
         private void ModResource_Drop(object sender, DragEventArgs e) {
