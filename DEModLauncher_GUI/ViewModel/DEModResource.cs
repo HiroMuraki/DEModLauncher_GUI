@@ -1,8 +1,8 @@
 ﻿namespace DEModLauncher_GUI.ViewModel {
-    public class DEModResource : ViewModelBase {
+    public class DEModResource : ViewModelBase, IModResource {
         private string _path;
         private ResourceStatus _status;
-        private DEModAttribute _attribute;
+        private DEModInformation _attribute;
 
         public string Path {
             get {
@@ -22,7 +22,7 @@
                 OnPropertyChanged(nameof(Status));
             }
         }
-        public DEModAttribute Attribute {
+        public IModInformation Attribute {
             get {
                 return _attribute;
             }
@@ -35,10 +35,10 @@
             _path = path;
             _status = ResourceStatus.Enabled;
             try {
-                _attribute = DEModAttribute.Read($"{DOOMEternal.ModPacksDirectory}\\{path}");
+                _attribute = DEModInformation.Read($"{DOOMEternal.ModPacksDirectory}\\{path}");
             }
             catch {
-                _attribute = new DEModAttribute();
+                _attribute = new DEModInformation();
             }
         }
 

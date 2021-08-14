@@ -1,4 +1,4 @@
-﻿namespace DEModLauncher_GUI.ViewModel {
+﻿namespace DEModLauncher_GUI {
     public enum ResourceStatus {
         Enabled,
         Disabled

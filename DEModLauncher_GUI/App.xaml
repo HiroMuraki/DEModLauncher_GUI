@@ -7,7 +7,7 @@
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="/DEModLauncher_GUI;component/Resources/ColorDict.xaml"/>
-                <ResourceDictionary Source="/DEModLauncher_GUI;component/Resources/TextDict.xaml"/>
+                <ResourceDictionary Source="/DEModLauncher_GUI;component/Resources/Zh_CN.xaml"/>
                 <ResourceDictionary Source="/DEModLauncher_GUI;component/Resources/StyleDict.xaml"/>
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>

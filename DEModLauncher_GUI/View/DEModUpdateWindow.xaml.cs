@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Windows;
 using System.Windows.Forms;
@@ -9,16 +10,10 @@ namespace DEModLauncher_GUI.View {
     /// DEModListWindow.xaml 的交互逻辑
     /// </summary>
     public partial class DEModUpdateWindow : Window {
-        private string _preOpenDirectory = null;
-        public List<string> ModList {
-            get { return (List<string>)GetValue(ModListProperty); }
-            set { SetValue(ModListProperty, value); }
-        }
-        public static readonly DependencyProperty ModListProperty =
-            DependencyProperty.Register(nameof(ModList), typeof(List<string>), typeof(DEModUpdateWindow), new PropertyMetadata(null));
+        public IModManager ModManager { get; }
 
         public DEModUpdateWindow() {
-            ModList = ViewModel.DEModManager.GetInstance().GetUsedMods();
+            ModManager = ViewModel.DEModManager.GetInstance();
             InitializeComponent();
         }
 
@@ -30,16 +25,7 @@ namespace DEModLauncher_GUI.View {
         }
 
         private void UpdateMod_Click(object sender, RoutedEventArgs e) {
-            string oldModName = (string)(sender as FrameworkElement).Tag;
-            OpenFileDialog ofd = new OpenFileDialog();
-            ofd.InitialDirectory = _preOpenDirectory ?? DOOMEternal.ModPacksDirectory;
-            ofd.Title = $"替换{oldModName}";
-            if (ofd.ShowDialog() == System.Windows.Forms.DialogResult.OK) {
-                string newFileName = ofd.FileName;
-                ViewModel.DEModManager.GetInstance().UpdateResourceFile(oldModName, newFileName);
-                ModList = ViewModel.DEModManager.GetInstance().GetUsedMods();
-                _preOpenDirectory = Path.GetDirectoryName(newFileName);
-            }
+            ModManager.UpdateResource((IModResource)(sender as FrameworkElement).Tag);
         }
     }
 }

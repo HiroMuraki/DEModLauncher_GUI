@@ -5,12 +5,13 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:View="clr-namespace:DEModLauncher_GUI.View"
         xmlns:ViewModel="clr-namespace:DEModLauncher_GUI.ViewModel"
+        xmlns:local="clr-namespace:DEModLauncher_GUI"
         xmlns:ValueConverter="clr-namespace:DEModLauncher_GUI.ViewModel.ValueConverter"
         mc:Ignorable="d"
-        DataContext="{Binding Path=DEModManager,RelativeSource={RelativeSource Mode=Self}}"
+        DataContext="{Binding Path=ModManager,RelativeSource={RelativeSource Mode=Self}}"
         FontFamily="Microsoft YaHei UI"
         WindowStartupLocation="CenterScreen" ResizeMode="NoResize" MouseWheel="Direction_MouseWHeel" KeyDown="Window_KeyDown"
-        Title="DEMODLauncher" Height="600" Width="950">
+        Title="DEModLauncher" Height="600" Width="950">
     <WindowChrome.WindowChrome>
         <WindowChrome UseAeroCaptionButtons="False" CaptionHeight="0" ResizeBorderThickness="0"/>
     </WindowChrome.WindowChrome>
@@ -24,12 +25,14 @@
                 <RowDefinition Height="3"/>
                 <RowDefinition Height="130" MinHeight="130"/>
             </Grid.RowDefinitions>
+            <!--当前模组-->
             <Grid Grid.Row="0">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="1.6*" MinWidth="100"/>
                     <ColumnDefinition Width="3"/>
                     <ColumnDefinition Width="0.9*" MinWidth="100"/>
                 </Grid.ColumnDefinitions>
+                <!--当前模组主信息-->
                 <Grid Grid.Column="0" AllowDrop="True" x:Name="CurrentModDisplayer" DragEnter="CurrentModDisplayer_DragEnter" DragLeave="CurrentModDisplayer_DragLeave" Drop="CurrentModDisplayer_FileDrop">
                     <Grid.RowDefinitions>
                         <RowDefinition/>
@@ -60,7 +63,7 @@
                             <MenuItem Tag="{Binding CurrentMod}" Header="{StaticResource ADD_MOD_RESOURCE_TOOLTIP}" Click="AddResource_Click"/>
                             <MenuItem Tag="{Binding CurrentMod}" Header="{StaticResource EDIT_MOD_PACK}" Click="EditModPack_Click"/>
                             <MenuItem Tag="{Binding CurrentMod}" Header="{StaticResource CHECK_MOD_PACK_CONFLICT}" Click="CheckConflict_Click"/>
-                            <MenuItem Tag="{Binding CurrentMod}" Header="{StaticResource GENERATE_MERGED_FILE}" Click="GenerateMergedFile_ClicK"/>
+                            <MenuItem Tag="{Binding CurrentMod}" Header="{StaticResource GENERATE_MERGED_FILE}" Click="ExportMergedMod_Click"/>
                         </ContextMenu>
                     </Grid.ContextMenu>
                     <Grid Grid.Row="0" Grid.RowSpan="2" MouseLeftButtonDown="Window_Move">
@@ -92,6 +95,7 @@
                     </Grid>
                 </Grid>
                 <GridSplitter Grid.Column="1" Width="2" HorizontalAlignment="Center" Background="{StaticResource AccentColor}"/>
+                <!--当前模组资源列表-->
                 <Grid Grid.Column="2">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="35"/>
@@ -126,12 +130,12 @@
                                     <MenuItem Tag="{Binding CurrentMod}" Header="{StaticResource ADD_MOD_RESOURCE_TOOLTIP}" Click="AddResource_Click"/>
                                     <MenuItem Tag="{Binding CurrentMod}" Header="{StaticResource EDIT_MOD_PACK}" Click="EditModPack_Click"/>
                                     <MenuItem Tag="{Binding CurrentMod}" Header="{StaticResource CHECK_MOD_PACK_CONFLICT}" Click="CheckConflict_Click"/>
-                                    <MenuItem Tag="{Binding CurrentMod}" Header="{StaticResource GENERATE_MERGED_FILE}" Click="GenerateMergedFile_ClicK"/>
+                                    <MenuItem Tag="{Binding CurrentMod}" Header="{StaticResource GENERATE_MERGED_FILE}" Click="ExportMergedMod_Click"/>
                                 </ContextMenu>
                             </ScrollViewer.ContextMenu>
                             <ItemsControl x:Name="ResourceList" DragOver="ResourceList_DragOver" ItemsSource="{Binding CurrentMod.Resources}" Margin="8">
                                 <ItemsControl.ItemTemplate>
-                                    <DataTemplate DataType="{x:Type ViewModel:DEModResource}">
+                                    <DataTemplate DataType="{x:Type local:IModResource}">
                                         <Grid>
                                             <Grid.ContextMenu>
                                                 <ContextMenu>
@@ -209,11 +213,13 @@
                 </Grid>
             </Grid>
             <Border Grid.Row="1" Height="2" HorizontalAlignment="Stretch" Background="{StaticResource AccentColor}"/>
+            <!--模组配置-->
             <Grid Grid.Row="2">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition/>
                     <ColumnDefinition Width="Auto"/>
                 </Grid.ColumnDefinitions>
+                <!--模组配置列表-->
                 <ScrollViewer Grid.Column="0" x:Name="ModPackDisplayer" VerticalScrollBarVisibility="Hidden" HorizontalScrollBarVisibility="Hidden" PreviewMouseWheel="Direction_MouseWHeel"  PreviewMouseDown="Direction_MouseDown" PreviewMouseMove="Direction_MouseMove">
                     <ScrollViewer.ContextMenu>
                         <ContextMenu BorderThickness="0" Padding="0" Background="Transparent">
@@ -224,7 +230,7 @@
                         <ItemsControl x:Name="ModPacksList" ItemsSource="{Binding DEModPacks}" AllowDrop="True"
                                       DragOver="ModPacksList_DragOver">
                             <ItemsControl.ItemTemplate>
-                                <DataTemplate DataType="{x:Type ViewModel:DEModPack}">
+                                <DataTemplate DataType="{x:Type local:IModPack}">
                                     <Grid>
                                         <Grid.ContextMenu>
                                             <ContextMenu>
@@ -232,13 +238,12 @@
                                                 <MenuItem Tag="{Binding}" Header="{StaticResource REMOVE_MOD_PACK}" Click="DeleteModPack_Click"/>
                                                 <MenuItem Tag="{Binding}" Header="{StaticResource DUPLICATE_MOD_PACK}" Click="DuplicateModPack_Click"/>
                                                 <MenuItem Tag="{Binding}" Header="{StaticResource CHECK_MOD_PACK_CONFLICT}" Click="CheckConflict_Click"/>
-                                                <MenuItem Tag="{Binding}" Header="{StaticResource GENERATE_MERGED_FILE}" Click="GenerateMergedFile_ClicK"/>
+                                                <MenuItem Tag="{Binding}" Header="{StaticResource GENERATE_MERGED_FILE}" Click="ExportMergedMod_Click"/>
                                             </ContextMenu>
                                         </Grid.ContextMenu>
                                         <View:ModPackButton ToolTip="{Binding Description}" PackName="{Binding PackName}" ImagePath="{Binding ImagePath}" Tag="{Binding}" Margin="5,0" 
                                                             GroupName="PackNameSelected" Click="SelectModPack_Click" PreviewMouseLeftButtonDown="EditModPack_Click"
-                                                            PreviewMouseDown="ModPack_PreviewMouseDown"
-                                                            Drop="ModPack_Drop"/>
+                                                            PreviewMouseDown="ModPack_PreviewMouseDown" Drop="ModPack_Drop"/>
                                     </Grid>
                                 </DataTemplate>
                             </ItemsControl.ItemTemplate>
@@ -252,6 +257,7 @@
                         </ItemsControl>
                     </Grid>
                 </ScrollViewer>
+                <!--模组配置添加按钮-->
                 <Button Grid.Column="1" Width="30" Content="+" ToolTip="{StaticResource ADD_MOD_PACK_TOOLTIP}" Foreground="{StaticResource TextColor}" Click="AddModPack_Click">
                     <Button.Triggers>
                         <EventTrigger RoutedEvent="Mouse.MouseEnter">
@@ -301,7 +307,10 @@
                     </Button.Style>
                 </Button>
             </Grid>
-            <!--Grid Grid.RowSpan="3">
+        </Grid>
+    </Border>
+</Window>
+<!--Grid Grid.RowSpan="3">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="30"/>
                     <RowDefinition/>
@@ -333,6 +342,3 @@
                              MouseLeftButtonDown="Window_Move"/>
                 </ScrollViewer>
             </Grid-->
-        </Grid>
-    </Border>
-</Window>

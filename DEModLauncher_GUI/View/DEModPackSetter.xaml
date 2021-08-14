@@ -36,7 +36,7 @@
                         </EventTrigger.Actions>
                     </EventTrigger>
                 </Grid.Triggers>
-                <Image Source="{Binding ImagePath}" Stretch="UniformToFill" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                <Image Source="{Binding ImagePath,Mode=OneWay}" Stretch="UniformToFill" VerticalAlignment="Center" HorizontalAlignment="Center"/>
                 <Border x:Name="ImageMask" Background="Black" Opacity="0" ToolTip="{StaticResource TEXT_OF_MOD_PACK_IMAGE}" MouseLeftButtonDown="ChangeImage_Click"/>
             </Grid>
             <Grid Grid.Row="1">

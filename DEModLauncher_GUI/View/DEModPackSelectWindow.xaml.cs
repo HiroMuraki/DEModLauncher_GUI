@@ -9,26 +9,26 @@ namespace DEModLauncher_GUI.View {
     /// DEModPackSelectWindow.xaml 的交互逻辑
     /// </summary>
     public partial class DEModPackSelectWindow : Window {
-        private readonly ObservableCollection<DEModPackSelector> _modPackSelectors;
-        public ObservableCollection<DEModPackSelector> ModPackSelectors {
+        private readonly ObservableCollection<IModPackSelector> _modPackSelectors;
+        public ObservableCollection<IModPackSelector> ModPackSelectors {
             get {
                 return _modPackSelectors;
             }
         }
-        public IEnumerable<DEModPack> SelectedModPacks {
+        public IEnumerable<IModPack> SelectedModPacks {
             get {
                 foreach (var item in _modPackSelectors) {
                     if (item.IsSelected) {
-                        yield return item.DEModPack;
+                        yield return item.ModPack;
                     }
                 }
             }
         }
 
-        public DEModPackSelectWindow(IEnumerable<DEModPack> modPacks) {
-            _modPackSelectors = new ObservableCollection<DEModPackSelector>();
+        public DEModPackSelectWindow(IEnumerable<IModPack> modPacks) {
+            _modPackSelectors = new ObservableCollection<IModPackSelector>();
             foreach (var modPack in modPacks) {
-                DEModPackSelector selector = new DEModPackSelector(modPack);
+                DEModPackSelector selector = new DEModPackSelector((DEModPack)modPack);
                 _modPackSelectors.Add(selector);
             }
             InitializeComponent();

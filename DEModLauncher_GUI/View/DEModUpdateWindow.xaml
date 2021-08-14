@@ -24,11 +24,11 @@
             </Grid>
             <Grid Grid.Row="1">
                 <ScrollViewer VerticalScrollBarVisibility="Auto">
-                    <ItemsControl ItemsSource="{Binding ModList}" Margin="10,5">
+                    <ItemsControl ItemsSource="{Binding ModManager.UsingMods}" Margin="10,5">
                         <ItemsControl.ItemTemplate>
                             <DataTemplate>
                                 <Grid>
-                                    <Button Content="{Binding}" HorizontalContentAlignment="Left" Height="40" Padding="10,0" ToolTip="{Binding}" Tag="{Binding}" Style="{StaticResource AGButton}" Click="UpdateMod_Click"/>
+                                    <Button Content="{Binding Path}" HorizontalContentAlignment="Left" Height="40" Padding="10,0" ToolTip="{Binding}" Tag="{Binding}" Style="{StaticResource AGButton}" Click="UpdateMod_Click"/>
                                 </Grid>
                             </DataTemplate>
                         </ItemsControl.ItemTemplate>

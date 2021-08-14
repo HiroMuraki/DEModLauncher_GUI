@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.IO.Compression;
+using Resources = System.Collections.ObjectModel.ObservableCollection<DEModLauncher_GUI.IModResource>;
 
 namespace DEModLauncher_GUI.ViewModel {
-    using Resources = ObservableCollection<DEModResource>;
-    public class DEModPack : ViewModelBase {
+    public class DEModPack : ViewModelBase, IModPack {
         private string _packName;
         private string _description;
         private string _imagePath;

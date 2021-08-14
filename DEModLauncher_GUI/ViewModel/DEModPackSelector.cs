@@ -1,10 +1,10 @@
 ﻿namespace DEModLauncher_GUI.ViewModel {
 
-    public class DEModPackSelector : ViewModelBase {
+    public class DEModPackSelector : ViewModelBase, IModPackSelector {
         private readonly DEModPack _dEModPack;
         private bool _isSelected;
 
-        public DEModPack DEModPack {
+        public IModPack ModPack {
             get {
                 return _dEModPack;
             }

@@ -3,7 +3,7 @@ using System.IO.Compression;
 using System.Text.RegularExpressions;
 
 namespace DEModLauncher_GUI.ViewModel {
-    public record DEModAttribute {
+    public record DEModInformation : IModInformation {
         private static readonly Regex nameReg = new Regex("(?<=\"name\":\")[\\s\\S]+(?=\"[,]*)");
         private static readonly Regex descriptionReg = new Regex("(?<=\"description\":\")[\\s\\S]+(?=\"[,]*)");
         private static readonly Regex authorReg = new Regex("(?<=\"author\":\")[\\s\\S]+(?=\"[,]*)");
@@ -12,10 +12,10 @@ namespace DEModLauncher_GUI.ViewModel {
         private string _description;
         private string _author;
 
-        public DEModAttribute() {
-            _name = "???";
-            _description = "???";
-            _author = "???";
+        public DEModInformation() {
+            _name = "?";
+            _description = "?";
+            _author = "?";
         }
 
         public string Name {
@@ -51,7 +51,7 @@ namespace DEModLauncher_GUI.ViewModel {
             return output;
         }
 
-        public static DEModAttribute Read(string path) {
+        public static DEModInformation Read(string path) {
             // 读取压缩包中的EternalMod.json
             ZipArchive zipArchive = ZipFile.Open(path, ZipArchiveMode.Read);
             ZipArchiveEntry entry = zipArchive.GetEntry("EternalMod.json");
@@ -60,7 +60,7 @@ namespace DEModLauncher_GUI.ViewModel {
             }
 
             // 读取
-            DEModAttribute attribute = new DEModAttribute();
+            DEModInformation attribute = new DEModInformation();
             using (StreamReader reader = new StreamReader(entry.Open())) {
                 while (!reader.EndOfStream) {
                     string line = reader.ReadLine().Trim();

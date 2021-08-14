@@ -3,7 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:DEModLauncher_GUI.View"
+        xmlns:local="clr-namespace:DEModLauncher_GUI"
         xmlns:ViewModel="clr-namespace:DEModLauncher_GUI.ViewModel"
         xmlns:View="clr-namespace:DEModLauncher_GUI.View"
         mc:Ignorable="d"
@@ -29,9 +29,9 @@
                 <ScrollViewer VerticalScrollBarVisibility="Auto">
                     <ItemsControl ItemsSource="{Binding ModPackSelectors}" Margin="10,5">
                         <ItemsControl.ItemTemplate>
-                            <DataTemplate DataType="{x:Type ViewModel:DEModPackSelector}">
+                            <DataTemplate DataType="{x:Type local:IModPackSelector}">
                                 <Grid>
-                                    <ToggleButton Content="{Binding DEModPack.PackName}" ToolTip="{Binding DEModPack.Description}" Tag="{Binding}" IsChecked="{Binding IsSelected}" Style="{StaticResource GResourceSelectorButton}"/>
+                                    <ToggleButton Content="{Binding ModPack.PackName}" ToolTip="{Binding ModPack.Description}" Tag="{Binding}" IsChecked="{Binding IsSelected}" Style="{StaticResource GResourceSelectorButton}"/>
                                 </Grid>
                             </DataTemplate>
                         </ItemsControl.ItemTemplate>
@@ -46,7 +46,7 @@
                 </ScrollViewer>
             </Grid>
             <Grid Grid.Row="2">
-                <Button Content="添加" FontSize="18" Style="{StaticResource GButton}" Click="Confirm_Click" BorderThickness="0"/>
+                <Button Content="{StaticResource ADD_MOD_RESOURCES_CONFIRM}" FontSize="18" Style="{StaticResource GButton}" Click="Confirm_Click" BorderThickness="0"/>
             </Grid>
         </Grid>
     </Border>

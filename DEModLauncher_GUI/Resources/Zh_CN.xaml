@@ -51,6 +51,8 @@
     <Sys:String x:Key="ADD_MOD_RESOURES_FROM_MOD_PACK_TITLE">选择模组包以添加</Sys:String>
     <!--添加自现有模组配置ToolTip-->
     <Sys:String x:Key="ADD_MOD_RESOURCES_FROM_MOD_PACK_TOOLTIP">添加自现有模组配置</Sys:String>
+    <!--添加自现有模组配置 确定按钮-->
+    <Sys:String x:Key="ADD_MOD_RESOURCES_CONFIRM">添加所选模组</Sys:String>
     <!--添加模组文件ToolTip-->
     <Sys:String x:Key="ADD_MOD_RESOURCE_TOOLTIP">添加模组文件</Sys:String>
     <!--在资源管理器中查看模组文件-->

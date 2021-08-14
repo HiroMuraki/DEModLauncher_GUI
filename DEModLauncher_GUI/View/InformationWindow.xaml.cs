@@ -10,8 +10,6 @@ namespace DEModLauncher_GUI.View {
         public void OnPropertyChanged(string propertyName) {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
-        private string _caption;
-
 
         public string Message {
             get {
@@ -24,11 +22,10 @@ namespace DEModLauncher_GUI.View {
         }
         public string Caption {
             get {
-                return _caption;
+                return Title;
             }
             set {
-                _caption = value;
-                OnPropertyChanged(nameof(Caption));
+                Title = value;
             }
         }
 
