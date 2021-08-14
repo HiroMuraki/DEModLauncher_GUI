@@ -4,7 +4,7 @@ namespace DEModLauncher_GUI.ViewModel {
     public class DEModResource : ViewModelBase, IModResource, IComparable<DEModResource> {
         private string _path;
         private ResourceStatus _status;
-        private DEModInformation _attribute;
+        private DEModInformation _information;
 
         public string Path {
             get {
@@ -24,9 +24,9 @@ namespace DEModLauncher_GUI.ViewModel {
                 OnPropertyChanged(nameof(Status));
             }
         }
-        public IModInformation Attribute {
+        public IModInformation Information {
             get {
-                return _attribute;
+                return _information;
             }
         }
 
@@ -37,10 +37,10 @@ namespace DEModLauncher_GUI.ViewModel {
             _path = path;
             _status = ResourceStatus.Enabled;
             try {
-                _attribute = DEModInformation.Read($"{DOOMEternal.ModPacksDirectory}\\{path}");
+                _information = DEModInformation.Read($"{DOOMEternal.ModPacksDirectory}\\{path}");
             }
             catch {
-                _attribute = new DEModInformation();
+                _information = new DEModInformation();
             }
         }
 
@@ -50,10 +50,17 @@ namespace DEModLauncher_GUI.ViewModel {
         public void Disable() {
             _status = ResourceStatus.Disabled;
         }
+        public DEModResource GetDeepCopy() {
+            DEModResource copy = new DEModResource();
+            copy._path = _path;
+            copy._status = _status;
+            copy._information = _information.GetDeepCopy();
+            return copy;
+        }
         public override string ToString() {
-            string output = $"名称：{_attribute.Name}\n";
-            output += $"描述：{_attribute.Description}\n";
-            output += $"作者：{_attribute.Author}\n";
+            string output = $"名称：{_information.Name}\n";
+            output += $"描述：{_information.Description}\n";
+            output += $"作者：{_information.Author}\n";
             output += $"文件：{_path}";
             return output;
         }

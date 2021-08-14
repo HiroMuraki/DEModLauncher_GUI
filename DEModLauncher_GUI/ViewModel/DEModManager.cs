@@ -207,12 +207,7 @@ namespace DEModLauncher_GUI.ViewModel {
             RemoveModPackHelper((DEModPack)modPack);
         }
         public void ResortModPack(IModPack source, IModPack target) {
-            if (ReferenceEquals(source, target)) {
-                return;
-            }
-            _dEModPacks.Remove(source);
-            _dEModPacks.Insert(_dEModPacks.IndexOf(target), source);
-            DOOMEternal.ModificationSaved = false;
+            ResortModPackHelper((DEModPack)source, (DEModPack)target);
         }
         public void EditModPack(IModPack modPack) {
             DEModPack dEModPack = (DEModPack)modPack;

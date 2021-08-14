@@ -50,6 +50,13 @@ namespace DEModLauncher_GUI.ViewModel {
             output += $"描述：{Description}\n";
             return output;
         }
+        public DEModInformation GetDeepCopy() {
+            DEModInformation copy = new DEModInformation();
+            copy._name = _name;
+            copy._description = _description;
+            copy._author = _author;
+            return copy;
+        }
 
         public static DEModInformation Read(string path) {
             // 读取压缩包中的EternalMod.json

@@ -242,7 +242,7 @@ namespace DEModLauncher_GUI.ViewModel {
             copy._description = _description;
             // 复制资源列表
             foreach (var res in _resources) {
-                copy.Resources.Add(res);
+                copy.Resources.Add((IModResource)((DEModPack)res).GetDeepCopy());
             }
             return copy;
         }

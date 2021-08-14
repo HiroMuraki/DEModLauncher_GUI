@@ -2,6 +2,6 @@
     public interface IModResource {
         string Path { get; set; }
         ResourceStatus Status { get; set; }
-        IModInformation Attribute { get; }
+        IModInformation Information { get; }
     }
 }
