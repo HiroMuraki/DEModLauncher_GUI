@@ -18,6 +18,7 @@ namespace DEModLauncher_GUI.ViewModel {
         private string _preOpenModDirectory = "";
         private bool _isLaunching;
         private DEModPack _currentMod;
+        private Resources _usingMods;
         private readonly DEModPacks _dEModPacks;
 
         #region IModManager接口实现
@@ -47,15 +48,30 @@ namespace DEModLauncher_GUI.ViewModel {
         }
         public Resources UsingMods {
             get {
-                Resources resources = new Resources();
+                List<DEModResource> ress = new List<DEModResource>();
                 foreach (var modPack in _dEModPacks) {
                     foreach (var res in modPack.Resources) {
-                        if (!resources.Contains(res)) {
-                            resources.Add(res);
+                        // 如果ress中未出现该模组，则加入
+                        bool isDistinct = true;
+                        foreach (var existed in ress) {
+                            if (existed.Path == res.Path) {
+                                isDistinct = false;
+                                break;
+                            }
+                        }
+                        if (isDistinct) {
+                            ress.Add((DEModResource)res);
                         }
                     }
                 }
-                return resources;
+                ress.Distinct();
+                ress.Sort();
+
+                _usingMods.Clear();
+                foreach (var item in ress) {
+                    _usingMods.Add(item);
+                }
+                return _usingMods;
             }
         }
         #endregion
@@ -380,6 +396,7 @@ namespace DEModLauncher_GUI.ViewModel {
         private DEModManager() {
             _currentMod = null;
             _dEModPacks = new DEModPacks();
+            _usingMods = new Resources();
         }
         public static DEModManager GetInstance() {
             if (_singletonIntance == null) {

@@ -1,5 +1,7 @@
-﻿namespace DEModLauncher_GUI.ViewModel {
-    public class DEModResource : ViewModelBase, IModResource {
+﻿using System;
+
+namespace DEModLauncher_GUI.ViewModel {
+    public class DEModResource : ViewModelBase, IModResource, IComparable<DEModResource> {
         private string _path;
         private ResourceStatus _status;
         private DEModInformation _attribute;
@@ -54,6 +56,10 @@
             output += $"作者：{_attribute.Author}\n";
             output += $"文件：{_path}";
             return output;
+        }
+
+        public int CompareTo(DEModResource other) {
+            return _path.CompareTo(other?._path);
         }
     }
 }
