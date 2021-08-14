@@ -78,9 +78,12 @@ namespace DEModLauncher_GUI.ViewModel {
                 });
             }
             catch (Exception exp) {
-                MessageBox.Show(exp.Message, "模组加载错误", MessageBoxButton.OK, MessageBoxImage.Error);
+                View.InformationWindow.Show(exp.Message, "模组启动错误", Application.Current.MainWindow);
+                return;
             }
-            IsLaunching = false;
+            finally {
+                IsLaunching = false;
+            }
         }
         public async void LaunchMod() {
             // 弹出提示窗口，避免误操作
@@ -101,8 +104,11 @@ namespace DEModLauncher_GUI.ViewModel {
             }
             catch (Exception exp) {
                 View.InformationWindow.Show(exp.Message, "模组启动错误", Application.Current.MainWindow);
+                return;
             }
-            IsLaunching = false;
+            finally {
+                IsLaunching = false;
+            }
             App.Close();
         }
         public void LaunchGame() {
