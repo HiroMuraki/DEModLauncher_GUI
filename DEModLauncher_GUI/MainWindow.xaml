@@ -103,7 +103,7 @@
                     </Grid.RowDefinitions>
                     <Grid Grid.Row="0">
                         <Border Grid.Column="0" Background="{StaticResource AccentColor}" MouseLeftButtonDown="Window_Move"/>
-                        <Grid VerticalAlignment="Center">
+                        <Grid>
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="35"/>
                                 <ColumnDefinition />
