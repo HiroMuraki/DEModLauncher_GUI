@@ -392,7 +392,7 @@ namespace DEModLauncher_GUI {
             // 拖拽触发检测
             bool isOk = await Task.Run(() => {
                 for (int i = 0; i < 4; i++) {
-                    Task.Delay(TimeSpan.FromMilliseconds(50)).Wait();
+                    Task.Delay(TimeSpan.FromMilliseconds(25)).Wait();
                     if (e.LeftButton != MouseButtonState.Pressed) {
                         return false;
                     }
