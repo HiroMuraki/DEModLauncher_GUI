@@ -504,12 +504,12 @@ namespace DEModLauncher_GUI.ViewModel {
                 }
             }
             // 设置新模组包名，避免重复
-            //int cpyID = 1;
-            //string testName = copiedPack.PackName;
-            //while (usedPackNames.Contains(copiedPack.PackName)) {
-            //    copiedPack.PackName = $"{testName}({cpyID})";
-            //    ++cpyID;
-            //}
+            int cpyID = 1;
+            string testName = copiedPack.PackName;
+            while (usedPackNames.Contains(copiedPack.PackName)) {
+                copiedPack.PackName = $"{testName} - 副本[{cpyID}]";
+                ++cpyID;
+            }
             _dEModPacks.Insert(_dEModPacks.IndexOf(modPack), copiedPack);
             DOOMEternal.ModificationSaved = false;
         }
