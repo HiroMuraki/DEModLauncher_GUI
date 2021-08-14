@@ -235,14 +235,14 @@ namespace DEModLauncher_GUI.ViewModel {
         public DEModPack GetDeepCopy() {
             DEModPack copy = new DEModPack();
             // 设置新模组包名
-            copy._packName = _packName;
+            copy._packName = $"{_packName} - 副本";
             // 模组图片
             copy._imagePath = _imagePath;
             // 模组描述
             copy._description = _description;
             // 复制资源列表
             foreach (var res in _resources) {
-                copy.Resources.Add((IModResource)((DEModPack)res).GetDeepCopy());
+                copy.Resources.Add(((DEModResource)res).GetDeepCopy());
             }
             return copy;
         }
