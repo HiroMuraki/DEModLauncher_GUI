@@ -1,8 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Diagnostics;
-using System.IO;
-using System.Windows;
-using System.Windows.Forms;
+﻿using System.Windows;
 using System.Windows.Input;
 
 namespace DEModLauncher_GUI.View {

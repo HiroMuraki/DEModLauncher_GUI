@@ -1,9 +1,5 @@
 ﻿using DEModLauncher_GUI.ViewModel;
 using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -35,11 +31,9 @@ namespace DEModLauncher_GUI {
         }
         private void LaunchMod_Click(object sender, RoutedEventArgs e) {
             _modManager.LaunchMod();
-            Window_Close(null, null);
         }
         private void LaunchGame_Click(object sender, RoutedEventArgs e) {
             _modManager.LaunchGame();
-            Window_Close(null, null);
         }
         private void SaveToFile_Click(object sender, RoutedEventArgs e) {
             _modManager.SaveProfiles();
