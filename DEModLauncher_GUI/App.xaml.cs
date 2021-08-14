@@ -20,5 +20,14 @@ namespace DEModLauncher_GUI {
             MainWindow window = new MainWindow();
             window.ShowDialog();
         }
+        public static void Close() {
+            if (!DOOMEternal.ModificationSaved) {
+                var result = MessageBox.Show("有更改尚未保存，是否关闭？", "警告", MessageBoxButton.OKCancel, MessageBoxImage.Warning);
+                if (result != MessageBoxResult.OK) {
+                    return;
+                }
+            }
+            Current.Shutdown();
+        }
     }
 }

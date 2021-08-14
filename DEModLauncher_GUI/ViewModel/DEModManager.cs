@@ -100,18 +100,20 @@ namespace DEModLauncher_GUI.ViewModel {
                 });
             }
             catch (Exception exp) {
-                View.InformationWindow.Show(exp.Message, "模组启动错误", App.Current.MainWindow);
+                View.InformationWindow.Show(exp.Message, "模组启动错误", Application.Current.MainWindow);
             }
             IsLaunching = false;
+            App.Close();
         }
         public void LaunchGame() {
             try {
                 LaunchHelper();
             }
             catch (Exception exp) {
-                View.InformationWindow.Show(exp.Message, "模组启动错误", App.Current.MainWindow);
+                View.InformationWindow.Show(exp.Message, "模组启动错误", Application.Current.MainWindow);
                 return;
             }
+            App.Close();
         }
         public void SaveProfiles() {
             var result = MessageBox.Show("是否保存当前模组配置？", "保存配置", MessageBoxButton.YesNo, MessageBoxImage.Question);

@@ -115,13 +115,7 @@ namespace DEModLauncher_GUI {
             DragMove();
         }
         private void Window_Close(object sender, RoutedEventArgs e) {
-            if (!DOOMEternal.ModificationSaved) {
-                var result = MessageBox.Show("有更改尚未保存，是否关闭？", "警告", MessageBoxButton.OKCancel, MessageBoxImage.Warning);
-                if (result != MessageBoxResult.OK) {
-                    return;
-                }
-            }
-            Application.Current.Shutdown();
+            App.Close();
         }
         private void Window_Minimum(object sender, RoutedEventArgs e) {
             WindowState = WindowState.Minimized;
