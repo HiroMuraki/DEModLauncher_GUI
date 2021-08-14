@@ -61,6 +61,10 @@ namespace DEModLauncher_GUI.ViewModel {
         #endregion
         #region 方法
         public async void LoadMod() {
+            if (_currentMod == null) {
+                MessageBox.Show("请先选择一个模组配置", "警告", MessageBoxButton.OK, MessageBoxImage.Warning);
+                return;
+            }
             // 弹出提示窗口，避免误操作
             var result = MessageBox.Show($"加载模组将需要一定时间，在此期间请勿关闭本程序。是否继续?",
                                          $"加载模组：{_currentMod.PackName}",
@@ -86,6 +90,10 @@ namespace DEModLauncher_GUI.ViewModel {
             }
         }
         public async void LaunchMod() {
+            if (_currentMod == null) {
+                MessageBox.Show("请先选择一个模组配置", "警告", MessageBoxButton.OK, MessageBoxImage.Warning);
+                return;
+            }
             // 弹出提示窗口，避免误操作
             var result = MessageBox.Show($"加载模组将需要一定时间，在此期间请勿关闭本程序。是否继续?",
                                          $"加载模组：{_currentMod.PackName}",
