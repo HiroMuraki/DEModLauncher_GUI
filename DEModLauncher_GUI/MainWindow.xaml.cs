@@ -390,9 +390,9 @@ namespace DEModLauncher_GUI {
         #region 模组配置列表拖动排序实现
         private async void ModPack_PreviewMouseDown(object sender, MouseButtonEventArgs e) {
             // 拖拽触发检测
-            DateTime heldTimeForResource = DateTime.Now;
             bool isOk = await Task.Run(() => {
-                while ((DateTime.Now - heldTimeForResource).TotalMilliseconds <= 200) {
+                for (int i = 0; i < 4; i++) {
+                    Task.Delay(TimeSpan.FromMilliseconds(50)).Wait();
                     if (e.LeftButton != MouseButtonState.Pressed) {
                         return false;
                     }
@@ -501,9 +501,9 @@ namespace DEModLauncher_GUI {
         #region 资源列表拖动排序实现
         private async void ModResource_PreviewMouseDown(object sender, MouseButtonEventArgs e) {
             // 拖拽触发检测
-            DateTime heldTimeForResource = DateTime.Now;
             bool isOk = await Task.Run(() => {
-                while ((DateTime.Now - heldTimeForResource).TotalMilliseconds <= 200) {
+                for (int i = 0; i < 4; i++) {
+                    Task.Delay(TimeSpan.FromMilliseconds(50)).Wait();
                     if (e.LeftButton != MouseButtonState.Pressed) {
                         return false;
                     }

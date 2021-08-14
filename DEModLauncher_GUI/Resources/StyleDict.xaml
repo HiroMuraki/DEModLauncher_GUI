@@ -270,7 +270,7 @@
                             <EventTrigger.Actions>
                                 <BeginStoryboard>
                                     <Storyboard Storyboard.TargetName="DragTip" Storyboard.TargetProperty="Opacity">
-                                        <DoubleAnimation To="0.75" AccelerationRatio="0.2" DecelerationRatio="0.8" Duration="0:0:0.1"/>
+                                        <DoubleAnimation To="0.75" AccelerationRatio="0.2" DecelerationRatio="0.8" Duration="0:0:0.05"/>
                                     </Storyboard>
                                 </BeginStoryboard>
                             </EventTrigger.Actions>
@@ -345,7 +345,7 @@
                             <EventTrigger.Actions>
                                 <BeginStoryboard>
                                     <Storyboard Storyboard.TargetName="DragTip" Storyboard.TargetProperty="Opacity">
-                                        <DoubleAnimation To="0.75" AccelerationRatio="0.2" DecelerationRatio="0.8" Duration="0:0:0.1"/>
+                                        <DoubleAnimation To="0.75" AccelerationRatio="0.2" DecelerationRatio="0.8" Duration="0:0:0.05"/>
                                     </Storyboard>
                                 </BeginStoryboard>
                             </EventTrigger.Actions>
