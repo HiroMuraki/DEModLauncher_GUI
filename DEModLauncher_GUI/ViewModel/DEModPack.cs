@@ -196,7 +196,12 @@ namespace DEModLauncher_GUI.ViewModel {
             View.DEModPackSetter setter = new View.DEModPackSetter() { Owner = Application.Current.MainWindow };
             setter.PackName = _packName;
             setter.Description = _description;
-            setter.ImagePath = string.IsNullOrEmpty(_imagePath) ? DOOMEternal.DefaultModPackImage : _imagePath;
+            if (string.IsNullOrEmpty(_imagePath)) {
+                setter.ImagePath = DOOMEternal.DefaultModPackImage;
+            }
+            else {
+                setter.ImagePath = $"{DOOMEternal.ModPackImagesDirectory}\\{_imagePath}";
+            }
             if (setter.ShowDialog() == true) {
                 try {
                     if (_packName != setter.PackName) {
