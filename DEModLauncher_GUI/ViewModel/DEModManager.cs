@@ -5,7 +5,6 @@ using System.IO;
 using System.IO.Compression;
 using System.Linq;
 using System.Runtime.Serialization.Json;
-using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using ModPacks = System.Collections.ObjectModel.ObservableCollection<DEModLauncher_GUI.IModPack>;
@@ -163,11 +162,9 @@ namespace DEModLauncher_GUI.ViewModel {
                 return;
             }
             try {
-
                 LoadProfilesHelper(DOOMEternal.LauncherProfileFile);
             }
             catch (Exception exp) {
-
                 MessageBox.Show(exp.Message, "读取配置文件出错", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
@@ -189,6 +186,7 @@ namespace DEModLauncher_GUI.ViewModel {
                     modPack.Description = setter.Description;
                     modPack.SetImage(setter.ImagePath);
                     AddModPackHelper(modPack);
+                    DOOMEternal.ModificationSaved = false;
                 }
             }
             catch (Exception exp) {
@@ -205,12 +203,15 @@ namespace DEModLauncher_GUI.ViewModel {
             if (_modPacks.Count <= 0) {
                 SetDefaultModPack();
             }
+            DOOMEternal.ModificationSaved = false;
         }
         public void DuplicateModPack(IModPack modPack) {
             DuplicateModPackHelper((DEModPack)modPack);
+            DOOMEternal.ModificationSaved = false;
         }
         public void ResortModPack(IModPack source, IModPack target) {
             ResortModPackHelper((DEModPack)source, (DEModPack)target);
+            DOOMEternal.ModificationSaved = false;
         }
         public void UpdateResource(IModResource resource) {
             System.Windows.Forms.OpenFileDialog ofd = new System.Windows.Forms.OpenFileDialog();
@@ -339,7 +340,6 @@ namespace DEModLauncher_GUI.ViewModel {
             }
             _modPacks.Add(modPack);
             CurrentMod = modPack;
-            DOOMEternal.ModificationSaved = false;
         }
         /// <summary>
         /// 移除指定模组配置
@@ -357,7 +357,6 @@ namespace DEModLauncher_GUI.ViewModel {
                     OnPropertyChanged(nameof(CurrentMod));
                 }
             }
-            DOOMEternal.ModificationSaved = false;
         }
         /// <summary>
         /// 将指定模组配置插入到指定模组之前
@@ -370,7 +369,6 @@ namespace DEModLauncher_GUI.ViewModel {
             }
             _modPacks.Remove(source);
             _modPacks.Insert(_modPacks.IndexOf(target), source);
-            DOOMEternal.ModificationSaved = false;
         }
         /// <summary>
         /// 制作模组文件副本
@@ -399,7 +397,6 @@ namespace DEModLauncher_GUI.ViewModel {
                 ++cpyID;
             }
             _modPacks.Insert(_modPacks.IndexOf(modPack), copiedPack);
-            DOOMEternal.ModificationSaved = false;
         }
         /// <summary>
         /// 更新指定资源文件
@@ -436,7 +433,6 @@ namespace DEModLauncher_GUI.ViewModel {
                     }
                 }
             }
-            DOOMEternal.ModificationSaved = false;
         }
         /// <summary>
         /// 保存配置至文件
@@ -459,8 +455,6 @@ namespace DEModLauncher_GUI.ViewModel {
             using (FileStream fs = new FileStream(fileName, FileMode.Create, FileAccess.Write)) {
                 _serializer.WriteObject(fs, dm);
             }
-            // 重置保存状态
-            DOOMEternal.ModificationSaved = true;
         }
         /// <summary>
         /// 从文件中读取配置
@@ -497,7 +491,6 @@ namespace DEModLauncher_GUI.ViewModel {
             if (_modPacks.Count <= 0) {
                 SetDefaultModPack();
             }
-            DOOMEternal.ModificationSaved = true;
         }
         /// <summary>
         /// 清理未使用的MOD文件

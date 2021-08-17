@@ -45,6 +45,9 @@ namespace DEModLauncher_GUI.View {
 
         public DEModPackSetter() {
             InitializeComponent();
+            if (string.IsNullOrEmpty(ImagePath)) {
+                ImagePath = DOOMEternal.DefaultModPackImage;
+            }
         }
 
         private void ChangeImage_Click(object sender, MouseButtonEventArgs e) {

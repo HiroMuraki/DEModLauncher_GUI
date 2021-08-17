@@ -339,7 +339,6 @@ namespace DEModLauncher_GUI.ViewModel {
                 throw new ArgumentException($"模组包[{resourceName}]已添加，不可重复添加");
             }
             _resources.Add(new DEModResource(resourceName));
-            DOOMEternal.ModificationSaved = false;
         }
         private void AddResourcesHelper(IEnumerable<string> fileList) {
             List<string> errorList = new List<string>();
