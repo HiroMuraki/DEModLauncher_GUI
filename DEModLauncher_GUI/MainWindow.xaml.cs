@@ -24,7 +24,7 @@ namespace DEModLauncher_GUI {
         public MainWindow() {
             _modManager = DEModManager.GetInstance();
             InitializeComponent();
-            HighlightModPackButton();
+            HighlightCurrentModPack();
         }
 
         #region 启动与保存
@@ -64,10 +64,11 @@ namespace DEModLauncher_GUI {
         private void AddModPack_Click(object sender, RoutedEventArgs e) {
             _modManager.AddModPack();
             ModPackDisplayer.ScrollToHorizontalOffset(ModPackDisplayer.ScrollableWidth * 2);
-            HighlightModPackButton();
+            HighlightCurrentModPack();
         }
-        private void DeleteModPack_Click(object sender, RoutedEventArgs e) {
+        private void RemoveModPack_Click(object sender, RoutedEventArgs e) {
             _modManager.RemoveModPack(GetModPackFrom(sender));
+            HighlightCurrentModPack();
         }
         private void EditModPack_Click(object sender, RoutedEventArgs e) {
             GetModPackFrom(sender).Edit();
@@ -342,7 +343,10 @@ namespace DEModLauncher_GUI {
         //}
         #endregion
 
-        private async void HighlightModPackButton() {
+        private async void HighlightCurrentModPack() {
+            if (_modManager.CurrentMod == null) {
+                return;
+            }
             RadioButton mpb = null;
             int tryTimes = 20;
             do {
@@ -355,23 +359,6 @@ namespace DEModLauncher_GUI {
                 tryTimes--;
             } while (mpb == null);
             mpb.IsChecked = true;
-
-            T FindVisualChild<T>(DependencyObject depObj) where T : DependencyObject {
-                if (depObj == null) {
-                    return null;
-                }
-                for (int i = 0; i < VisualTreeHelper.GetChildrenCount(depObj); i++) {
-                    DependencyObject child = VisualTreeHelper.GetChild(depObj, i);
-                    if (child is T) {
-                        return (T)child;
-                    }
-                    T childItem = FindVisualChild<T>(child);
-                    if (childItem != null) {
-                        return childItem;
-                    }
-                }
-                return null;
-            }
         }
         private bool IsFileDrop(IDataObject data) {
             var dataFormats = new List<string>(data.GetFormats());
@@ -386,6 +373,22 @@ namespace DEModLauncher_GUI {
                     return dp as T;
                 }
                 dp = VisualTreeHelper.GetParent(dp);
+            }
+            return null;
+        }
+        private static T FindVisualChild<T>(DependencyObject depObj) where T : DependencyObject {
+            if (depObj == null) {
+                return null;
+            }
+            for (int i = 0; i < VisualTreeHelper.GetChildrenCount(depObj); i++) {
+                DependencyObject child = VisualTreeHelper.GetChild(depObj, i);
+                if (child is T) {
+                    return (T)child;
+                }
+                T childItem = FindVisualChild<T>(child);
+                if (childItem != null) {
+                    return childItem;
+                }
             }
             return null;
         }

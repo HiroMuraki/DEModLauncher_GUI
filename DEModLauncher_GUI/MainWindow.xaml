@@ -237,7 +237,7 @@
                                         <View:ModPackButton.ContextMenu>
                                             <ContextMenu>
                                                 <MenuItem Tag="{Binding}" Header="{StaticResource EDIT_MOD_PACK}" Click="EditModPack_Click"/>
-                                                <MenuItem Tag="{Binding}" Header="{StaticResource REMOVE_MOD_PACK}" Click="DeleteModPack_Click"/>
+                                                <MenuItem Tag="{Binding}" Header="{StaticResource REMOVE_MOD_PACK}" Click="RemoveModPack_Click"/>
                                                 <MenuItem Tag="{Binding}" Header="{StaticResource DUPLICATE_MOD_PACK}" Click="DuplicateModPack_Click"/>
                                                 <MenuItem Tag="{Binding}" Header="{StaticResource CHECK_MOD_PACK_CONFLICT}" Click="CheckConflict_Click"/>
                                                 <MenuItem Tag="{Binding}" Header="{StaticResource GENERATE_MERGED_FILE}" Click="ExportMergedResource_Click"/>

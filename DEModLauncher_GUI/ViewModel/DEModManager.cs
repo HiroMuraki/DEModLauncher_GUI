@@ -151,6 +151,7 @@ namespace DEModLauncher_GUI.ViewModel {
             }
             try {
                 SaveProfileHelper(DOOMEternal.LauncherProfileFile);
+                DOOMEternal.ModificationSaved = true;
             }
             catch (Exception exp) {
                 MessageBox.Show(exp.Message, "保存配置文件出错", MessageBoxButton.OK, MessageBoxImage.Error);
