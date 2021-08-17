@@ -24,6 +24,7 @@ namespace DEModLauncher_GUI {
         public MainWindow() {
             _modManager = DEModManager.GetInstance();
             InitializeComponent();
+            HighlightModPackButton();
         }
 
         #region 启动与保存
@@ -63,6 +64,7 @@ namespace DEModLauncher_GUI {
         private void AddModPack_Click(object sender, RoutedEventArgs e) {
             _modManager.AddModPack();
             ModPackDisplayer.ScrollToHorizontalOffset(ModPackDisplayer.ScrollableWidth * 2);
+            HighlightModPackButton();
         }
         private void DeleteModPack_Click(object sender, RoutedEventArgs e) {
             _modManager.RemoveModPack(GetModPackFrom(sender));
@@ -340,6 +342,37 @@ namespace DEModLauncher_GUI {
         //}
         #endregion
 
+        private async void HighlightModPackButton() {
+            RadioButton mpb = null;
+            int tryTimes = 20;
+            do {
+                if (tryTimes <= 0) {
+                    return;
+                }
+                await Task.Delay(50);
+                ContentPresenter cp = (ContentPresenter)ModPacksList.ItemContainerGenerator.ContainerFromItem(_modManager.CurrentMod);
+                mpb = FindVisualChild<RadioButton>(cp);
+                tryTimes--;
+            } while (mpb == null);
+            mpb.IsChecked = true;
+
+            T FindVisualChild<T>(DependencyObject depObj) where T : DependencyObject {
+                if (depObj == null) {
+                    return null;
+                }
+                for (int i = 0; i < VisualTreeHelper.GetChildrenCount(depObj); i++) {
+                    DependencyObject child = VisualTreeHelper.GetChild(depObj, i);
+                    if (child is T) {
+                        return (T)child;
+                    }
+                    T childItem = FindVisualChild<T>(child);
+                    if (childItem != null) {
+                        return childItem;
+                    }
+                }
+                return null;
+            }
+        }
         private bool IsFileDrop(IDataObject data) {
             var dataFormats = new List<string>(data.GetFormats());
             if (dataFormats.Contains(DataFormats.FileDrop)) {

@@ -231,8 +231,10 @@
                                       DragOver="ModPacksList_DragOver">
                             <ItemsControl.ItemTemplate>
                                 <DataTemplate DataType="{x:Type local:IModPack}">
-                                    <Grid>
-                                        <Grid.ContextMenu>
+                                    <View:ModPackButton ToolTip="{Binding Description}" PackName="{Binding PackName}" ImagePath="{Binding ImagePath}" Tag="{Binding}" Margin="5,0" 
+                                                        GroupName="PackNameSelected" Click="SelectModPack_Click" PreviewMouseLeftButtonDown="EditModPack_Click"
+                                                        PreviewMouseDown="ModPack_PreviewMouseDown" Drop="ModPack_Drop">
+                                        <View:ModPackButton.ContextMenu>
                                             <ContextMenu>
                                                 <MenuItem Tag="{Binding}" Header="{StaticResource EDIT_MOD_PACK}" Click="EditModPack_Click"/>
                                                 <MenuItem Tag="{Binding}" Header="{StaticResource REMOVE_MOD_PACK}" Click="DeleteModPack_Click"/>
@@ -240,11 +242,8 @@
                                                 <MenuItem Tag="{Binding}" Header="{StaticResource CHECK_MOD_PACK_CONFLICT}" Click="CheckConflict_Click"/>
                                                 <MenuItem Tag="{Binding}" Header="{StaticResource GENERATE_MERGED_FILE}" Click="ExportMergedResource_Click"/>
                                             </ContextMenu>
-                                        </Grid.ContextMenu>
-                                        <View:ModPackButton ToolTip="{Binding Description}" PackName="{Binding PackName}" ImagePath="{Binding ImagePath}" Tag="{Binding}" Margin="5,0" 
-                                                            GroupName="PackNameSelected" Click="SelectModPack_Click" PreviewMouseLeftButtonDown="EditModPack_Click"
-                                                            PreviewMouseDown="ModPack_PreviewMouseDown" Drop="ModPack_Drop"/>
-                                    </Grid>
+                                        </View:ModPackButton.ContextMenu>
+                                    </View:ModPackButton>
                                 </DataTemplate>
                             </ItemsControl.ItemTemplate>
                             <ItemsControl.ItemsPanel>
