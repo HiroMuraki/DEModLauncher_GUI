@@ -69,7 +69,7 @@ namespace DEModLauncher_GUI.ViewModel {
         }
         #endregion
 
-        #region T
+        #region IModPack接口实现
         private static string _preOpenModDirectory = null;
         public void Deploy() {
             LaunchCheck();
@@ -130,7 +130,7 @@ namespace DEModLauncher_GUI.ViewModel {
             if (!File.Exists(modPackBackup)) {
                 File.Copy(resourcePath, modPackBackup);
             }
-            if (ExistsResource(resourceName)) {
+            if (ContainsResourceHelper(resourceName)) {
                 throw new ArgumentException($"模组包[{resourceName}]已添加，不可重复添加");
             }
             _resources.Insert(index, new DEModResource(resourceName));
@@ -157,13 +157,16 @@ namespace DEModLauncher_GUI.ViewModel {
             sfd.AddExtension = true;
             if (sfd.ShowDialog() == System.Windows.Forms.DialogResult.OK) {
                 try {
-                    dEModPack.GenerateMergedFile(sfd.FileName);
+                    dEModPack.GenerateMergedResource(sfd.FileName);
                     MessageBox.Show($"导出成功，文件已保存至{sfd.FileName}", "完成", MessageBoxButton.OK, MessageBoxImage.Information);
                 }
                 catch (Exception exp) {
                     MessageBox.Show($"无法生成组合包，原因：{exp.Message}", "生成错误", MessageBoxButton.OK, MessageBoxImage.Error);
                 }
             }
+        }
+        public bool ContainsResource(IModResource resource) {
+            return ContainsResourceHelper(resource.Path);
         }
         public void CheckModConfliction() {
             StringBuilder sb = new StringBuilder();
@@ -225,11 +228,7 @@ namespace DEModLauncher_GUI.ViewModel {
         }
         #endregion
 
-        #region 公共方法
-        /// <summary>
-        /// 添加模组资源
-        /// </summary>
-        /// <param name="resourcePath">模组资源路径</param>
+        #region 其他公共方法
         public void SetImage(string imagePath) {
             if (imagePath == DOOMEternal.DefaultModPackImage) {
                 _imagePath = null;
@@ -254,35 +253,6 @@ namespace DEModLauncher_GUI.ViewModel {
             OnPropertyChanged(nameof(ImagePath));
             DOOMEternal.ModificationSaved = false;
         }
-        /// <summary>
-        /// 获取模组冲突信息
-        /// </summary>
-        /// <returns></returns>
-        public ModPackConflictInformation GetConflictInformation() {
-            Dictionary<string, List<string>> resourceDict = new Dictionary<string, List<string>>();
-            int totalCount = 0;
-            int validCount = 0;
-            foreach (var resource in _resources) {
-                if (resource.Status == ResourceStatus.Disabled) {
-                    continue;
-                }
-                string fullFileName = $@"{DOOMEternal.ModPacksDirectory}\{resource.Path}";
-                foreach (var subFile in GetZippedFiles(fullFileName)) {
-                    if (!resourceDict.ContainsKey(subFile)) {
-                        resourceDict[subFile] = new List<string>();
-                        validCount += 1;
-                    }
-                    totalCount += 1;
-                    resourceDict[subFile].Add(resource.Path);
-                }
-            }
-            int conflictedCount = totalCount - validCount;
-            return new ModPackConflictInformation(totalCount, validCount, conflictedCount, GetConflictedFiles(resourceDict));
-        }
-        /// <summary>
-        /// 获取数据MODEL
-        /// </summary>
-        /// <returns></returns>
         public Model.DEModPack GetDataModel() {
             Model.DEModPack mp = new Model.DEModPack();
             mp.PackName = _packName;
@@ -294,10 +264,6 @@ namespace DEModLauncher_GUI.ViewModel {
             }
             return mp;
         }
-        /// <summary>
-        /// 获取深度复制
-        /// </summary>
-        /// <returns></returns>
         public DEModPack GetDeepCopy() {
             DEModPack copy = new DEModPack();
             // 设置新模组包名
@@ -312,25 +278,20 @@ namespace DEModLauncher_GUI.ViewModel {
             }
             return copy;
         }
-        /// <summary>
-        /// 检查是否已存在某个模组资源
-        /// </summary>
-        /// <param name="resourceName">要检查的模组资源</param>
-        /// <returns></returns>
-        public bool ExistsResource(string resourceName) {
-            foreach (var item in _resources) {
-                if (item.Path == resourceName) {
-                    return true;
-                }
-            }
-            return false;
-        }
         public override string ToString() {
             int resourceCount = _resources.Count;
             return $"{_packName}({resourceCount}个模组)";
         }
         #endregion
 
+        private bool ContainsResourceHelper(string resourcePath) {
+            foreach (var item in _resources) {
+                if (item.Path == resourcePath) {
+                    return true;
+                }
+            }
+            return false;
+        }
         private void AddResourceHelper(string resourcePath) {
             if (DOOMEternal.GameDirectory == null) {
                 throw new ArgumentException("请先选择游戏文件夹");
@@ -340,7 +301,7 @@ namespace DEModLauncher_GUI.ViewModel {
             if (!File.Exists(modPackBackup)) {
                 File.Copy(resourcePath, modPackBackup);
             }
-            if (ExistsResource(resourceName)) {
+            if (ContainsResourceHelper(resourceName)) {
                 throw new ArgumentException($"模组包[{resourceName}]已添加，不可重复添加");
             }
             _resources.Add(new DEModResource(resourceName));
@@ -370,7 +331,7 @@ namespace DEModLauncher_GUI.ViewModel {
                 }
             }
         }
-        private void GenerateMergedFile(string outputFile) {
+        private void GenerateMergedResource(string outputFile) {
             int conflictedItems = GetConflictInformation().ConflictedCount;
             string fileName = Path.GetFileNameWithoutExtension(outputFile);
             string mergeWorkingFolder = $@"{DOOMEternal.ModPacksDirectory}\MERGE_WORKING_FOLDER_{fileName}";
@@ -396,15 +357,35 @@ namespace DEModLauncher_GUI.ViewModel {
                 Directory.Delete(mergeWorkingFolder, true);
             }
         }
-        private static Dictionary<string, List<string>> GetConflictedFiles(Dictionary<string, List<string>> fileDict) {
-            Dictionary<string, List<string>> conflictedFiles = new Dictionary<string, List<string>>();
-            foreach (var file in fileDict.Keys) {
-                if (fileDict[file].Count <= 1) {
+        private ModPackConflictInformation GetConflictInformation() {
+            Dictionary<string, List<string>> resourceDict = new Dictionary<string, List<string>>();
+            int totalCount = 0;
+            int validCount = 0;
+            foreach (var resource in _resources) {
+                if (resource.Status == ResourceStatus.Disabled) {
                     continue;
                 }
-                conflictedFiles[file] = new List<string>(fileDict[file]);
+                string fullFileName = $@"{DOOMEternal.ModPacksDirectory}\{resource.Path}";
+                foreach (var subFile in GetZippedFiles(fullFileName)) {
+                    if (!resourceDict.ContainsKey(subFile)) {
+                        resourceDict[subFile] = new List<string>();
+                        validCount += 1;
+                    }
+                    totalCount += 1;
+                    resourceDict[subFile].Add(resource.Path);
+                }
             }
-            return conflictedFiles;
+            int conflictedCount = totalCount - validCount;
+
+            Dictionary<string, List<string>> conflictedFiles = new Dictionary<string, List<string>>();
+            foreach (var file in resourceDict.Keys) {
+                if (resourceDict[file].Count <= 1) {
+                    continue;
+                }
+                conflictedFiles[file] = new List<string>(resourceDict[file]);
+            }
+
+            return new ModPackConflictInformation(totalCount, validCount, conflictedCount, conflictedFiles);
         }
         private static IEnumerable<string> GetZippedFiles(string fileName) {
             ZipArchive zipFile = ZipFile.OpenRead(fileName);

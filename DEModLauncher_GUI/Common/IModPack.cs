@@ -18,5 +18,6 @@ namespace DEModLauncher_GUI {
         void ResortResource(IModResource source, IModResource target);
         void ExportMergedResource(IModPack modPack);
         void CheckModConfliction();
+        bool ContainsResource(IModResource resourceName);
     }
 }

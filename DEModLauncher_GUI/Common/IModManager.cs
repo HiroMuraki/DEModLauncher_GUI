@@ -10,6 +10,7 @@ namespace DEModLauncher_GUI {
         void LoadMod();
         void LaunchMod();
         void LaunchGame();
+        void Initialize();
         void SaveProfiles();
         void LoadProfiles();
         void LoadProfiles(string file);

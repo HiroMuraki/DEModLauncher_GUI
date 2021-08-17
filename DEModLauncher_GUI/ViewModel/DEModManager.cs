@@ -156,6 +156,9 @@ namespace DEModLauncher_GUI.ViewModel {
                 MessageBox.Show(exp.Message, "保存配置文件出错", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
+        public void Initialize() {
+            SetDefaultModPack();
+        }
         public void LoadProfiles() {
             var result = MessageBox.Show("此操作将会重新读取模组配置文件，并丢弃当前设置，是否继续？", "重新读取", MessageBoxButton.YesNo, MessageBoxImage.Warning);
             if (result != MessageBoxResult.Yes) {
@@ -233,9 +236,9 @@ namespace DEModLauncher_GUI.ViewModel {
             }
         }
         #endregion
-        public void Initialize() {
-            SetDefaultModPack();
-        }
+        #endregion
+
+        #region 其他公共方法
         public void ExportModPacks() {
             System.Windows.Forms.SaveFileDialog sfd = new System.Windows.Forms.SaveFileDialog();
             sfd.InitialDirectory = DOOMEternal.GameDirectory;
@@ -413,10 +416,11 @@ namespace DEModLauncher_GUI.ViewModel {
             }
             // 否则逐一对模组配置中的相关文件进行修改
             DOOMEternal.AddModResourceFile(newResourceFile);
+            DEModResource newResource = new DEModResource(newResourceName);
             foreach (var modPack in _modPacks) {
                 DEModPack dEModPack = (DEModPack)modPack;
                 // 如果模组列表中已有该模组，则将旧模组移除即可
-                if (dEModPack.ExistsResource(newResourceName)) {
+                if (dEModPack.ContainsResource(newResource)) {
                     for (int i = 0; i < dEModPack.Resources.Count; i++) {
                         if (dEModPack.Resources[i].Path == oldResourceName) {
                             dEModPack.RemoveResource((DEModResource)dEModPack.Resources[i]);
