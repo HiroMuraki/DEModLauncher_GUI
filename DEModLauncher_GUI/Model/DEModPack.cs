@@ -1,17 +1,16 @@
-using System.Collections.Generic;
 using System.Runtime.Serialization;
+using Resources = System.Collections.Generic.List<string>;
 
 namespace DEModLauncher_GUI.Model {
-    using Resources = List<string>;
     [DataContract]
     public class DEModPack {
-        [DataMember]
+        [DataMember(Order = 0)]
         public string PackName;
-        [DataMember]
+        [DataMember(Order = 1)]
         public string Description;
-        [DataMember]
+        [DataMember(Order = 2)]
         public string ImagePath;
-        [DataMember]
+        [DataMember(Order = 3)]
         public Resources Resources;
     }
 }

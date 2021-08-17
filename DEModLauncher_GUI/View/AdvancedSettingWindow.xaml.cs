@@ -35,5 +35,9 @@ namespace DEModLauncher_GUI.View {
                 Owner = this
             }.ShowDialog();
         }
+
+        private void ViewLauncherProfile_Click(object sender, RoutedEventArgs e) {
+            DOOMEternal.OpenLauncherProfile();
+        }
     }
 }

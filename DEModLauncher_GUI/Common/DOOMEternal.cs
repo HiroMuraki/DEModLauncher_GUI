@@ -1,5 +1,4 @@
-﻿using System;
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using System.IO;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -11,7 +10,7 @@ namespace DEModLauncher_GUI {
         public static readonly string DefaultModPackImage = @"\DEModLauncher_GUI;component\Resources\Images\header3.jpg";
         public static string GameMainExecutor { get; set; } = "DOOMEternalx64vk.exe";
         public static string ModLoader { get; set; } = "EternalModInjector.bat";
-        public static string ModLoaderProfileFile { get; set; } = "EternalModInjector Settings.txt";
+        public static string ModLoaderProfileFile { get; } = "EternalModInjector Settings.txt";
         public static string GameDirectory { get; set; } = "";
         public static bool ModificationSaved { get; set; } = true;
         public static string ModDirectory {
@@ -58,6 +57,12 @@ namespace DEModLauncher_GUI {
             p.StartInfo.Arguments = $@"/e, {GameDirectory}";
             p.Start();
         }
+        public static void OpenLauncherProfile() {
+            Process p = new Process();
+            p.StartInfo.FileName = "explorer.exe";
+            p.StartInfo.Arguments = $@"/select, {LauncherProfileFile}";
+            p.Start();
+        }
         public static void InitNecessaryDirectory() {
             if (!Directory.Exists(ModDirectory)) {
                 Directory.CreateDirectory(ModDirectory);
@@ -68,22 +73,6 @@ namespace DEModLauncher_GUI {
             if (!Directory.Exists(ModPackImagesDirectory)) {
                 Directory.CreateDirectory(ModPackImagesDirectory);
             }
-        }
-        public static void AddModResourceFile(string filePath) {
-            if (GameDirectory == null) {
-                throw new ArgumentException("请先选择游戏文件夹");
-            }
-            if (!Directory.Exists(ModPacksDirectory)) {
-                Directory.CreateDirectory(ModPacksDirectory);
-            }
-            string resourceName = Path.GetFileName(filePath);
-            string modPackBackup = $@"{ModPacksDirectory}\{resourceName}";
-            if (!File.Exists(modPackBackup)) {
-                File.Copy(filePath, modPackBackup);
-            }
-        }
-        public static void RemoveModResourceFile(string modName) {
-            File.Delete($"{ModPacksDirectory}\\{modName}");
         }
         public static void SetModLoaderProfile(string option, object value) {
             if (!File.Exists(ModLoaderProfileFile)) {

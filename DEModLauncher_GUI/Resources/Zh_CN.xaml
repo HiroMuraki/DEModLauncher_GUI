@@ -30,6 +30,9 @@
     <Sys:String x:Key="UPDATE_MOD_FILE_TITLE">点击模组以进行替换</Sys:String>
     <Sys:String x:Key="ADVANCED_OPTION_UPDATE_MODS">替换模组文件</Sys:String>
     <Sys:String x:Key="ADVANCED_OPTION_UPDATE_MODS_TOOLTIP">全局替换指定模组文件</Sys:String>
+    <!--高级选项 查看启动器配置-->
+    <Sys:String x:Key="ADVANCED_OPTION_VIEW_LAUNCHER_PROFILE">查看启动器配置文件</Sys:String>
+    <Sys:String x:Key="ADVANCED_OPTION_VIEW_LAUNCHER_PROFILE_TOOLTIP">查看启动器配置文件</Sys:String>
 
     <!--仅加载模组-->
     <Sys:String x:Key="LOAD_MOD">加载</Sys:String>
