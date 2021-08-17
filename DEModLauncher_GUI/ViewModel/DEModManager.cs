@@ -19,7 +19,7 @@ namespace DEModLauncher_GUI.ViewModel {
         private bool _isLaunching;
         private DEModPack _currentMod;
         private Resources _usingMods;
-        private readonly ModPacks _dEModPacks;
+        private readonly ModPacks _modPacks;
 
         #region IModManager接口实现
         #region 属性
@@ -43,13 +43,13 @@ namespace DEModLauncher_GUI.ViewModel {
         }
         public ModPacks ModPacks {
             get {
-                return _dEModPacks;
+                return _modPacks;
             }
         }
         public Resources UsingMods {
             get {
                 List<DEModResource> ress = new List<DEModResource>();
-                foreach (var modPack in _dEModPacks) {
+                foreach (var modPack in _modPacks) {
                     foreach (var res in modPack.Resources) {
                         // 如果ress中未出现该模组，则加入
                         bool isDistinct = true;
@@ -202,6 +202,9 @@ namespace DEModLauncher_GUI.ViewModel {
                 return;
             }
             RemoveModPackHelper((DEModPack)modPack);
+            if (_modPacks.Count <= 0) {
+                SetDefaultModPack();
+            }
         }
         public void DuplicateModPack(IModPack modPack) {
             DuplicateModPackHelper((DEModPack)modPack);
@@ -229,6 +232,9 @@ namespace DEModLauncher_GUI.ViewModel {
             }
         }
         #endregion
+        public void Initialize() {
+            SetDefaultModPack();
+        }
         public void ExportModPacks() {
             System.Windows.Forms.SaveFileDialog sfd = new System.Windows.Forms.SaveFileDialog();
             sfd.InitialDirectory = DOOMEternal.GameDirectory;
@@ -280,7 +286,7 @@ namespace DEModLauncher_GUI.ViewModel {
         }
         private DEModManager() {
             _currentMod = null;
-            _dEModPacks = new ModPacks();
+            _modPacks = new ModPacks();
             _usingMods = new Resources();
         }
         public static DEModManager GetInstance() {
@@ -292,6 +298,16 @@ namespace DEModLauncher_GUI.ViewModel {
         #endregion
 
         #region 辅助方法
+        private void SetDefaultModPack() {
+            if (ModPacks.Count > 0) {
+                return;
+            }
+            DEModPack modPack = new DEModPack();
+            modPack.PackName = "默认模组";
+            modPack.Description = "模组描述";
+            modPack.SetImage(DOOMEternal.DefaultModPackImage);
+            AddModPackHelper(modPack);
+        }
         /// <summary>
         /// 启动魔族加载器
         /// </summary>
@@ -316,12 +332,12 @@ namespace DEModLauncher_GUI.ViewModel {
             if (string.IsNullOrEmpty(modPack.PackName)) {
                 throw new ArgumentException("模组名不可为空");
             }
-            foreach (var mp in _dEModPacks) {
+            foreach (var mp in _modPacks) {
                 if (mp.PackName == modPack.PackName) {
                     throw new ArgumentException($"模组配置[{modPack.PackName}]已存在，不可重复添加");
                 }
             }
-            _dEModPacks.Add(modPack);
+            _modPacks.Add(modPack);
             CurrentMod = modPack;
             DOOMEternal.ModificationSaved = false;
         }
@@ -330,10 +346,10 @@ namespace DEModLauncher_GUI.ViewModel {
         /// </summary>
         /// <param name="modPack">要移除的模组配置</param>
         private void RemoveModPackHelper(DEModPack modPack) {
-            _dEModPacks.Remove(modPack);
+            _modPacks.Remove(modPack);
             if (_currentMod == modPack) {
-                if (_dEModPacks.Count > 0) {
-                    _currentMod = (DEModPack)_dEModPacks[0];
+                if (_modPacks.Count > 0) {
+                    _currentMod = (DEModPack)_modPacks[0];
                     OnPropertyChanged(nameof(CurrentMod));
                 }
                 else {
@@ -352,8 +368,8 @@ namespace DEModLauncher_GUI.ViewModel {
             if (ReferenceEquals(source, target)) {
                 return;
             }
-            _dEModPacks.Remove(source);
-            _dEModPacks.Insert(_dEModPacks.IndexOf(target), source);
+            _modPacks.Remove(source);
+            _modPacks.Insert(_modPacks.IndexOf(target), source);
             DOOMEternal.ModificationSaved = false;
         }
         /// <summary>
@@ -363,7 +379,7 @@ namespace DEModLauncher_GUI.ViewModel {
         private void DuplicateModPackHelper(DEModPack modPack) {
             // 获取已经使用过的模组包名
             List<string> usedPackNames = new List<string>();
-            foreach (var dmp in _dEModPacks) {
+            foreach (var dmp in _modPacks) {
                 usedPackNames.Add(dmp.PackName);
             }
             // 获取模组包副本
@@ -382,7 +398,7 @@ namespace DEModLauncher_GUI.ViewModel {
                 copiedPack.PackName = $"{testName} - 副本[{cpyID}]";
                 ++cpyID;
             }
-            _dEModPacks.Insert(_dEModPacks.IndexOf(modPack), copiedPack);
+            _modPacks.Insert(_modPacks.IndexOf(modPack), copiedPack);
             DOOMEternal.ModificationSaved = false;
         }
         /// <summary>
@@ -400,7 +416,7 @@ namespace DEModLauncher_GUI.ViewModel {
             }
             // 否则逐一对模组配置中的相关文件进行修改
             DOOMEternal.AddModResourceFile(newResourceFile);
-            foreach (var modPack in _dEModPacks) {
+            foreach (var modPack in _modPacks) {
                 DEModPack dEModPack = (DEModPack)modPack;
                 // 如果模组列表中已有该模组，则将旧模组移除即可
                 if (dEModPack.ExistsResource(newResourceName)) {
@@ -435,7 +451,7 @@ namespace DEModLauncher_GUI.ViewModel {
             dm.CurrentMod = _currentMod?.PackName;
             // 写入ModPacks信息
             dm.ModPacks = new List<Model.DEModPack>();
-            foreach (var modPack in _dEModPacks) {
+            foreach (var modPack in _modPacks) {
                 DEModPack dEModPack = (DEModPack)modPack;
                 var dp = dEModPack.GetDataModel();
                 dm.ModPacks.Add(dp);
@@ -459,7 +475,7 @@ namespace DEModLauncher_GUI.ViewModel {
             if (dm == null) {
                 throw new InvalidDataException();
             }
-            // 设置游戏目录，这条暂时无效
+            // 设置游戏目录，这条暂时无效，在程序初始化时会强制修改为当前目录
             DOOMEternal.GameDirectory = dm.GameDirectory;
             // 如果指定了ModLoader与游戏主程序，修改
             if (!string.IsNullOrEmpty(dm.ModLoader)) {
@@ -470,13 +486,16 @@ namespace DEModLauncher_GUI.ViewModel {
             }
             // 读取模组包，同时设置CurrentMod
             CurrentMod = null;
-            _dEModPacks.Clear();
+            _modPacks.Clear();
             foreach (var modPack in dm.ModPacks) {
                 DEModPack dp = new DEModPack(modPack);
-                _dEModPacks.Add(dp);
+                _modPacks.Add(dp);
                 if (CurrentMod == null && modPack.PackName == dm.CurrentMod) {
                     CurrentMod = dp;
                 }
+            }
+            if (_modPacks.Count <= 0) {
+                SetDefaultModPack();
             }
             DOOMEternal.ModificationSaved = true;
         }
@@ -487,7 +506,7 @@ namespace DEModLauncher_GUI.ViewModel {
         private List<string> ClearUnusedModFileHelper() {
             // 获取当前正在使用的模组列表
             List<string> usedResources = new List<string>();
-            foreach (var modPack in _dEModPacks) {
+            foreach (var modPack in _modPacks) {
                 foreach (var resource in modPack.Resources) {
                     string filePath = $@"{DOOMEternal.ModPacksDirectory}\{resource.Path}";
                     if (!usedResources.Contains(filePath)) {
@@ -509,7 +528,7 @@ namespace DEModLauncher_GUI.ViewModel {
         private List<string> ClearUnusedImageFilesHelper() {
             // 获取当前正在使用的图片文件名
             List<string> usedImageFiles = new List<string>();
-            foreach (var modPack in _dEModPacks) {
+            foreach (var modPack in _modPacks) {
                 // 跳过默认图片
                 if (modPack.ImagePath == DOOMEternal.DefaultModPackImage) {
                     continue;

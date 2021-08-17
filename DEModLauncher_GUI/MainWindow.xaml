@@ -63,7 +63,7 @@
                             <MenuItem Tag="{Binding CurrentMod}" Header="{StaticResource ADD_MOD_RESOURCE_TOOLTIP}" Click="AddResource_Click"/>
                             <MenuItem Tag="{Binding CurrentMod}" Header="{StaticResource EDIT_MOD_PACK}" Click="EditModPack_Click"/>
                             <MenuItem Tag="{Binding CurrentMod}" Header="{StaticResource CHECK_MOD_PACK_CONFLICT}" Click="CheckConflict_Click"/>
-                            <MenuItem Tag="{Binding CurrentMod}" Header="{StaticResource GENERATE_MERGED_FILE}" Click="ExportMergedMod_Click"/>
+                            <MenuItem Tag="{Binding CurrentMod}" Header="{StaticResource GENERATE_MERGED_FILE}" Click="ExportMergedResource_Click"/>
                         </ContextMenu>
                     </Grid.ContextMenu>
                     <Grid Grid.Row="0" Grid.RowSpan="2" MouseLeftButtonDown="Window_Move">
@@ -130,7 +130,7 @@
                                     <MenuItem Tag="{Binding CurrentMod}" Header="{StaticResource ADD_MOD_RESOURCE_TOOLTIP}" Click="AddResource_Click"/>
                                     <MenuItem Tag="{Binding CurrentMod}" Header="{StaticResource EDIT_MOD_PACK}" Click="EditModPack_Click"/>
                                     <MenuItem Tag="{Binding CurrentMod}" Header="{StaticResource CHECK_MOD_PACK_CONFLICT}" Click="CheckConflict_Click"/>
-                                    <MenuItem Tag="{Binding CurrentMod}" Header="{StaticResource GENERATE_MERGED_FILE}" Click="ExportMergedMod_Click"/>
+                                    <MenuItem Tag="{Binding CurrentMod}" Header="{StaticResource GENERATE_MERGED_FILE}" Click="ExportMergedResource_Click"/>
                                 </ContextMenu>
                             </ScrollViewer.ContextMenu>
                             <ItemsControl x:Name="ResourceList" DragOver="ResourceList_DragOver" ItemsSource="{Binding CurrentMod.Resources}" Margin="8">
@@ -238,7 +238,7 @@
                                                 <MenuItem Tag="{Binding}" Header="{StaticResource REMOVE_MOD_PACK}" Click="DeleteModPack_Click"/>
                                                 <MenuItem Tag="{Binding}" Header="{StaticResource DUPLICATE_MOD_PACK}" Click="DuplicateModPack_Click"/>
                                                 <MenuItem Tag="{Binding}" Header="{StaticResource CHECK_MOD_PACK_CONFLICT}" Click="CheckConflict_Click"/>
-                                                <MenuItem Tag="{Binding}" Header="{StaticResource GENERATE_MERGED_FILE}" Click="ExportMergedMod_Click"/>
+                                                <MenuItem Tag="{Binding}" Header="{StaticResource GENERATE_MERGED_FILE}" Click="ExportMergedResource_Click"/>
                                             </ContextMenu>
                                         </Grid.ContextMenu>
                                         <View:ModPackButton ToolTip="{Binding Description}" PackName="{Binding PackName}" ImagePath="{Binding ImagePath}" Tag="{Binding}" Margin="5,0" 

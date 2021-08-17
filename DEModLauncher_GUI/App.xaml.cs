@@ -9,9 +9,12 @@ namespace DEModLauncher_GUI {
     /// </summary>
     public partial class App : Application {
         private void Application_Startup(object sender, StartupEventArgs e) {
-            // 若已有配置文件，则读取
+            // 若已有配置文件，则读取，否则进行初始化
             if (File.Exists(DOOMEternal.LauncherProfileFile)) {
                 DEModManager.GetInstance().LoadProfiles(DOOMEternal.LauncherProfileFile);
+            }
+            else {
+                DEModManager.GetInstance().Initialize();
             }
             // 强制将游戏文件夹路径设置为当前文件夹
             DOOMEternal.GameDirectory = Environment.CurrentDirectory;

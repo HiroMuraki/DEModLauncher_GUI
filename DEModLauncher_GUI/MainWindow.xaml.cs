@@ -78,24 +78,24 @@ namespace DEModLauncher_GUI {
         private void CheckConflict_Click(object sender, RoutedEventArgs e) {
             GetModPackFrom(sender).CheckModConfliction();
         }
-        public void ExportMergedMod_Click(object sender, RoutedEventArgs e) {
-            _modManager.CurrentMod.ExportMergedResource(GetModPackFrom(sender));
+        public void ExportMergedResource_Click(object sender, RoutedEventArgs e) {
+            _modManager.CurrentMod?.ExportMergedResource(GetModPackFrom(sender));
         }
         #endregion
 
         #region 资源操作
         private void AddResource_Click(object sender, RoutedEventArgs e) {
-            _modManager.CurrentMod.AddResource();
+            _modManager.CurrentMod?.AddResource();
             ResourcesDisplayer.ScrollToVerticalOffset(ResourcesDisplayer.ScrollableHeight * 2);
         }
         private void AddModPackReference_Click(object sender, RoutedEventArgs e) {
-            _modManager.CurrentMod.AddResourcesReference();
+            _modManager.CurrentMod?.AddResourcesReference();
         }
         private void DeleteResource_Click(object sender, RoutedEventArgs e) {
-            _modManager.CurrentMod.RemoveResource(GetResourceFrom(sender));
+            _modManager.CurrentMod?.RemoveResource(GetResourceFrom(sender));
         }
         private void CurrentModDisplayer_FileDrop(object sender, DragEventArgs e) {
-            _modManager.CurrentMod.AddResource(e.Data);
+            _modManager.CurrentMod?.AddResource(e.Data);
             ResourcesDisplayer.ScrollToVerticalOffset(ResourcesDisplayer.ScrollableHeight * 2);
             FileDragArea.IsHitTestVisible = false;
         }
@@ -256,7 +256,7 @@ namespace DEModLauncher_GUI {
             }
 
             // 否则将源移除，重新插入到target前
-            _modManager.CurrentMod.ResortResource(source, target);
+            _modManager.CurrentMod?.ResortResource(source, target);
         }
         private void AddResourceFromFileDrop(int index, IDataObject data) {
             string[] fileList = data.GetData(DataFormats.FileDrop) as string[];
@@ -266,7 +266,7 @@ namespace DEModLauncher_GUI {
             List<string> errorList = new List<string>();
             foreach (var item in fileList) {
                 try {
-                    _modManager.CurrentMod.InsertResource(index, item);
+                    _modManager.CurrentMod?.InsertResource(index, item);
                 }
                 catch (Exception e) {
                     errorList.Add($"{item}\n");
