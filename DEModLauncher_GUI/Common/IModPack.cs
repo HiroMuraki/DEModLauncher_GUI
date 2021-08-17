@@ -1,4 +1,5 @@
-﻿using Resources = System.Collections.ObjectModel.ObservableCollection<DEModLauncher_GUI.IModResource>;
+﻿using System.Windows;
+using Resources = System.Collections.ObjectModel.ObservableCollection<DEModLauncher_GUI.IModResource>;
 
 namespace DEModLauncher_GUI {
     public interface IModPack {
@@ -6,5 +7,16 @@ namespace DEModLauncher_GUI {
         public string Description { get; set; }
         public string ImagePath { get; }
         public Resources Resources { get; }
+
+        void Deploy();
+        void Edit();
+        void AddResource();
+        void AddResource(IDataObject data);
+        void AddResourcesReference();
+        void InsertResource(int index, string resourcePath);
+        void RemoveResource(IModResource resource);
+        void ResortResource(IModResource source, IModResource target);
+        void ExportMergedResource(IModPack modPack);
+        void CheckModConfliction();
     }
 }

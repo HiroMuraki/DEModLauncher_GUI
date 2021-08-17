@@ -28,8 +28,7 @@ namespace DEModLauncher_GUI.View {
         public DEModPackSelectWindow(IEnumerable<IModPack> modPacks) {
             _modPackSelectors = new ObservableCollection<IModPackSelector>();
             foreach (var modPack in modPacks) {
-                DEModPackSelector selector = new DEModPackSelector((DEModPack)modPack);
-                _modPackSelectors.Add(selector);
+                _modPackSelectors.Add(new DEModPackSelector((DEModPack)modPack));
             }
             InitializeComponent();
         }

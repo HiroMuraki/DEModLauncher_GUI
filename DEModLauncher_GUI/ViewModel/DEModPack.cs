@@ -2,6 +2,9 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.IO.Compression;
+using System.Linq;
+using System.Text;
+using System.Windows;
 using Resources = System.Collections.ObjectModel.ObservableCollection<DEModLauncher_GUI.IModResource>;
 
 namespace DEModLauncher_GUI.ViewModel {
@@ -66,20 +69,59 @@ namespace DEModLauncher_GUI.ViewModel {
         }
         #endregion
 
-        #region 公共方法
-        /// <summary>
-        /// 部署模组配置中的文件
-        /// </summary>
+        #region T
+        private static string _preOpenModDirectory = null;
         public void Deploy() {
             LaunchCheck();
             ClearResources();
             DeployResources();
         }
-        /// <summary>
-        /// 添加模组资源
-        /// </summary>
-        /// <param name="resourcePath">模组资源路径</param>
-        public void AddResource(string resourcePath) {
+        public void AddResource() {
+            System.Windows.Forms.OpenFileDialog ofd = new System.Windows.Forms.OpenFileDialog();
+            ofd.Title = "选择模组文件";
+            ofd.Filter = "zip压缩包|*.zip";
+            ofd.InitialDirectory = _preOpenModDirectory ?? DOOMEternal.ModPacksDirectory;
+            ofd.Multiselect = true;
+            if (ofd.ShowDialog() == System.Windows.Forms.DialogResult.OK) {
+                _preOpenModDirectory = Path.GetDirectoryName(ofd.FileName);
+                try {
+                    AddResourcesHelper(ofd.FileNames);
+                    DOOMEternal.ModificationSaved = false;
+                }
+                catch (Exception exp) {
+                    MessageBox.Show(exp.Message, "错误", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
+            }
+        }
+        public void AddResource(IDataObject data) {
+            try {
+                string[] fileList = data.GetData(DataFormats.FileDrop) as string[];
+                AddResourcesHelper(fileList);
+                DOOMEternal.ModificationSaved = false;
+            }
+            catch (Exception exp) {
+                MessageBox.Show(exp.Message, "错误", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+        public void AddResourcesReference() {
+            try {
+                var existedModPacks = DEModManager.GetInstance().ModPacks;
+                var allowedModPack = from i in existedModPacks where i != this select i;
+                View.DEModPackSelectWindow selector = new View.DEModPackSelectWindow(allowedModPack) {
+                    Owner = Application.Current.MainWindow
+                };
+                if (selector.ShowDialog() == true) {
+                    foreach (var selectedMod in selector.SelectedModPacks) {
+                        AddResourcesReferenceHelper((DEModPack)selectedMod);
+                    }
+                }
+                DOOMEternal.ModificationSaved = false;
+            }
+            catch (Exception exp) {
+                MessageBox.Show($"添加时模组文件时发生错误，原因：{exp.Message}", "错误", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+        public void InsertResource(int index, string resourcePath) {
             if (DOOMEternal.GameDirectory == null) {
                 throw new ArgumentException("请先选择游戏文件夹");
             }
@@ -91,38 +133,14 @@ namespace DEModLauncher_GUI.ViewModel {
             if (ExistsResource(resourceName)) {
                 throw new ArgumentException($"模组包[{resourceName}]已添加，不可重复添加");
             }
-            _resources.Add(new DEModResource(resourceName));
+            _resources.Insert(index, new DEModResource(resourceName));
             DOOMEternal.ModificationSaved = false;
         }
-        /// <summary>
-        /// 添加特定模组配置的内容
-        /// </summary>
-        /// <param name="modPack">要添加的模组配置</param>
-        public void AddResourcesReference(DEModPack modPack) {
-            foreach (var item in modPack.Resources) {
-                try {
-                    AddResource(item.Path);
-                }
-                catch {
-                    continue;
-                }
-            }
-            DOOMEternal.ModificationSaved = false;
-        }
-        /// <summary>
-        /// 移除模组资源
-        /// </summary>
-        /// <param name="resource">要移除的模组资源</param>
-        public void RemoveResource(DEModResource resource) {
+        public void RemoveResource(IModResource resource) {
             _resources.Remove(resource);
             DOOMEternal.ModificationSaved = false;
         }
-        /// <summary>
-        /// 将指定模组插入到指定模组之前
-        /// </summary>
-        /// <param name="source">要插入的模组资源</param>
-        /// <param name="target">目标模组资源</param>
-        public void InsertResource(DEModResource source, DEModResource target) {
+        public void ResortResource(IModResource source, IModResource target) {
             if (ReferenceEquals(source, target)) {
                 return;
             }
@@ -130,10 +148,83 @@ namespace DEModLauncher_GUI.ViewModel {
             _resources.Insert(_resources.IndexOf(target), source);
             DOOMEternal.ModificationSaved = false;
         }
+        public void ExportMergedResource(IModPack modPack) {
+            DEModPack dEModPack = (DEModPack)modPack;
+            System.Windows.Forms.SaveFileDialog sfd = new System.Windows.Forms.SaveFileDialog();
+            sfd.FileName = dEModPack.PackName;
+            sfd.InitialDirectory = Environment.CurrentDirectory;
+            sfd.Filter = "zip压缩包|*.zip";
+            sfd.AddExtension = true;
+            if (sfd.ShowDialog() == System.Windows.Forms.DialogResult.OK) {
+                try {
+                    dEModPack.GenerateMergedFile(sfd.FileName);
+                    MessageBox.Show($"导出成功，文件已保存至{sfd.FileName}", "完成", MessageBoxButton.OK, MessageBoxImage.Information);
+                }
+                catch (Exception exp) {
+                    MessageBox.Show($"无法生成组合包，原因：{exp.Message}", "生成错误", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
+            }
+        }
+        public void CheckModConfliction() {
+            StringBuilder sb = new StringBuilder();
+            try {
+                var checkResult = GetConflictInformation();
+                string title = "";
+                sb.Append($"总文件数: {checkResult.TotalCount}, 无冲突文件数: {checkResult.ValidCount}, 冲突文件数: {checkResult.ConflictedCount}\n");
+                if (checkResult.ConflictedCount <= 0) {
+                    title = "检查结果 - 无冲突";
+                }
+                else {
+                    title = "检查结果 - 以下文件存在冲突";
+                    int conflictID = 1;
+                    foreach (var conflictedFile in checkResult.ConflictedFiles.Keys) {
+                        sb.Append($"[{conflictID}]{conflictedFile}\n");
+                        foreach (var relatedFile in checkResult.ConflictedFiles[conflictedFile]) {
+                            sb.Append($"   > {relatedFile}\n");
+                        }
+                        sb.Append('\n');
+                        conflictID += 1;
+                    }
+                }
+                View.InformationWindow.Show(sb.ToString(), title, Application.Current.MainWindow);
+            }
+            catch (Exception exp) {
+                MessageBox.Show($"冲突检查出错，原因：{exp.Message}", "错误", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+        public void Edit() {
+            View.DEModPackSetter setter = new View.DEModPackSetter() { Owner = Application.Current.MainWindow };
+            setter.PackName = _packName;
+            setter.Description = _description;
+            setter.ImagePath = _imagePath;
+            if (setter.ShowDialog() == true) {
+                try {
+                    if (_packName != setter.PackName) {
+                        foreach (var modPack in DEModManager.GetInstance().ModPacks) {
+                            if (modPack.PackName == setter.PackName) {
+                                throw new ArgumentException($"模组配置名[{setter.PackName}]已存在");
+                            }
+                        }
+                    }
+                    PackName = setter.PackName;
+                    Description = setter.Description;
+                    if (_imagePath != setter.ImagePath) {
+                        SetImage(setter.ImagePath);
+                    }
+                    DOOMEternal.ModificationSaved = false;
+                }
+                catch (Exception exp) {
+                    MessageBox.Show(exp.Message, "修改模组配置错误", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
+            }
+        }
+        #endregion
+
+        #region 公共方法
         /// <summary>
-        /// 设置模组配置图像
+        /// 添加模组资源
         /// </summary>
-        /// <param name="imagePath">图像路径</param>
+        /// <param name="resourcePath">模组资源路径</param>
         public void SetImage(string imagePath) {
             if (imagePath == DOOMEternal.DefaultModPackImage) {
                 _imagePath = null;
@@ -157,36 +248,6 @@ namespace DEModLauncher_GUI.ViewModel {
             _imagePath = imageName;
             OnPropertyChanged(nameof(ImagePath));
             DOOMEternal.ModificationSaved = false;
-        }
-        /// <summary>
-        /// 创建合并包
-        /// </summary>
-        /// <param name="outputFile">输出路径</param>
-        public void GenerateMergedFile(string outputFile) {
-            int conflictedItems = GetConflictInformation().ConflictedCount;
-            string fileName = Path.GetFileNameWithoutExtension(outputFile);
-            string mergeWorkingFolder = $@"{DOOMEternal.ModPacksDirectory}\MERGE_WORKING_FOLDER_{fileName}";
-            if (conflictedItems > 0) {
-                throw new NotSupportedException("该模组配置存在冲突，请解决冲突后再导出");
-            }
-            try {
-                if (Directory.Exists(mergeWorkingFolder)) {
-                    Directory.Delete(mergeWorkingFolder, true);
-                }
-                Directory.CreateDirectory(mergeWorkingFolder);
-                foreach (var resource in _resources) {
-                    using (ZipArchive zipFile = ZipFile.OpenRead($@"{DOOMEternal.ModPacksDirectory}\{resource.Path}")) {
-                        zipFile.ExtractToDirectory(mergeWorkingFolder);
-                    }
-                }
-                ZipFile.CreateFromDirectory(mergeWorkingFolder, outputFile, CompressionLevel.Fastest, false);
-            }
-            catch (Exception) {
-                throw;
-            }
-            finally {
-                Directory.Delete(mergeWorkingFolder, true);
-            }
         }
         /// <summary>
         /// 获取模组冲突信息
@@ -265,6 +326,72 @@ namespace DEModLauncher_GUI.ViewModel {
         }
         #endregion
 
+        private void AddResourceHelper(string resourcePath) {
+            if (DOOMEternal.GameDirectory == null) {
+                throw new ArgumentException("请先选择游戏文件夹");
+            }
+            string resourceName = Path.GetFileName(resourcePath);
+            string modPackBackup = $@"{DOOMEternal.ModPacksDirectory}\{resourceName}";
+            if (!File.Exists(modPackBackup)) {
+                File.Copy(resourcePath, modPackBackup);
+            }
+            if (ExistsResource(resourceName)) {
+                throw new ArgumentException($"模组包[{resourceName}]已添加，不可重复添加");
+            }
+            _resources.Add(new DEModResource(resourceName));
+            DOOMEternal.ModificationSaved = false;
+        }
+        private void AddResourcesHelper(IEnumerable<string> fileList) {
+            List<string> errorList = new List<string>();
+            foreach (var fileName in fileList) {
+                try {
+                    AddResourceHelper(fileName);
+                }
+                catch (Exception exp) {
+                    errorList.Add($"{fileName}\n");
+                    errorList.Add($"    {exp.Message}\n\n");
+                }
+            }
+            if (errorList.Count > 0) {
+                View.InformationWindow.Show($"无法添加以下模组文件：\n{string.Join("", errorList)}", "错误", Application.Current.MainWindow);
+            }
+        }
+        public void AddResourcesReferenceHelper(IModPack modPack) {
+            foreach (var item in modPack.Resources) {
+                try {
+                    AddResourceHelper(item.Path);
+                }
+                catch {
+                    continue;
+                }
+            }
+        }
+        private void GenerateMergedFile(string outputFile) {
+            int conflictedItems = GetConflictInformation().ConflictedCount;
+            string fileName = Path.GetFileNameWithoutExtension(outputFile);
+            string mergeWorkingFolder = $@"{DOOMEternal.ModPacksDirectory}\MERGE_WORKING_FOLDER_{fileName}";
+            if (conflictedItems > 0) {
+                throw new NotSupportedException("该模组配置存在冲突，请解决冲突后再导出");
+            }
+            try {
+                if (Directory.Exists(mergeWorkingFolder)) {
+                    Directory.Delete(mergeWorkingFolder, true);
+                }
+                Directory.CreateDirectory(mergeWorkingFolder);
+                foreach (var resource in _resources) {
+                    using (ZipArchive zipFile = ZipFile.OpenRead($@"{DOOMEternal.ModPacksDirectory}\{resource.Path}")) {
+                        zipFile.ExtractToDirectory(mergeWorkingFolder);
+                    }
+                }
+                ZipFile.CreateFromDirectory(mergeWorkingFolder, outputFile, CompressionLevel.Fastest, false);
+            }
+            catch (Exception) {
+                throw;
+            }
+            finally {
+                Directory.Delete(mergeWorkingFolder, true);
+            }
+        }
         private static Dictionary<string, List<string>> GetConflictedFiles(Dictionary<string, List<string>> fileDict) {
             Dictionary<string, List<string>> conflictedFiles = new Dictionary<string, List<string>>();
             foreach (var file in fileDict.Keys) {

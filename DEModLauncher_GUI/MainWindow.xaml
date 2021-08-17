@@ -227,7 +227,7 @@
                         </ContextMenu>
                     </ScrollViewer.ContextMenu>
                     <Grid Margin="10,0" VerticalAlignment="Center">
-                        <ItemsControl x:Name="ModPacksList" ItemsSource="{Binding DEModPacks}" AllowDrop="True"
+                        <ItemsControl x:Name="ModPacksList" ItemsSource="{Binding ModPacks}" AllowDrop="True"
                                       DragOver="ModPacksList_DragOver">
                             <ItemsControl.ItemTemplate>
                                 <DataTemplate DataType="{x:Type local:IModPack}">

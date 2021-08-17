@@ -1,5 +1,6 @@
 ﻿using DEModLauncher_GUI.ViewModel;
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -54,40 +55,48 @@ namespace DEModLauncher_GUI {
 
         #region 模组配置操作
         private void SelectModPack_Click(object sender, RoutedEventArgs e) {
-            _modManager.SetCurrentMod(GetDEModPackFrom(sender)); ;
+            _modManager.SetCurrentMod(GetModPackFrom(sender)); ;
         }
         private void DuplicateModPack_Click(object sender, RoutedEventArgs e) {
-            _modManager.DuplicateModPack(GetDEModPackFrom(sender));
+            _modManager.DuplicateModPack(GetModPackFrom(sender));
         }
         private void AddModPack_Click(object sender, RoutedEventArgs e) {
             _modManager.AddModPack();
             ModPackDisplayer.ScrollToHorizontalOffset(ModPackDisplayer.ScrollableWidth * 2);
         }
         private void DeleteModPack_Click(object sender, RoutedEventArgs e) {
-            _modManager.RemoveModPack(GetDEModPackFrom(sender));
+            _modManager.RemoveModPack(GetModPackFrom(sender));
         }
         private void EditModPack_Click(object sender, RoutedEventArgs e) {
-            _modManager.EditModPack(GetDEModPackFrom(sender));
+            GetModPackFrom(sender).Edit();
         }
         private void EditModPack_Click(object sender, MouseButtonEventArgs e) {
             if (e.ClickCount >= 2) {
-                _modManager.EditModPack(GetDEModPackFrom(sender));
+                GetModPackFrom(sender).Edit();
             }
         }
         private void CheckConflict_Click(object sender, RoutedEventArgs e) {
-            _modManager.CheckModConfliction(GetDEModPackFrom(sender));
+            GetModPackFrom(sender).CheckModConfliction();
         }
         public void ExportMergedMod_Click(object sender, RoutedEventArgs e) {
-            _modManager.ExportMergedMod(GetDEModPackFrom(sender));
+            _modManager.CurrentMod.ExportMergedResource(GetModPackFrom(sender));
         }
         #endregion
 
         #region 资源操作
         private void AddResource_Click(object sender, RoutedEventArgs e) {
-            _modManager.AddResource();
+            _modManager.CurrentMod.AddResource();
+            ResourcesDisplayer.ScrollToVerticalOffset(ResourcesDisplayer.ScrollableHeight * 2);
+        }
+        private void AddModPackReference_Click(object sender, RoutedEventArgs e) {
+            _modManager.CurrentMod.AddResourcesReference();
+        }
+        private void DeleteResource_Click(object sender, RoutedEventArgs e) {
+            _modManager.CurrentMod.RemoveResource(GetResourceFrom(sender));
         }
         private void CurrentModDisplayer_FileDrop(object sender, DragEventArgs e) {
-            _modManager.AddResource(e.Data);
+            _modManager.CurrentMod.AddResource(e.Data);
+            ResourcesDisplayer.ScrollToVerticalOffset(ResourcesDisplayer.ScrollableHeight * 2);
             FileDragArea.IsHitTestVisible = false;
         }
         private void CurrentModDisplayer_DragEnter(object sender, DragEventArgs e) {
@@ -95,12 +104,6 @@ namespace DEModLauncher_GUI {
         }
         private void CurrentModDisplayer_DragLeave(object sender, DragEventArgs e) {
             FileDragArea.IsHitTestVisible = false;
-        }
-        private void AddModPackReference_Click(object sender, RoutedEventArgs e) {
-            _modManager.AddResourcesReference();
-        }
-        private void DeleteResource_Click(object sender, RoutedEventArgs e) {
-            _modManager.RemoveResource(GetResourceFrom(sender));
         }
         private void OpenResourceFile_Click(object sender, RoutedEventArgs e) {
             _modManager.OpenResourceFile(GetResourceFrom(sender));
@@ -230,7 +233,15 @@ namespace DEModLauncher_GUI {
             }
         }
         private void ModResource_Drop(object sender, DragEventArgs e) {
+            // 如果拖入的是文件列表
+            if (IsFileDrop(e.Data)) {
+                IModResource trg = (sender as FrameworkElement).Tag as IModResource;
+                AddResourceFromFileDrop(_modManager.CurrentMod.Resources.IndexOf(trg), e.Data);
+                return;
+            }
+            // 否则视为资源排序
             IModResource source = e.Data.GetData(typeof(DEModResource)) as IModResource;
+            // 如果为空，尝试作为文件列表处理
             if (source == null) {
                 return;
             }
@@ -245,7 +256,26 @@ namespace DEModLauncher_GUI {
             }
 
             // 否则将源移除，重新插入到target前
-            _modManager.ResortResource(source, target);
+            _modManager.CurrentMod.ResortResource(source, target);
+        }
+        private void AddResourceFromFileDrop(int index, IDataObject data) {
+            string[] fileList = data.GetData(DataFormats.FileDrop) as string[];
+            if (fileList == null) {
+                return;
+            }
+            List<string> errorList = new List<string>();
+            foreach (var item in fileList) {
+                try {
+                    _modManager.CurrentMod.InsertResource(index, item);
+                }
+                catch (Exception e) {
+                    errorList.Add($"{item}\n");
+                    errorList.Add($"    原因：{e.Message}\n\n");
+                }
+            }
+            if (errorList.Count > 0) {
+                View.InformationWindow.Show(string.Join("", errorList), "", Application.Current.MainWindow);
+            }
         }
         //// 方案2
         //private async void ResourceList_PreviewMouseDown(object sender, MouseButtonEventArgs e) {
@@ -310,6 +340,13 @@ namespace DEModLauncher_GUI {
         //}
         #endregion
 
+        private bool IsFileDrop(IDataObject data) {
+            var dataFormats = new List<string>(data.GetFormats());
+            if (dataFormats.Contains(DataFormats.FileDrop)) {
+                return true;
+            }
+            return false;
+        }
         private static T FindVisualParent<T>(DependencyObject dp) where T : class {
             while (dp != null) {
                 if (dp is T) {
@@ -322,7 +359,7 @@ namespace DEModLauncher_GUI {
         private static IModResource GetResourceFrom(object sender) {
             return (sender as FrameworkElement).Tag as IModResource;
         }
-        private static IModPack GetDEModPackFrom(object sender) {
+        private static IModPack GetModPackFrom(object sender) {
             return (sender as FrameworkElement).Tag as IModPack;
         }
     }
