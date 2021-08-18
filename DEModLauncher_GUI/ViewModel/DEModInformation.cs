@@ -71,7 +71,6 @@ namespace DEModLauncher_GUI.ViewModel {
             string output = $"名称：{_name}\n";
             output += $"作者：{_author}\n";
             output += $"版本：{_version}\n";
-            output += $"游戏版本：{_requiredVersion}\n";
             output += $"描述：{ImproveReadability(_description)}";
             return output;
         }

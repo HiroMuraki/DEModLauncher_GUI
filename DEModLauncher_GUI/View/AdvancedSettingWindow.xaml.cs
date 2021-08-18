@@ -39,5 +39,9 @@ namespace DEModLauncher_GUI.View {
         private void ViewLauncherProfile_Click(object sender, RoutedEventArgs e) {
             DOOMEternal.OpenLauncherProfile();
         }
+
+        private void ResetModLoader_Click(object sender, RoutedEventArgs e) {
+            DEModManager.GetInstance().ResetModLoader();
+        }
     }
 }

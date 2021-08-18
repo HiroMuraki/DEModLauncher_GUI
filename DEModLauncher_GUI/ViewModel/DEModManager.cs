@@ -316,6 +316,33 @@ namespace DEModLauncher_GUI.ViewModel {
         #endregion
 
         #region 其他公共方法
+        public void ResetModLoader() {
+            var result = MessageBox.Show("重置模组加载器将会移除由其产生的文件备份与配置文件\n" +
+                                         "请在重置前或重置后验证游戏文件完整性\n" +
+                                         "是否继续",
+                                         "警告",
+                                         MessageBoxButton.OKCancel,
+                                         MessageBoxImage.Warning);
+            if (result != MessageBoxResult.OK) {
+                return;
+            }
+            List<string> removedFiles = new List<string>();
+            removedFiles.Add("重置完成，以下文件被移除");
+            // 移除哈希信息
+            File.Delete($"{DOOMEternal.GameDirectory}\\base\\idRehash.map");
+            removedFiles.Add($"{DOOMEternal.GameDirectory}\\base\\idRehash.map");
+            // 移除模组加载器配置文件
+            File.Delete($"{DOOMEternal.GameDirectory}\\{DOOMEternal.ModLoaderProfileFile}");
+            removedFiles.Add($"{DOOMEternal.GameDirectory}\\{DOOMEternal.ModLoaderProfileFile}");
+            // 移除备份文件
+            foreach (var file in TravelFiles(DOOMEternal.GameDirectory)) {
+                if (Path.GetExtension(file) == ".backup") {
+                    File.Delete(file);
+                    removedFiles.Add(file);
+                }
+            }
+            View.InformationWindow.Show(string.Join('\n', removedFiles), "重置完成", Application.Current.MainWindow);
+        }
         public void ExportModPacks() {
             System.Windows.Forms.SaveFileDialog sfd = new System.Windows.Forms.SaveFileDialog();
             sfd.InitialDirectory = DOOMEternal.GameDirectory;
@@ -379,6 +406,16 @@ namespace DEModLauncher_GUI.ViewModel {
         #endregion
 
         #region 辅助方法
+        private IEnumerable<string> TravelFiles(string directory) {
+            foreach (var file in Directory.GetFiles(directory)) {
+                yield return file;
+            }
+            foreach (var subDirectory in Directory.GetDirectories(directory)) {
+                foreach (var file in TravelFiles(subDirectory)) {
+                    yield return file;
+                }
+            }
+        }
         private void AddModResourceFile(string filePath) {
             if (DOOMEternal.GameDirectory == null) {
                 throw new ArgumentException("请先选择游戏文件夹");

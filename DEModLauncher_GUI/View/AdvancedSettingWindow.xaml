@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:DEModLauncher_GUI"
         mc:Ignorable="d" ResizeMode="NoResize"
         WindowStartupLocation="CenterOwner"
-        Title="{StaticResource ADVANCED_OPTION}" Height="400" Width="400">
+        Title="{StaticResource ADVANCED_OPTION}" Height="450" Width="400">
     <Grid Background="{StaticResource MainColor}">
         <Grid Margin="10" VerticalAlignment="Center">
             <Grid.RowDefinitions>
@@ -43,6 +43,7 @@
                     <Button Height="50" Content="{StaticResource ADVANCED_OPTION_VIEW_LAUNCHER_PROFILE}" ToolTip="{StaticResource ADVANCED_OPTION_VIEW_LAUNCHER_PROFILE_TOOLTIP}" Style="{StaticResource AGButton}" Click="ViewLauncherProfile_Click"/>
                     <Button Height="50" Content="{StaticResource ADVANCED_OPTION_CLEAN_UNUSED_MOD_FILES}" ToolTip="{StaticResource ADVANCED_OPTION_CLEAN_UNUSED_MOD_FILES_TOOLTIP}" Style="{StaticResource AGButton}" Click="ClearUnusedModFiles_Click"/>
                     <Button Height="50" Content="{StaticResource ADVANCED_OPTION_CLEAN_UNUSED_IMAGE_FILES}" ToolTip="{StaticResource ADVANCED_OPTION_CLEAN_UNUSED_IMAGE_FILES_TOOLTIP}" Style="{StaticResource AGButton}" Click="ClearUnusedImageFiles_Click"/>
+                    <Button Height="50" Content="{StaticResource ADD_MOD_RESET_MOD_LOADER}" ToolTip="{StaticResource ADD_MOD_RESET_MOD_LOADER_TOOLTIP}" Style="{StaticResource AGButton}" Click="ResetModLoader_Click"/>
                     <Button Height="50" Content="{StaticResource ADVANCED_OPTION_UPDATE_MODS}" ToolTip="{StaticResource ADVANCED_OPTION_UPDATE_MODS_TOOLTIP}" Style="{StaticResource AGButton}" Click="UpdateModFile_Click"/>
                     <Button Height="50" Content="{StaticResource ADVANCED_OPTION_EXPORT_MODPACKSS}" ToolTip="{StaticResource ADVANCED_OPTION_EXPORT_MODPACKSS_TOOLTIP}" Style="{StaticResource AGButton}" Click="ExportModPacks_Click"/>
                 </StackPanel>
