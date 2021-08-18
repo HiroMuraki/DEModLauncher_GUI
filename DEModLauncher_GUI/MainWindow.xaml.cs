@@ -343,9 +343,6 @@ namespace DEModLauncher_GUI {
         #endregion
 
         private async void ModManager_CurrentModChanged() {
-            if (_modManager.CurrentMod == null) {
-                return;
-            }
             RadioButton mpb = null;
             int tryTimes = 20;
             do {
@@ -353,8 +350,7 @@ namespace DEModLauncher_GUI {
                     return;
                 }
                 await Task.Delay(50);
-                ContentPresenter cp = (ContentPresenter)ModPacksList.ItemContainerGenerator.ContainerFromItem(_modManager.CurrentMod);
-                mpb = FindVisualChild<RadioButton>(cp);
+                mpb = FindVisualChild<RadioButton>(ModPacksList.ItemContainerGenerator.ContainerFromItem(_modManager.CurrentMod));
                 tryTimes--;
             } while (mpb == null);
             mpb.IsChecked = true;
