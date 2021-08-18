@@ -23,9 +23,10 @@ namespace DEModLauncher_GUI {
 
         public MainWindow() {
             _modManager = DEModManager.GetInstance();
+            _modManager.CurrentModChanged += ModManager_CurrentModChanged;
             InitializeComponent();
-            HighlightCurrentModPack();
         }
+
 
         #region 启动与保存
         private void LoadMod_Click(object sender, RoutedEventArgs e) {
@@ -38,10 +39,10 @@ namespace DEModLauncher_GUI {
             _modManager.LaunchGame();
         }
         private void SaveToFile_Click(object sender, RoutedEventArgs e) {
-            _modManager.SaveProfiles();
+            _modManager.SaveProfile();
         }
         private void LoadFromFile_Click(object sender, RoutedEventArgs e) {
-            _modManager.LoadProfiles();
+            _modManager.LoadProfile();
         }
         private void OpenOptionMenu_Click(object sender, RoutedEventArgs e) {
             ContextMenu menu = ((Button)sender).ContextMenu;
@@ -64,11 +65,9 @@ namespace DEModLauncher_GUI {
         private void AddModPack_Click(object sender, RoutedEventArgs e) {
             _modManager.AddModPack();
             ModPackDisplayer.ScrollToHorizontalOffset(ModPackDisplayer.ScrollableWidth * 2);
-            HighlightCurrentModPack();
         }
         private void RemoveModPack_Click(object sender, RoutedEventArgs e) {
             _modManager.RemoveModPack(GetModPackFrom(sender));
-            HighlightCurrentModPack();
         }
         private void EditModPack_Click(object sender, RoutedEventArgs e) {
             GetModPackFrom(sender).Edit();
@@ -81,7 +80,7 @@ namespace DEModLauncher_GUI {
         private void CheckConflict_Click(object sender, RoutedEventArgs e) {
             GetModPackFrom(sender).CheckModConfliction();
         }
-        public void ExportMergedResource_Click(object sender, RoutedEventArgs e) {
+        private void ExportMergedResource_Click(object sender, RoutedEventArgs e) {
             _modManager.CurrentMod?.ExportMergedResource(GetModPackFrom(sender));
         }
         #endregion
@@ -130,7 +129,7 @@ namespace DEModLauncher_GUI {
             if (Keyboard.IsKeyDown(Key.LeftCtrl)) {
                 switch (e.Key) {
                     case Key.S:
-                        _modManager.SaveProfiles();
+                        _modManager.SaveProfile();
                         break;
                 }
             }
@@ -205,7 +204,6 @@ namespace DEModLauncher_GUI {
 
             // 否则将源移除，重新插入到target前
             _modManager.ResortModPack(source, target);
-            HighlightCurrentModPack();
         }
         #endregion
 
@@ -344,7 +342,7 @@ namespace DEModLauncher_GUI {
         //}
         #endregion
 
-        private async void HighlightCurrentModPack() {
+        private async void ModManager_CurrentModChanged() {
             if (_modManager.CurrentMod == null) {
                 return;
             }

@@ -30,8 +30,8 @@ namespace DEModLauncher_GUI.ViewModel {
             }
         }
 
-        public DEModResource() {
-            _status = ResourceStatus.Enabled;
+        private DEModResource() {
+
         }
         public DEModResource(string path) {
             _path = path;
@@ -58,11 +58,10 @@ namespace DEModLauncher_GUI.ViewModel {
             return copy;
         }
         public override string ToString() {
-            string output = $"名称：{_information.Name}\n";
-            output += $"描述：{_information.Description}\n";
-            output += $"作者：{_information.Author}\n";
-            output += $"文件：{_path}";
-            return output;
+            if (_path.EndsWith(".zip")) {
+                return _path[0..(_path.Length - 4)];
+            }
+            return _path;
         }
 
         public int CompareTo(DEModResource other) {

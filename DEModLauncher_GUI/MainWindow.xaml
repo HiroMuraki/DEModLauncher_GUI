@@ -143,7 +143,7 @@
                                                     <MenuItem Tag="{Binding}" Header="{StaticResource REMOVE_MOD_RESOURCE}" Click="DeleteResource_Click"/>
                                                 </ContextMenu>
                                             </Grid.ContextMenu>
-                                            <ToggleButton Content="{Binding Path}" ToolTip="{Binding}" Tag="{Binding}" IsChecked="{Binding Status,Converter={StaticResource ResourceStatusToBoolean}}"
+                                            <ToggleButton Content="{Binding}" ToolTip="{Binding Information}" Tag="{Binding}" IsChecked="{Binding Status,Converter={StaticResource ResourceStatusToBoolean}}"
                                                           Style="{StaticResource GResourceItemButton}"
                                                           PreviewMouseDown="ModResource_PreviewMouseDown"
                                                           Drop="ModResource_Drop">

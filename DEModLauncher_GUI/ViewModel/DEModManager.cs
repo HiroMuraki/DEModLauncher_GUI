@@ -21,6 +21,9 @@ namespace DEModLauncher_GUI.ViewModel {
         private readonly ModPacks _modPacks;
 
         #region IModManager接口实现
+        #region 事件
+        public event Action CurrentModChanged;
+        #endregion
         #region 属性
         public bool IsLaunching {
             get {
@@ -38,6 +41,7 @@ namespace DEModLauncher_GUI.ViewModel {
             set {
                 _currentMod = (DEModPack)value;
                 OnPropertyChanged(nameof(CurrentMod));
+                CurrentModChanged?.Invoke();
             }
         }
         public ModPacks ModPacks {
@@ -144,7 +148,7 @@ namespace DEModLauncher_GUI.ViewModel {
             }
             App.Close();
         }
-        public void SaveProfiles() {
+        public void SaveProfile() {
             var result = MessageBox.Show("是否保存当前模组配置？", "保存配置", MessageBoxButton.YesNo, MessageBoxImage.Question);
             if (result != MessageBoxResult.Yes) {
                 return;
@@ -160,7 +164,7 @@ namespace DEModLauncher_GUI.ViewModel {
         public void Initialize() {
             SetDefaultModPack();
         }
-        public void LoadProfiles() {
+        public void LoadProfile() {
             var result = MessageBox.Show("此操作将会重新读取模组配置文件，并丢弃当前设置，是否继续？", "重新读取", MessageBoxButton.YesNo, MessageBoxImage.Warning);
             if (result != MessageBoxResult.Yes) {
                 return;
@@ -172,7 +176,7 @@ namespace DEModLauncher_GUI.ViewModel {
                 MessageBox.Show(exp.Message, "读取配置文件出错", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
-        public void LoadProfiles(string file) {
+        public void LoadProfile(string file) {
             LoadProfileHelper(file);
         }
         public void SetCurrentMod(IModPack currentMod) {
@@ -207,12 +211,12 @@ namespace DEModLauncher_GUI.ViewModel {
             if (_currentMod == modPack) {
                 if (_modPacks.Count > 0) {
                     _currentMod = (DEModPack)_modPacks[0];
-                    OnPropertyChanged(nameof(CurrentMod));
                 }
                 else {
                     _currentMod = null;
-                    OnPropertyChanged(nameof(CurrentMod));
                 }
+                OnPropertyChanged(nameof(CurrentMod));
+                CurrentModChanged?.Invoke();
             }
             if (_modPacks.Count <= 0) {
                 SetDefaultModPack();

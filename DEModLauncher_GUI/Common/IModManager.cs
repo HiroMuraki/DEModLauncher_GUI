@@ -1,8 +1,10 @@
-﻿using ModPacks = System.Collections.ObjectModel.ObservableCollection<DEModLauncher_GUI.IModPack>;
+﻿using System;
+using ModPacks = System.Collections.ObjectModel.ObservableCollection<DEModLauncher_GUI.IModPack>;
 using Resources = System.Collections.ObjectModel.ObservableCollection<DEModLauncher_GUI.IModResource>;
 
 namespace DEModLauncher_GUI {
     public interface IModManager {
+        event Action CurrentModChanged;
         IModPack CurrentMod { get; }
         ModPacks ModPacks { get; }
         Resources UsingMods { get; }
@@ -11,9 +13,9 @@ namespace DEModLauncher_GUI {
         void LaunchMod();
         void LaunchGame();
         void Initialize();
-        void SaveProfiles();
-        void LoadProfiles();
-        void LoadProfiles(string file);
+        void SaveProfile();
+        void LoadProfile();
+        void LoadProfile(string file);
         void SetCurrentMod(IModPack currentMod);
         void AddModPack();
         void RemoveModPack(IModPack modPack);
