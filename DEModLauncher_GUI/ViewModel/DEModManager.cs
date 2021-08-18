@@ -276,7 +276,7 @@ namespace DEModLauncher_GUI.ViewModel {
                 foreach (var modPack in _modPacks) {
                     DEModPack dEModPack = (DEModPack)modPack;
                     // 如果模组列表中已有该模组，则将旧模组移除即可
-                    if (dEModPack.ContainsResource(newResource)) {
+                    if (dEModPack.ContainResource(newResource)) {
                         for (int i = 0; i < dEModPack.Resources.Count; i++) {
                             if (dEModPack.Resources[i].Path == oldResourceName) {
                                 dEModPack.RemoveResource((DEModResource)dEModPack.Resources[i]);
@@ -328,12 +328,17 @@ namespace DEModLauncher_GUI.ViewModel {
             }
             List<string> removedFiles = new List<string>();
             removedFiles.Add("重置完成，以下文件被移除");
-            // 移除哈希信息
-            File.Delete($"{DOOMEternal.GameDirectory}\\base\\idRehash.map");
-            removedFiles.Add($"{DOOMEternal.GameDirectory}\\base\\idRehash.map");
-            // 移除模组加载器配置文件
-            File.Delete($"{DOOMEternal.GameDirectory}\\{DOOMEternal.ModLoaderProfileFile}");
-            removedFiles.Add($"{DOOMEternal.GameDirectory}\\{DOOMEternal.ModLoaderProfileFile}");
+            // 移除哈希信息与模组加载器配置文件
+            string[] modLoaderProfiles = new string[2] {
+                $"{DOOMEternal.GameDirectory}\\base\\idRehash.map",
+                $"{DOOMEternal.GameDirectory}\\{DOOMEternal.ModLoaderProfileFile}"
+            };
+            foreach (var file in modLoaderProfiles) {
+                if (File.Exists(file)) {
+                    File.Delete(file);
+                    removedFiles.Add(file);
+                }
+            }
             // 移除备份文件
             foreach (var file in TravelFiles(DOOMEternal.GameDirectory)) {
                 if (Path.GetExtension(file) == ".backup") {

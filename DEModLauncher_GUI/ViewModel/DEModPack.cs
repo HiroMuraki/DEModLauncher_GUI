@@ -228,7 +228,7 @@ namespace DEModLauncher_GUI.ViewModel {
                 }
             }
         }
-        public bool ContainsResource(IModResource resource) {
+        public bool ContainResource(IModResource resource) {
             return ContainsResourceHelper(resource.Path);
         }
         public void CheckModConfliction() {
