@@ -205,7 +205,7 @@ namespace DEModLauncher_GUI {
 
             // 否则将源移除，重新插入到target前
             _modManager.ResortModPack(source, target);
-            ModManager_CurrentModChanged();
+            _modManager.SetCurrentMod(source);
         }
         #endregion
 
