@@ -22,7 +22,12 @@ namespace DEModLauncher_GUI.ViewModel {
                 _path = value;
                 OnPropertyChanged(nameof(Path));
                 OnPropertyChanged(nameof(Name));
-                _information = DEModInformation.Read($"{DOOMEternal.ModPacksDirectory}\\{_path}");
+                try {
+                    _information = DEModInformation.Read($"{DOOMEternal.ModPacksDirectory}\\{_path}");
+                }
+                catch (Exception) {
+                    _information = new DEModInformation();
+                }
                 OnPropertyChanged(nameof(Information));
             }
         }

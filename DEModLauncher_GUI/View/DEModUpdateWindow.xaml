@@ -4,6 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:DEModLauncher_GUI.View"
+        xmlns:ViewModel="clr-namespace:DEModLauncher_GUI.ViewModel"
         DataContext="{Binding RelativeSource={RelativeSource Mode=Self}}"
         WindowStartupLocation="CenterOwner"
         Title="DEModPackSelectWindow" Height="600" Width="500">
@@ -26,9 +27,9 @@
                 <ScrollViewer VerticalScrollBarVisibility="Auto">
                     <ItemsControl ItemsSource="{Binding ModManager.UsingMods}" Margin="10,5">
                         <ItemsControl.ItemTemplate>
-                            <DataTemplate>
+                            <DataTemplate DataType="{x:Type ViewModel:DEModResource}">
                                 <Grid>
-                                    <Button Content="{Binding Path}" HorizontalContentAlignment="Left" Height="40" Padding="10,0" ToolTip="{Binding}" Tag="{Binding}" Style="{StaticResource AGButton}" Click="UpdateMod_Click"/>
+                                    <Button Content="{Binding Name}" ToolTip="{Binding Information}" Tag="{Binding}" Style="{StaticResource AGButton}" HorizontalContentAlignment="Left" Height="40" Padding="10,0" Click="UpdateMod_Click"/>
                                 </Grid>
                             </DataTemplate>
                         </ItemsControl.ItemTemplate>
