@@ -23,7 +23,7 @@ namespace DEModLauncher_GUI.ViewModel {
                 OnPropertyChanged(nameof(Path));
                 OnPropertyChanged(nameof(Name));
                 _information = DEModInformation.Read($"{DOOMEternal.ModPacksDirectory}\\{_path}");
-                OnPropertyChanged(nameof(Path));
+                OnPropertyChanged(nameof(Information));
             }
         }
         public ResourceStatus Status {
