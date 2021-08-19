@@ -174,6 +174,7 @@ namespace DEModLauncher_GUI {
             if (isOk) {
                 View.ModPackButton source = sender as View.ModPackButton;
                 source.IsChecked = true;
+                _modManager.SetCurrentMod(GetModPackFrom(source));
                 DataObject dataObj = new DataObject(source.Tag);
                 DragDrop.DoDragDrop(ResourceList, dataObj, DragDropEffects.Move);
             }
@@ -204,6 +205,7 @@ namespace DEModLauncher_GUI {
 
             // 否则将源移除，重新插入到target前
             _modManager.ResortModPack(source, target);
+            ModManager_CurrentModChanged();
         }
         #endregion
 
