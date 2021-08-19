@@ -133,7 +133,7 @@
                                     <MenuItem Tag="{Binding CurrentMod}" Header="{StaticResource GENERATE_MERGED_FILE}" Click="ExportMergedResource_Click"/>
                                 </ContextMenu>
                             </ScrollViewer.ContextMenu>
-                            <ItemsControl x:Name="ResourceList" DragOver="ResourceList_DragOver" ItemsSource="{Binding CurrentMod.Resources}" Margin="8">
+                            <ItemsControl x:Name="ResourceList" DragOver="ResourceList_DragOver" ItemsSource="{Binding CurrentMod.Resources}" Margin="6">
                                 <ItemsControl.ItemTemplate>
                                     <DataTemplate DataType="{x:Type local:IModResource}">
                                         <Grid>
@@ -143,7 +143,7 @@
                                                     <MenuItem Tag="{Binding}" Header="{StaticResource REMOVE_MOD_RESOURCE}" Click="DeleteResource_Click"/>
                                                 </ContextMenu>
                                             </Grid.ContextMenu>
-                                            <ToggleButton Content="{Binding}" ToolTip="{Binding Information}" Tag="{Binding}" IsChecked="{Binding Status,Converter={StaticResource ResourceStatusToBoolean}}"
+                                            <ToggleButton Content="{Binding Name}" ToolTip="{Binding Information}" Tag="{Binding}" IsChecked="{Binding Status,Converter={StaticResource ResourceStatusToBoolean}}"
                                                           Style="{StaticResource GResourceItemButton}"
                                                           PreviewMouseDown="ModResource_PreviewMouseDown"
                                                           Drop="ModResource_Drop">

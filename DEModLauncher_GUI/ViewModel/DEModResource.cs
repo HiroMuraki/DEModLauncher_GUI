@@ -6,12 +6,23 @@ namespace DEModLauncher_GUI.ViewModel {
         private ResourceStatus _status;
         private DEModInformation _information;
 
+        public string Name {
+            get {
+                if (_path.EndsWith(".zip")) {
+                    return _path[0..(_path.Length - 4)];
+                }
+                return _path;
+            }
+        }
         public string Path {
             get {
                 return _path;
             }
             set {
                 _path = value;
+                OnPropertyChanged(nameof(Path));
+                OnPropertyChanged(nameof(Name));
+                _information = DEModInformation.Read($"{DOOMEternal.ModPacksDirectory}\\{_path}");
                 OnPropertyChanged(nameof(Path));
             }
         }
@@ -58,10 +69,7 @@ namespace DEModLauncher_GUI.ViewModel {
             return copy;
         }
         public override string ToString() {
-            if (_path.EndsWith(".zip")) {
-                return _path[0..(_path.Length - 4)];
-            }
-            return _path;
+            return Name;
         }
 
         public int CompareTo(DEModResource other) {

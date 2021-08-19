@@ -34,8 +34,8 @@
     <Sys:String x:Key="ADVANCED_OPTION_VIEW_LAUNCHER_PROFILE">查看启动器配置文件</Sys:String>
     <Sys:String x:Key="ADVANCED_OPTION_VIEW_LAUNCHER_PROFILE_TOOLTIP">查看启动器配置文件</Sys:String>
     <!--高级选项 重置模组加载器-->
-    <Sys:String x:Key="ADD_MOD_RESET_MOD_LOADER">重置模组加载器</Sys:String>
-    <Sys:String x:Key="ADD_MOD_RESET_MOD_LOADER_TOOLTIP">重置模组加载器状态，在此前请先验证游戏文件完整性</Sys:String>
+    <Sys:String x:Key="ADVANCED_OPTION_RESET_MOD_LOADER">重置模组加载器</Sys:String>
+    <Sys:String x:Key="ADVANCED_OPTION_RESET_MOD_LOADER_TOOLTIP">重置模组加载器状态，在此前请先验证游戏文件完整性</Sys:String>
 
     <!--仅加载模组-->
     <Sys:String x:Key="LOAD_MOD">加载</Sys:String>

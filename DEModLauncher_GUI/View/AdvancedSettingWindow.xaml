@@ -6,21 +6,21 @@
         xmlns:local="clr-namespace:DEModLauncher_GUI"
         mc:Ignorable="d" ResizeMode="NoResize"
         WindowStartupLocation="CenterOwner"
-        Title="{StaticResource ADVANCED_OPTION}" Height="450" Width="400">
+        Title="{StaticResource ADVANCED_OPTION}" Height="350" Width="450">
     <Grid Background="{StaticResource MainColor}">
         <Grid Margin="10" VerticalAlignment="Center">
             <Grid.RowDefinitions>
-                <RowDefinition Height="35"/>
+                <RowDefinition Height="60"/>
                 <RowDefinition />
             </Grid.RowDefinitions>
             <Grid Grid.Row="0">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="Auto"/>
-                    <ColumnDefinition/>
-                </Grid.ColumnDefinitions>
-                <Label Grid.Column="0" Content="{StaticResource GAME_DIRECTORY}" ToolTip="{StaticResource GAME_DIRECTORY_TOOLTIP}" Width="65" VerticalContentAlignment="Center" HorizontalContentAlignment="Center"
-                       BorderThickness="0,1,0,0" BorderBrush="{StaticResource BorderColor}" Background="{StaticResource MainColor}" Foreground="{StaticResource TextColor}"/>
-                <TextBox Grid.Column="1" x:Name="GameDirectory" IsReadOnly="True" VerticalContentAlignment="Center" BorderThickness="0,1,0,0" BorderBrush="{StaticResource BorderColor}"  
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="25"/>
+                    <RowDefinition Height="35"/>
+                </Grid.RowDefinitions>
+                <Label Grid.Row="0" Content="{StaticResource GAME_DIRECTORY}" ToolTip="{StaticResource GAME_DIRECTORY_TOOLTIP}" Width="65" VerticalContentAlignment="Center" HorizontalContentAlignment="Center"
+                       BorderThickness="0" Padding="0" Background="{StaticResource MainColor}" Foreground="{StaticResource TextColor}"/>
+                <TextBox Grid.Row="1" x:Name="GameDirectory" IsReadOnly="True" VerticalContentAlignment="Center" BorderThickness="1" BorderBrush="{StaticResource BorderColor}"  
                          Background="{StaticResource MainColor}" Foreground="{StaticResource TextColor}">
                     <TextBox.Style>
                         <Style TargetType="TextBox">
@@ -38,15 +38,15 @@
                 </TextBox>
             </Grid>
             <Grid Grid.Row="1">
-                <StackPanel>
+                <UniformGrid Columns="2">
                     <Button Height="50" Content="{StaticResource ADVANCED_OPTION_OPEN_GAME_DIRECTORY}" ToolTip="{StaticResource ADVANCED_OPTION_OPEN_GAME_DIRECTORY_TOOLTIP}" Style="{StaticResource AGButton}"  Click="OpenGameDirectory_Click"/>
                     <Button Height="50" Content="{StaticResource ADVANCED_OPTION_VIEW_LAUNCHER_PROFILE}" ToolTip="{StaticResource ADVANCED_OPTION_VIEW_LAUNCHER_PROFILE_TOOLTIP}" Style="{StaticResource AGButton}" Click="ViewLauncherProfile_Click"/>
                     <Button Height="50" Content="{StaticResource ADVANCED_OPTION_CLEAN_UNUSED_MOD_FILES}" ToolTip="{StaticResource ADVANCED_OPTION_CLEAN_UNUSED_MOD_FILES_TOOLTIP}" Style="{StaticResource AGButton}" Click="ClearUnusedModFiles_Click"/>
                     <Button Height="50" Content="{StaticResource ADVANCED_OPTION_CLEAN_UNUSED_IMAGE_FILES}" ToolTip="{StaticResource ADVANCED_OPTION_CLEAN_UNUSED_IMAGE_FILES_TOOLTIP}" Style="{StaticResource AGButton}" Click="ClearUnusedImageFiles_Click"/>
-                    <Button Height="50" Content="{StaticResource ADD_MOD_RESET_MOD_LOADER}" ToolTip="{StaticResource ADD_MOD_RESET_MOD_LOADER_TOOLTIP}" Style="{StaticResource AGButton}" Click="ResetModLoader_Click"/>
                     <Button Height="50" Content="{StaticResource ADVANCED_OPTION_UPDATE_MODS}" ToolTip="{StaticResource ADVANCED_OPTION_UPDATE_MODS_TOOLTIP}" Style="{StaticResource AGButton}" Click="UpdateModFile_Click"/>
+                    <Button Height="50" Content="{StaticResource ADVANCED_OPTION_RESET_MOD_LOADER}" ToolTip="{StaticResource ADVANCED_OPTION_RESET_MOD_LOADER_TOOLTIP}" Style="{StaticResource AGButton}" Click="ResetModLoader_Click"/>
                     <Button Height="50" Content="{StaticResource ADVANCED_OPTION_EXPORT_MODPACKSS}" ToolTip="{StaticResource ADVANCED_OPTION_EXPORT_MODPACKSS_TOOLTIP}" Style="{StaticResource AGButton}" Click="ExportModPacks_Click"/>
-                </StackPanel>
+                </UniformGrid>
             </Grid>
         </Grid>
     </Grid>

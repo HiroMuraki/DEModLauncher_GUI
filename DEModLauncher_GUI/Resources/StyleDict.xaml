@@ -315,7 +315,7 @@
         <Setter Property="HorizontalContentAlignment" Value="Left" />
         <Setter Property="FontSize" Value="12" />
         <Setter Property="Height" Value="30" />
-        <Setter Property="Padding" Value="10,0" />
+        <Setter Property="Padding" Value="7,0" />
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="ToggleButton">
