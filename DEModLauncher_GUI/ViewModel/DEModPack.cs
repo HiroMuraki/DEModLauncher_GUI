@@ -197,21 +197,6 @@ namespace DEModLauncher_GUI.ViewModel {
                 MessageBox.Show($"添加时模组文件时发生错误，原因：{exp.Message}", "错误", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
-        public void AddResources(IEnumerable<string> fileList) {
-            List<string> errorList = new List<string>();
-            foreach (var item in fileList) {
-                try {
-                    AddResourceHelper(item);
-                }
-                catch (Exception e) {
-                    errorList.Add($"{item}\n");
-                    errorList.Add($"    原因：{e.Message}\n\n");
-                }
-            }
-            if (errorList.Count > 0) {
-                View.InformationWindow.Show(string.Join("", errorList), "", Application.Current.MainWindow);
-            }
-        }
         public void InsertResource(int index, string resourcePath) {
             if (DOOMEternal.GameDirectory == null) {
                 throw new ArgumentException("请先选择游戏文件夹");
@@ -231,7 +216,15 @@ namespace DEModLauncher_GUI.ViewModel {
             List<string> errorList = new List<string>();
             foreach (var item in fileList) {
                 try {
-                    InsertResource(index, item);
+                    if (index < 0) {
+                        InsertResource(0, item);
+                    }
+                    else if (index > _resources.Count - 1) {
+                        AddResourceHelper(item);
+                    }
+                    else {
+                        InsertResource(index, item);
+                    }
                 }
                 catch (Exception e) {
                     errorList.Add($"{item}\n");
@@ -365,7 +358,7 @@ namespace DEModLauncher_GUI.ViewModel {
             copy._description = _description;
             // 复制资源列表
             foreach (var res in _resources) {
-                copy.Resources.Add(((DEModResource)res).GetDeepCopy());
+                copy.Resources.Add(res.GetDeepCopy());
             }
             return copy;
         }

@@ -1,12 +1,9 @@
 ﻿using DEModLauncher_GUI.ViewModel;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
-using System.Windows.Media;
 
 namespace DEModLauncher_GUI {
     /// <summary>
@@ -92,7 +89,7 @@ namespace DEModLauncher_GUI {
             _modManager.CurrentModPack?.RemoveResource(GetResourceFrom(sender));
         }
         private void CurrentModPackDisplayer_FileDrop(object sender, DragEventArgs e) {
-            _modManager.CurrentModPack?.InsertResources(0, (string[])e.Data.GetData(DataFormats.FileDrop));
+            _modManager.CurrentModPack?.InsertResources(_modManager.CurrentModPack.Resources.Count, (string[])e.Data.GetData(DataFormats.FileDrop));
             ResourcesDisplayer.ScrollToEnd();
             FileDragArea.IsHitTestVisible = false;
         }
@@ -109,10 +106,12 @@ namespace DEModLauncher_GUI {
 
         #region 窗口操作
         private void Window_Move(object sender, MouseButtonEventArgs e) {
-            if (e.ClickCount >= 2) {
-                return;
+            try {
+                DragMove();
             }
-            DragMove();
+            catch {
+
+            }
         }
         private void Window_Close(object sender, RoutedEventArgs e) {
             App.Close();
@@ -231,7 +230,11 @@ namespace DEModLauncher_GUI {
             }
             // 如果拖入的是文件列表
             if (e.Data.IsTargetType(DataFormats.FileDrop)) {
-                _modManager.CurrentModPack?.InsertResources(_modManager.CurrentModPack.Resources.IndexOf(target), (string[])e.Data.GetData(DataFormats.FileDrop));
+                int insertIndex = _modManager.CurrentModPack.Resources.IndexOf(target);
+                if (e.Direction == Direction.Down) {
+                    insertIndex += 1;
+                }
+                _modManager.CurrentModPack?.InsertResources(insertIndex, (string[])e.Data.GetData(DataFormats.FileDrop));
                 return;
             }
             // 否则视为资源排序

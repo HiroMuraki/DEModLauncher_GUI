@@ -1,6 +1,5 @@
 ﻿using DEModLauncher_GUI.ViewModel;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Windows;
 using System.Windows.Input;
 using DEModPacks = System.Collections.ObjectModel.ObservableCollection<DEModLauncher_GUI.ViewModel.DEModPack>;
@@ -41,7 +40,12 @@ namespace DEModLauncher_GUI.View {
             DialogResult = false;
         }
         private void Window_Move(object sender, MouseButtonEventArgs e) {
-            DragMove();
+            try {
+                DragMove();
+            }
+            catch {
+
+            }
         }
     }
 }

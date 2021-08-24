@@ -1,6 +1,6 @@
-﻿using System.Windows;
+﻿using DEModLauncher_GUI.ViewModel;
+using System.Windows;
 using System.Windows.Input;
-using DEModLauncher_GUI.ViewModel;
 
 namespace DEModLauncher_GUI.View {
     /// <summary>
@@ -18,7 +18,12 @@ namespace DEModLauncher_GUI.View {
             Close();
         }
         private void Window_Move(object sender, MouseButtonEventArgs e) {
-            DragMove();
+            try {
+                DragMove();
+            }
+            catch {
+
+            }
         }
 
         private void UpdateMod_Click(object sender, RoutedEventArgs e) {

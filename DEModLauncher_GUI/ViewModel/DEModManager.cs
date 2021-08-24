@@ -212,7 +212,7 @@ namespace DEModLauncher_GUI.ViewModel {
             _modPacks.Remove(modPack);
             if (_currentMod == modPack) {
                 if (_modPacks.Count > 0) {
-                    _currentMod = (DEModPack)_modPacks[0];
+                    _currentMod = _modPacks[0];
                 }
                 else {
                     _currentMod = null;
@@ -497,7 +497,7 @@ namespace DEModLauncher_GUI.ViewModel {
             // 写入ModPacks信息
             dm.ModPacks = new List<Model.DEModPack>();
             foreach (var modPack in _modPacks) {
-                DEModPack dEModPack = (DEModPack)modPack;
+                DEModPack dEModPack = modPack;
                 var dp = dEModPack.GetDataModel();
                 dm.ModPacks.Add(dp);
             }
