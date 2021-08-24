@@ -87,8 +87,10 @@ namespace DEModLauncher_GUI.ViewModel {
         public async void LaunchMod() {
             try {
                 DOOMEternal.SetModLoaderProfile("AUTO_LAUNCH_GAME", 1);
-                await LoadModHelper();
-                App.Close();
+                var launched = await LoadModHelper();
+                if (launched) {
+                    App.Close();
+                }
             }
             catch (Exception exp) {
                 View.InformationWindow.Show(exp.Message, "模组启动错误", Application.Current.MainWindow);
@@ -373,10 +375,10 @@ namespace DEModLauncher_GUI.ViewModel {
         /// <summary>
         /// 调用模组加载器
         /// </summary>
-        private async Task LoadModHelper() {
+        private async Task<bool> LoadModHelper() {
             if (_currentMod == null) {
                 MessageBox.Show("请先选择一个模组配置", "警告", MessageBoxButton.OK, MessageBoxImage.Warning);
-                return;
+                return false;
             }
             // 弹出提示窗口，避免误操作
             var result = MessageBox.Show($"加载模组将需要一定时间，在此期间请勿关闭本程序。是否继续?",
@@ -384,17 +386,18 @@ namespace DEModLauncher_GUI.ViewModel {
                                          MessageBoxButton.YesNo,
                                          MessageBoxImage.Question);
             if (result != MessageBoxResult.Yes) {
-                return;
+                return false;
             }
             IsLaunching = true;
             try {
                 await Task.Run(() => {
                     LaunchModLoaderHelper();
                 });
+                return true;
             }
             catch (Exception exp) {
                 View.InformationWindow.Show(exp.Message, "模组启动错误", Application.Current.MainWindow);
-                return;
+                return false;
             }
             finally {
                 IsLaunching = false;
