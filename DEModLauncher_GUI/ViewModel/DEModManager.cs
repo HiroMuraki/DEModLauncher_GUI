@@ -166,6 +166,7 @@ namespace DEModLauncher_GUI.ViewModel {
                     modPack.Description = setter.Description;
                     modPack.SetImage(setter.ImagePath);
                     AddModPackHelper(modPack);
+                    SetCurrentModPack(modPack);
                     DOOMEternal.ModificationSaved = false;
                 }
             }

@@ -24,7 +24,6 @@ namespace DEModLauncher_GUI {
 
         public MainWindow() {
             _modManager = DEModManager.GetInstance();
-            _modManager.CurrentModPackChanged += ModManager_CurrentModChanged;
             InitializeComponent();
         }
 
@@ -84,17 +83,17 @@ namespace DEModLauncher_GUI {
         #region 资源操作
         private void AddResource_Click(object sender, RoutedEventArgs e) {
             _modManager.CurrentModPack?.NewResource();
-            ResourcesDisplayer.ScrollToVerticalOffset(ResourcesDisplayer.ScrollableHeight * 2);
+            ResourcesDisplayer.ScrollToEnd();
         }
         private void AddModPackReference_Click(object sender, RoutedEventArgs e) {
             _modManager.CurrentModPack?.AddResourcesReference();
         }
-        private void DeleteResource_Click(object sender, RoutedEventArgs e) {
+        private void RemoveResource_Click(object sender, RoutedEventArgs e) {
             _modManager.CurrentModPack?.RemoveResource(GetResourceFrom(sender));
         }
         private void CurrentModPackDisplayer_FileDrop(object sender, DragEventArgs e) {
             _modManager.CurrentModPack?.InsertResources(0, (string[])e.Data.GetData(DataFormats.FileDrop));
-            ResourcesDisplayer.ScrollToVerticalOffset(ResourcesDisplayer.ScrollableHeight * 2);
+            ResourcesDisplayer.ScrollToEnd();
             FileDragArea.IsHitTestVisible = false;
         }
         private void CurrentModPackDisplayer_DragEnter(object sender, DragEventArgs e) {
@@ -317,20 +316,6 @@ namespace DEModLauncher_GUI {
         //    _dEModMananger.CurrentMod.InsertResource(source, target);
         //}
         #endregion
-
-        private async void ModManager_CurrentModChanged() {
-            RadioButton mpb = null;
-            int tryTimes = 20;
-            do {
-                if (tryTimes <= 0) {
-                    return;
-                }
-                await Task.Delay(50);
-                mpb = Util.FindVisualChild<RadioButton>(ModPacksList.ItemContainerGenerator.ContainerFromItem(_modManager.CurrentModPack));
-                tryTimes--;
-            } while (mpb == null);
-            mpb.IsChecked = true;
-        }
 
         private static DEModResource GetResourceFrom(object sender) {
             return (sender as FrameworkElement).Tag as DEModResource;

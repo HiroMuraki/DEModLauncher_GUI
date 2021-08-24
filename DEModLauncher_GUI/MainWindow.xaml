@@ -140,7 +140,7 @@
                                             <Grid.ContextMenu>
                                                 <ContextMenu>
                                                     <MenuItem Tag="{Binding}" Header="{StaticResource VIEW_MOD_RESOURCE}" Click="OpenResourceFile_Click"/>
-                                                    <MenuItem Tag="{Binding}" Header="{StaticResource REMOVE_MOD_RESOURCE}" Click="DeleteResource_Click"/>
+                                                    <MenuItem Tag="{Binding}" Header="{StaticResource REMOVE_MOD_RESOURCE}" Click="RemoveResource_Click"/>
                                                 </ContextMenu>
                                             </Grid.ContextMenu>
                                             <View:ModResource ResourceName="{Binding Name}" Status="{Binding Status}" ToolTip="{Binding Information}" Tag="{Binding}" 
