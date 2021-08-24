@@ -81,7 +81,7 @@
                             <ColumnDefinition Width="1*"/>
                         </Grid.ColumnDefinitions>
                         <Button Grid.Column="0" Content="{StaticResource LOAD_MOD}" 
-                            ToolTip="{StaticResource LAUNCH_AFTER_LOAD_MOD_TOOLTIP}" FontSize="14"
+                            ToolTip="{StaticResource LOAD_MOD_TOOLTIP}" FontSize="14"
                             Style="{StaticResource GButton}" BorderThickness="0,1,1,0"
                             Click="LoadMod_Click"/>
                         <Button Grid.Column="1" Content="{StaticResource LAUNCH_AFTER_LOAD_MOD}" 

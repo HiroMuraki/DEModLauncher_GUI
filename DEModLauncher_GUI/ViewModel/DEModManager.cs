@@ -76,63 +76,24 @@ namespace DEModLauncher_GUI.ViewModel {
 
         #region 公共方法
         public async void LoadMod() {
-            if (_currentMod == null) {
-                MessageBox.Show("请先选择一个模组配置", "警告", MessageBoxButton.OK, MessageBoxImage.Warning);
-                return;
-            }
-            // 弹出提示窗口，避免误操作
-            var result = MessageBox.Show($"加载模组将需要一定时间，在此期间请勿关闭本程序。是否继续?",
-                                         $"加载模组：{_currentMod.PackName}",
-                                         MessageBoxButton.YesNo,
-                                         MessageBoxImage.Question);
-            if (result != MessageBoxResult.Yes) {
-                return;
-            }
-            // 进入启动程序
-            IsLaunching = true;
             try {
                 DOOMEternal.SetModLoaderProfile("AUTO_LAUNCH_GAME", 0);
-                await Task.Run(() => {
-                    LaunchModLoaderHelper();
-                });
+                await Task.Run(() => { LoadModHelper(); });
+
             }
             catch (Exception exp) {
                 View.InformationWindow.Show(exp.Message, "模组启动错误", Application.Current.MainWindow);
-                return;
-            }
-            finally {
-                IsLaunching = false;
             }
         }
         public async void LaunchMod() {
-            if (_currentMod == null) {
-                MessageBox.Show("请先选择一个模组配置", "警告", MessageBoxButton.OK, MessageBoxImage.Warning);
-                return;
-            }
-            // 弹出提示窗口，避免误操作
-            var result = MessageBox.Show($"加载模组将需要一定时间，在此期间请勿关闭本程序。是否继续?",
-                                         $"加载模组：{_currentMod.PackName}",
-                                         MessageBoxButton.YesNo,
-                                         MessageBoxImage.Question);
-            if (result != MessageBoxResult.Yes) {
-                return;
-            }
-            // 进入启动程序
-            IsLaunching = true;
             try {
                 DOOMEternal.SetModLoaderProfile("AUTO_LAUNCH_GAME", 1);
-                await Task.Run(() => {
-                    LaunchModLoaderHelper();
-                });
+                await Task.Run(() => { LoadModHelper(); });
+                App.Close();
             }
             catch (Exception exp) {
                 View.InformationWindow.Show(exp.Message, "模组启动错误", Application.Current.MainWindow);
-                return;
             }
-            finally {
-                IsLaunching = false;
-            }
-            App.Close();
         }
         public async void LaunchGame() {
             try {
@@ -144,7 +105,6 @@ namespace DEModLauncher_GUI.ViewModel {
                 View.InformationWindow.Show(exp.Message, "游戏启动错误", Application.Current.MainWindow);
                 return;
             }
-            App.Close();
         }
         public void SetCurrentModPack(DEModPack modPack) {
             foreach (var item in _modPacks) {
@@ -410,6 +370,33 @@ namespace DEModLauncher_GUI.ViewModel {
         #endregion
 
         #region 辅助方法
+        // 调用模组加载器
+        private void LoadModHelper() {
+            if (_currentMod == null) {
+                MessageBox.Show("请先选择一个模组配置", "警告", MessageBoxButton.OK, MessageBoxImage.Warning);
+                return;
+            }
+            // 弹出提示窗口，避免误操作
+            var result = MessageBox.Show($"加载模组将需要一定时间，在此期间请勿关闭本程序。是否继续?",
+                                         $"加载模组：{_currentMod.PackName}",
+                                         MessageBoxButton.YesNo,
+                                         MessageBoxImage.Question);
+            if (result != MessageBoxResult.Yes) {
+                return;
+            }
+            IsLaunching = true;
+            try {
+                LaunchModLoaderHelper();
+            }
+            catch (Exception exp) {
+                View.InformationWindow.Show(exp.Message, "模组启动错误", Application.Current.MainWindow);
+                return;
+            }
+            finally {
+                IsLaunching = false;
+            }
+        }
+
         /// <summary>
         /// CurrentModPack修改时调用 
         /// </summary>
