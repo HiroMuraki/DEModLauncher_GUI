@@ -16,7 +16,7 @@
         <WindowChrome UseAeroCaptionButtons="False" CaptionHeight="0" ResizeBorderThickness="0"/>
     </WindowChrome.WindowChrome>
     <Window.Resources>
-        <ValueConverter:ResourceStatusToBoolean x:Key="ResourceStatusToBoolean"/>
+        <ValueConverter:StatusToBoolean x:Key="StatusToBoolean"/>
     </Window.Resources>
     <Border BorderBrush="{StaticResource BorderColor}" Background="{StaticResource MainColor}" BorderThickness="2">
         <Grid>
@@ -135,7 +135,7 @@
                             </ScrollViewer.ContextMenu>
                             <ItemsControl x:Name="ResourceList" DragOver="ResourceList_DragOver" ItemsSource="{Binding CurrentMod.Resources}" Margin="6">
                                 <ItemsControl.ItemTemplate>
-                                    <DataTemplate DataType="{x:Type local:IModResource}">
+                                    <DataTemplate DataType="{x:Type ViewModel:DEModResource}">
                                         <Grid>
                                             <Grid.ContextMenu>
                                                 <ContextMenu>
@@ -143,11 +143,9 @@
                                                     <MenuItem Tag="{Binding}" Header="{StaticResource REMOVE_MOD_RESOURCE}" Click="DeleteResource_Click"/>
                                                 </ContextMenu>
                                             </Grid.ContextMenu>
-                                            <ToggleButton Content="{Binding Name}" ToolTip="{Binding Information}" Tag="{Binding}" IsChecked="{Binding Status,Converter={StaticResource ResourceStatusToBoolean}}"
-                                                          Style="{StaticResource GResourceItemButton}"
-                                                          PreviewMouseDown="ModResource_PreviewMouseDown"
-                                                          Drop="ModResource_Drop">
-                                            </ToggleButton>
+                                            <View:ModResource ResourceName="{Binding Name}" Status="{Binding Status}" ToolTip="{Binding Information}" Tag="{Binding}" 
+                                                              PreviewMouseLeftButtonDown="ModResource_PreviewMouseDown" DataDragDrop="ModResource_DataDragDrop">
+                                            </View:ModResource>
                                         </Grid>
                                     </DataTemplate>
                                 </ItemsControl.ItemTemplate>
@@ -230,11 +228,10 @@
                         <ItemsControl x:Name="ModPacksList" ItemsSource="{Binding ModPacks}" AllowDrop="True"
                                       DragOver="ModPacksList_DragOver">
                             <ItemsControl.ItemTemplate>
-                                <DataTemplate DataType="{x:Type local:IModPack}">
-                                    <View:ModPackButton ToolTip="{Binding Description}" PackName="{Binding PackName}" ImagePath="{Binding ImagePath}" Tag="{Binding}" Margin="5,0" 
-                                                        GroupName="PackNameSelected" Click="SelectModPack_Click" PreviewMouseLeftButtonDown="EditModPack_Click"
-                                                        PreviewMouseDown="ModPack_PreviewMouseDown" Drop="ModPack_Drop">
-                                        <View:ModPackButton.ContextMenu>
+                                <DataTemplate DataType="{x:Type ViewModel:DEModPack}">
+                                    <View:ModPack PackName="{Binding PackName}" ImagePath="{Binding ImagePath}" ToolTip="{Binding Description}" Status="{Binding Status}" Tag="{Binding}" Margin="5,0" 
+                                                  PreviewMouseDown="ModPack_PreviewMouseDown" DataDragDrop="ModPack_DataDragDrop">
+                                        <View:ModPack.ContextMenu>
                                             <ContextMenu>
                                                 <MenuItem Tag="{Binding}" Header="{StaticResource EDIT_MOD_PACK}" Click="EditModPack_Click"/>
                                                 <MenuItem Tag="{Binding}" Header="{StaticResource REMOVE_MOD_PACK}" Click="RemoveModPack_Click"/>
@@ -242,8 +239,8 @@
                                                 <MenuItem Tag="{Binding}" Header="{StaticResource CHECK_MOD_PACK_CONFLICT}" Click="CheckConflict_Click"/>
                                                 <MenuItem Tag="{Binding}" Header="{StaticResource GENERATE_MERGED_FILE}" Click="ExportMergedResource_Click"/>
                                             </ContextMenu>
-                                        </View:ModPackButton.ContextMenu>
-                                    </View:ModPackButton>
+                                        </View:ModPack.ContextMenu>
+                                    </View:ModPack>
                                 </DataTemplate>
                             </ItemsControl.ItemTemplate>
                             <ItemsControl.ItemsPanel>

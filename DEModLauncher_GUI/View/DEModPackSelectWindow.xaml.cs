@@ -3,32 +3,33 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Windows;
 using System.Windows.Input;
+using DEModPacks = System.Collections.ObjectModel.ObservableCollection<DEModLauncher_GUI.ViewModel.DEModPack>;
 
 namespace DEModLauncher_GUI.View {
     /// <summary>
     /// DEModPackSelectWindow.xaml 的交互逻辑
     /// </summary>
     public partial class DEModPackSelectWindow : Window {
-        private readonly ObservableCollection<IModPackSelector> _modPackSelectors;
-        public ObservableCollection<IModPackSelector> ModPackSelectors {
+        private readonly DEModPacks _modPackSelectors;
+        public DEModPacks ModPackSelectors {
             get {
                 return _modPackSelectors;
             }
         }
-        public IEnumerable<IModPack> SelectedModPacks {
+        public IEnumerable<DEModPack> SelectedModPacks {
             get {
                 foreach (var item in _modPackSelectors) {
-                    if (item.IsSelected) {
-                        yield return item.ModPack;
+                    if (item.Status == Status.Enable) {
+                        yield return item;
                     }
                 }
             }
         }
 
-        public DEModPackSelectWindow(IEnumerable<IModPack> modPacks) {
-            _modPackSelectors = new ObservableCollection<IModPackSelector>();
+        public DEModPackSelectWindow(IEnumerable<DEModPack> modPacks) {
+            _modPackSelectors = new DEModPacks();
             foreach (var modPack in modPacks) {
-                _modPackSelectors.Add(new DEModPackSelector((DEModPack)modPack));
+                _modPackSelectors.Add(modPack.GetDeepCopy());
             }
             InitializeComponent();
         }

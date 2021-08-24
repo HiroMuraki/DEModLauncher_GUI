@@ -5,13 +5,15 @@ using System.IO.Compression;
 using System.Linq;
 using System.Text;
 using System.Windows;
-using Resources = System.Collections.ObjectModel.ObservableCollection<DEModLauncher_GUI.IModResource>;
+using Resources = System.Collections.ObjectModel.ObservableCollection<DEModLauncher_GUI.ViewModel.DEModResource>;
 
 namespace DEModLauncher_GUI.ViewModel {
-    public class DEModPack : ViewModelBase, IModPack {
+    public class DEModPack : ViewModelBase {
+        private static string _preOpenModDirectory = null;
         private string _packName;
         private string _description;
         private string _imagePath;
+        private Status _status;
         private readonly Resources _resources;
 
         #region 公共属性
@@ -46,6 +48,11 @@ namespace DEModLauncher_GUI.ViewModel {
                 return fullPath;
             }
         }
+        public Status Status {
+            get {
+                return _status;
+            }
+        }
         public Resources Resources {
             get {
                 return _resources;
@@ -56,12 +63,14 @@ namespace DEModLauncher_GUI.ViewModel {
         #region 构造方法
         public DEModPack() {
             _resources = new Resources();
+            _status = Status.Disable;
         }
         public DEModPack(Model.DEModPack model) {
             _packName = model.PackName;
             _description = model.Description;
             _imagePath = model.ImagePath;
             _resources = new Resources();
+            _status = Status.Disable;
             foreach (var res in model.Resources) {
                 DEModResource resource = new DEModResource(res);
                 _resources.Add(resource);
@@ -69,8 +78,15 @@ namespace DEModLauncher_GUI.ViewModel {
         }
         #endregion
 
-        #region IModPack接口实现
-        private static string _preOpenModDirectory = null;
+        #region 公共方法
+        public void ToggleOn() {
+            _status = Status.Enable;
+            OnPropertyChanged(nameof(Status));
+        }
+        public void ToggleOff() {
+            _status = Status.Disable;
+            OnPropertyChanged(nameof(Status));
+        }
         public void Deploy() {
             // 检查模组加载器是否存在
             if (!File.Exists(DOOMEternal.ModLoader)) {
@@ -79,7 +95,7 @@ namespace DEModLauncher_GUI.ViewModel {
             // 检查模组资源是否缺失
             List<string> lackedFiles = new List<string>();
             foreach (var resource in _resources) {
-                if (resource.Status == ResourceStatus.Disabled) {
+                if (resource.Status == Status.Disable) {
                     continue;
                 }
                 if (!File.Exists($@"{DOOMEternal.ModPacksDirectory}\{resource.Path}")) {
@@ -99,7 +115,7 @@ namespace DEModLauncher_GUI.ViewModel {
             }
             // 装入选定模组
             foreach (var resource in _resources) {
-                if (resource.Status == ResourceStatus.Disabled) {
+                if (resource.Status == Status.Disable) {
                     continue;
                 }
                 string fileName = Path.GetFileName(resource.Path);
@@ -108,7 +124,38 @@ namespace DEModLauncher_GUI.ViewModel {
                 File.Copy(sourceFile, destFile);
             }
         }
-        public void AddResource() {
+        public void Edit() {
+            View.DEModPackSetter setter = new View.DEModPackSetter() { Owner = Application.Current.MainWindow };
+            setter.PackName = _packName;
+            setter.Description = _description;
+            if (string.IsNullOrEmpty(_imagePath)) {
+                setter.ImagePath = DOOMEternal.DefaultModPackImage;
+            }
+            else {
+                setter.ImagePath = $"{DOOMEternal.ModPackImagesDirectory}\\{_imagePath}";
+            }
+            if (setter.ShowDialog() == true) {
+                try {
+                    if (_packName != setter.PackName) {
+                        foreach (var modPack in DEModManager.GetInstance().ModPacks) {
+                            if (modPack.PackName == setter.PackName) {
+                                throw new ArgumentException($"模组配置名[{setter.PackName}]已存在");
+                            }
+                        }
+                    }
+                    PackName = setter.PackName;
+                    Description = setter.Description;
+                    if (_imagePath != setter.ImagePath) {
+                        SetImage(setter.ImagePath);
+                    }
+                    DOOMEternal.ModificationSaved = false;
+                }
+                catch (Exception exp) {
+                    MessageBox.Show(exp.Message, "修改模组配置错误", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
+            }
+        }
+        public void NewResource() {
             System.Windows.Forms.OpenFileDialog ofd = new System.Windows.Forms.OpenFileDialog();
             ofd.Title = "选择模组文件";
             ofd.Filter = "zip压缩包|*.zip";
@@ -123,16 +170,6 @@ namespace DEModLauncher_GUI.ViewModel {
                 catch (Exception exp) {
                     MessageBox.Show(exp.Message, "错误", MessageBoxButton.OK, MessageBoxImage.Error);
                 }
-            }
-        }
-        public void AddResource(IDataObject data) {
-            try {
-                string[] fileList = data.GetData(DataFormats.FileDrop) as string[];
-                AddResourcesHelper(fileList);
-                DOOMEternal.ModificationSaved = false;
-            }
-            catch (Exception exp) {
-                MessageBox.Show(exp.Message, "错误", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
         public void AddResourcesReference() {
@@ -175,22 +212,32 @@ namespace DEModLauncher_GUI.ViewModel {
             _resources.Insert(index, new DEModResource(resourceName));
             DOOMEternal.ModificationSaved = false;
         }
-        public void RemoveResource(IModResource resource) {
+        public void InsertResources(int index, IEnumerable<string> fileList) {
+            List<string> errorList = new List<string>();
+            foreach (var item in fileList) {
+                try {
+                    InsertResource(index, item);
+                }
+                catch (Exception e) {
+                    errorList.Add($"{item}\n");
+                    errorList.Add($"    原因：{e.Message}\n\n");
+                }
+            }
+            if (errorList.Count > 0) {
+                View.InformationWindow.Show(string.Join("", errorList), "", Application.Current.MainWindow);
+            }
+        }
+        public void RemoveResource(DEModResource resource) {
             _resources.Remove(resource);
             DOOMEternal.ModificationSaved = false;
         }
-        public void ResortResource(IModResource source, IModResource target) {
-            if (ReferenceEquals(source, target)) {
-                return;
-            }
-            _resources.Remove(source);
-            _resources.Insert(_resources.IndexOf(target), source);
+        public void ResortResource(int index, DEModResource source) {
+            _resources.ReInsert(index, source);
             DOOMEternal.ModificationSaved = false;
         }
-        public void ExportMergedResource(IModPack modPack) {
-            DEModPack dEModPack = (DEModPack)modPack;
+        public void ExportMergedResource(DEModPack modPack) {
             System.Windows.Forms.SaveFileDialog sfd = new System.Windows.Forms.SaveFileDialog();
-            sfd.FileName = dEModPack.PackName;
+            sfd.FileName = modPack.PackName;
             sfd.InitialDirectory = Environment.CurrentDirectory;
             sfd.Filter = "zip压缩包|*.zip";
             sfd.AddExtension = true;
@@ -228,7 +275,7 @@ namespace DEModLauncher_GUI.ViewModel {
                 }
             }
         }
-        public bool ContainResource(IModResource resource) {
+        public bool ContainResource(DEModResource resource) {
             return ContainsResourceHelper(resource.Path);
         }
         public void CheckModConfliction() {
@@ -258,40 +305,6 @@ namespace DEModLauncher_GUI.ViewModel {
                 MessageBox.Show($"冲突检查出错，原因：{exp.Message}", "错误", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
-        public void Edit() {
-            View.DEModPackSetter setter = new View.DEModPackSetter() { Owner = Application.Current.MainWindow };
-            setter.PackName = _packName;
-            setter.Description = _description;
-            if (string.IsNullOrEmpty(_imagePath)) {
-                setter.ImagePath = DOOMEternal.DefaultModPackImage;
-            }
-            else {
-                setter.ImagePath = $"{DOOMEternal.ModPackImagesDirectory}\\{_imagePath}";
-            }
-            if (setter.ShowDialog() == true) {
-                try {
-                    if (_packName != setter.PackName) {
-                        foreach (var modPack in DEModManager.GetInstance().ModPacks) {
-                            if (modPack.PackName == setter.PackName) {
-                                throw new ArgumentException($"模组配置名[{setter.PackName}]已存在");
-                            }
-                        }
-                    }
-                    PackName = setter.PackName;
-                    Description = setter.Description;
-                    if (_imagePath != setter.ImagePath) {
-                        SetImage(setter.ImagePath);
-                    }
-                    DOOMEternal.ModificationSaved = false;
-                }
-                catch (Exception exp) {
-                    MessageBox.Show(exp.Message, "修改模组配置错误", MessageBoxButton.OK, MessageBoxImage.Error);
-                }
-            }
-        }
-        #endregion
-
-        #region 其他公共方法
         public void SetImage(string imagePath) {
             if (imagePath == DOOMEternal.DefaultModPackImage) {
                 _imagePath = null;
@@ -389,7 +402,7 @@ namespace DEModLauncher_GUI.ViewModel {
             int totalCount = 0;
             int validCount = 0;
             foreach (var resource in _resources) {
-                if (resource.Status == ResourceStatus.Disabled) {
+                if (resource.Status == Status.Disable) {
                     continue;
                 }
                 string fullFileName = $@"{DOOMEternal.ModPacksDirectory}\{resource.Path}";

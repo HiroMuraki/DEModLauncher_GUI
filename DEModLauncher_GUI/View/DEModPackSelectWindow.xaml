@@ -6,13 +6,17 @@
         xmlns:local="clr-namespace:DEModLauncher_GUI"
         xmlns:ViewModel="clr-namespace:DEModLauncher_GUI.ViewModel"
         xmlns:View="clr-namespace:DEModLauncher_GUI.View"
+        xmlns:ValueConverter="clr-namespace:DEModLauncher_GUI.ViewModel.ValueConverter"
         mc:Ignorable="d"
         DataContext="{Binding RelativeSource={RelativeSource Mode=Self}}"
         WindowStartupLocation="CenterOwner"
-        Title="DEModPackSelectWindow" Height="600" Width="500">
+        Title="" Height="600" Width="500">
     <WindowChrome.WindowChrome>
         <WindowChrome UseAeroCaptionButtons="False" CaptionHeight="0"/>
     </WindowChrome.WindowChrome>
+    <Window.Resources>
+        <ValueConverter:StatusToBoolean x:Key="StatusToBoolean"/>
+    </Window.Resources>
     <Border Background="{StaticResource MainColor}" BorderBrush="{StaticResource BorderColor}" BorderThickness="1">
         <Grid>
             <Grid.RowDefinitions>
@@ -29,9 +33,9 @@
                 <ScrollViewer VerticalScrollBarVisibility="Auto">
                     <ItemsControl ItemsSource="{Binding ModPackSelectors}" Margin="10,5">
                         <ItemsControl.ItemTemplate>
-                            <DataTemplate DataType="{x:Type local:IModPackSelector}">
+                            <DataTemplate DataType="{x:Type ViewModel:DEModPack}">
                                 <Grid>
-                                    <ToggleButton Content="{Binding ModPack.PackName}" ToolTip="{Binding ModPack.Description}" Tag="{Binding}" IsChecked="{Binding IsSelected}" Style="{StaticResource GResourceSelectorButton}"/>
+                                    <ToggleButton Content="{Binding PackName}" ToolTip="{Binding Description}" Tag="{Binding}" IsChecked="{Binding Status,Converter={StaticResource StatusToBoolean}}" Style="{StaticResource GResourceSelectorButton}"/>
                                 </Grid>
                             </DataTemplate>
                         </ItemsControl.ItemTemplate>

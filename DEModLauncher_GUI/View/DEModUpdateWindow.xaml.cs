@@ -1,15 +1,16 @@
 ﻿using System.Windows;
 using System.Windows.Input;
+using DEModLauncher_GUI.ViewModel;
 
 namespace DEModLauncher_GUI.View {
     /// <summary>
     /// DEModListWindow.xaml 的交互逻辑
     /// </summary>
     public partial class DEModUpdateWindow : Window {
-        public IModManager ModManager { get; }
+        public DEModManager ModManager { get; }
 
         public DEModUpdateWindow() {
-            ModManager = ViewModel.DEModManager.GetInstance();
+            ModManager = DEModManager.GetInstance();
             InitializeComponent();
         }
 
@@ -21,7 +22,7 @@ namespace DEModLauncher_GUI.View {
         }
 
         private void UpdateMod_Click(object sender, RoutedEventArgs e) {
-            ModManager.UpdateResource((IModResource)(sender as FrameworkElement).Tag);
+            ModManager.UpdateResource((DEModResource)(sender as FrameworkElement).Tag);
         }
     }
 }

@@ -1,6 +1,7 @@
 ﻿using DEModLauncher_GUI.ViewModel;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -13,9 +14,9 @@ namespace DEModLauncher_GUI {
     /// </summary>
     public partial class MainWindow : Window {
         private Point _heldPoint;
-        private IModManager _modManager;
+        private DEModManager _modManager;
 
-        public IModManager ModManager {
+        public DEModManager ModManager {
             get {
                 return _modManager;
             }
@@ -23,7 +24,7 @@ namespace DEModLauncher_GUI {
 
         public MainWindow() {
             _modManager = DEModManager.GetInstance();
-            _modManager.CurrentModChanged += ModManager_CurrentModChanged;
+            _modManager.CurrentModPackChanged += ModManager_CurrentModChanged;
             InitializeComponent();
         }
 
@@ -57,13 +58,13 @@ namespace DEModLauncher_GUI {
 
         #region 模组配置操作
         private void SelectModPack_Click(object sender, RoutedEventArgs e) {
-            _modManager.SetCurrentMod(GetModPackFrom(sender)); ;
+            _modManager.SetCurrentModPack(GetModPackFrom(sender)); ;
         }
         private void DuplicateModPack_Click(object sender, RoutedEventArgs e) {
             _modManager.DuplicateModPack(GetModPackFrom(sender));
         }
         private void AddModPack_Click(object sender, RoutedEventArgs e) {
-            _modManager.AddModPack();
+            _modManager.NewModPack();
             ModPackDisplayer.ScrollToHorizontalOffset(ModPackDisplayer.ScrollableWidth * 2);
         }
         private void RemoveModPack_Click(object sender, RoutedEventArgs e) {
@@ -71,11 +72,6 @@ namespace DEModLauncher_GUI {
         }
         private void EditModPack_Click(object sender, RoutedEventArgs e) {
             GetModPackFrom(sender).Edit();
-        }
-        private void EditModPack_Click(object sender, MouseButtonEventArgs e) {
-            if (e.ClickCount >= 2) {
-                GetModPackFrom(sender).Edit();
-            }
         }
         private void CheckConflict_Click(object sender, RoutedEventArgs e) {
             GetModPackFrom(sender).CheckModConfliction();
@@ -87,7 +83,7 @@ namespace DEModLauncher_GUI {
 
         #region 资源操作
         private void AddResource_Click(object sender, RoutedEventArgs e) {
-            _modManager.CurrentMod?.AddResource();
+            _modManager.CurrentMod?.NewResource();
             ResourcesDisplayer.ScrollToVerticalOffset(ResourcesDisplayer.ScrollableHeight * 2);
         }
         private void AddModPackReference_Click(object sender, RoutedEventArgs e) {
@@ -97,7 +93,7 @@ namespace DEModLauncher_GUI {
             _modManager.CurrentMod?.RemoveResource(GetResourceFrom(sender));
         }
         private void CurrentModDisplayer_FileDrop(object sender, DragEventArgs e) {
-            _modManager.CurrentMod?.AddResource(e.Data);
+            _modManager.CurrentMod?.InsertResources(0, (string[])e.Data.GetData(DataFormats.FileDrop));
             ResourcesDisplayer.ScrollToVerticalOffset(ResourcesDisplayer.ScrollableHeight * 2);
             FileDragArea.IsHitTestVisible = false;
         }
@@ -160,6 +156,7 @@ namespace DEModLauncher_GUI {
 
         #region 模组配置列表拖动排序实现
         private async void ModPack_PreviewMouseDown(object sender, MouseButtonEventArgs e) {
+            _modManager.SetCurrentModPack(GetModPackFrom(sender));
             // 拖拽触发检测
             bool isOk = await Task.Run(() => {
                 for (int i = 0; i < 4; i++) {
@@ -172,40 +169,38 @@ namespace DEModLauncher_GUI {
             });
 
             if (isOk) {
-                View.ModPackButton source = sender as View.ModPackButton;
-                source.IsChecked = true;
-                _modManager.SetCurrentMod(GetModPackFrom(source));
+                View.ModPack source = sender as View.ModPack;
                 DataObject dataObj = new DataObject(source.Tag);
                 DragDrop.DoDragDrop(ResourceList, dataObj, DragDropEffects.Move);
             }
         }
-        private void ModPacksList_DragOver(object sender, DragEventArgs e) {
-            Point hoverPos = e.GetPosition(ModPackDisplayer);
-            if (hoverPos.X <= 40) {
-                ModPackDisplayer.ScrollToHorizontalOffset(ModPackDisplayer.HorizontalOffset - hoverPos.X - 40);
-            }
-            else if (hoverPos.X >= 850) {
-                ModPackDisplayer.ScrollToHorizontalOffset(ModPackDisplayer.HorizontalOffset + hoverPos.X - 850);
-            }
-        }
-        private void ModPack_Drop(object sender, DragEventArgs e) {
-            IModPack source = e.Data.GetData(typeof(DEModPack)) as IModPack;
+        private void ModPack_DataDragDrop(object sender, DataDragDropEventArgs e) {
+            DEModPack source = e.Data.GetData(typeof(DEModPack)) as DEModPack;
             if (source == null) {
                 return;
             }
-            IModPack target = (sender as FrameworkElement).Tag as IModPack;
+            DEModPack target = (sender as FrameworkElement).Tag as DEModPack;
             if (target == null) {
                 return;
             }
-
-            // 如果源和目标相同，跳过
-            if (ReferenceEquals(source, target)) {
-                return;
+            var newIndex = _modManager.ModPacks.IndexOf(target);
+            switch (e.Direction) {
+                case Direction.Left:
+                    break;
+                case Direction.Right:
+                    newIndex += 1;
+                    break;
             }
-
-            // 否则将源移除，重新插入到target前
-            _modManager.ResortModPack(source, target);
-            _modManager.SetCurrentMod(source);
+            _modManager.ResortModPack(newIndex, source);
+        }
+        private void ModPacksList_DragOver(object sender, DragEventArgs e) {
+            Point hoverPos = e.GetPosition(ModPackDisplayer);
+            if (hoverPos.X <= 50) {
+                ModPackDisplayer.ScrollToHorizontalOffset(ModPackDisplayer.HorizontalOffset - hoverPos.X - 50);
+            }
+            else if (hoverPos.X >= ModPackDisplayer.ActualWidth - 50) {
+                ModPackDisplayer.ScrollToHorizontalOffset(ModPackDisplayer.HorizontalOffset + (hoverPos.X - (ModPackDisplayer.ActualWidth - 50)));
+            }
         }
         #endregion
 
@@ -214,7 +209,7 @@ namespace DEModLauncher_GUI {
             // 拖拽触发检测
             bool isOk = await Task.Run(() => {
                 for (int i = 0; i < 4; i++) {
-                    Task.Delay(TimeSpan.FromMilliseconds(50)).Wait();
+                    Task.Delay(TimeSpan.FromMilliseconds(25)).Wait();
                     if (e.LeftButton != MouseButtonState.Pressed) {
                         return false;
                     }
@@ -226,59 +221,38 @@ namespace DEModLauncher_GUI {
                 DataObject dataObj = new DataObject((sender as FrameworkElement).Tag);
                 DragDrop.DoDragDrop(ResourceList, dataObj, DragDropEffects.Move);
             }
+            else {
+                GetResourceFrom(sender)?.Toggle();
+            }
+        }
+        private void ModResource_DataDragDrop(object sender, DataDragDropEventArgs e) {
+            DEModResource target = (sender as FrameworkElement).Tag as DEModResource;
+            if (target == null) {
+                return;
+            }
+            // 如果拖入的是文件列表
+            if (e.Data.IsTargetType(DataFormats.FileDrop)) {
+                _modManager.CurrentMod?.InsertResources(_modManager.CurrentMod.Resources.IndexOf(target), (string[])e.Data.GetData(DataFormats.FileDrop));
+                return;
+            }
+            // 否则视为资源排序
+            DEModResource source = e.Data.GetData(typeof(DEModResource)) as DEModResource;
+            if (source == null) {
+                return;
+            }
+            var newIndex = _modManager.CurrentMod.Resources.IndexOf(target);
+            if (e.Direction == Direction.Down) {
+                newIndex += 1;
+            }
+            _modManager.CurrentMod.ResortResource(newIndex, source);
         }
         private void ResourceList_DragOver(object sender, DragEventArgs e) {
             Point hoverPos = e.GetPosition(ResourcesDisplayer);
             if (hoverPos.Y <= 30) {
                 ResourcesDisplayer.ScrollToVerticalOffset(ResourcesDisplayer.VerticalOffset - hoverPos.Y - 30);
             }
-            else if (hoverPos.Y >= 390) {
-                ResourcesDisplayer.ScrollToVerticalOffset(ResourcesDisplayer.VerticalOffset + hoverPos.Y - 390);
-            }
-        }
-        private void ModResource_Drop(object sender, DragEventArgs e) {
-            // 如果拖入的是文件列表
-            if (IsFileDrop(e.Data)) {
-                IModResource trg = (sender as FrameworkElement).Tag as IModResource;
-                AddResourceFromFileDrop(_modManager.CurrentMod.Resources.IndexOf(trg), e.Data);
-                return;
-            }
-            // 否则视为资源排序
-            IModResource source = e.Data.GetData(typeof(DEModResource)) as IModResource;
-            // 如果为空，尝试作为文件列表处理
-            if (source == null) {
-                return;
-            }
-            IModResource target = (sender as FrameworkElement).Tag as IModResource;
-            if (target == null) {
-                return;
-            }
-
-            // 如果源和目标相同，跳过
-            if (ReferenceEquals(source, target)) {
-                return;
-            }
-
-            // 否则将源移除，重新插入到target前
-            _modManager.CurrentMod?.ResortResource(source, target);
-        }
-        private void AddResourceFromFileDrop(int index, IDataObject data) {
-            string[] fileList = data.GetData(DataFormats.FileDrop) as string[];
-            if (fileList == null) {
-                return;
-            }
-            List<string> errorList = new List<string>();
-            foreach (var item in fileList) {
-                try {
-                    _modManager.CurrentMod?.InsertResource(index, item);
-                }
-                catch (Exception e) {
-                    errorList.Add($"{item}\n");
-                    errorList.Add($"    原因：{e.Message}\n\n");
-                }
-            }
-            if (errorList.Count > 0) {
-                View.InformationWindow.Show(string.Join("", errorList), "", Application.Current.MainWindow);
+            else if (hoverPos.Y >= (ResourcesDisplayer.ActualHeight - 30)) {
+                ResourcesDisplayer.ScrollToVerticalOffset(ResourcesDisplayer.VerticalOffset + (hoverPos.Y - (ResourcesDisplayer.ActualHeight - 30)));
             }
         }
         //// 方案2
@@ -352,48 +326,17 @@ namespace DEModLauncher_GUI {
                     return;
                 }
                 await Task.Delay(50);
-                mpb = FindVisualChild<RadioButton>(ModPacksList.ItemContainerGenerator.ContainerFromItem(_modManager.CurrentMod));
+                mpb = Util.FindVisualChild<RadioButton>(ModPacksList.ItemContainerGenerator.ContainerFromItem(_modManager.CurrentMod));
                 tryTimes--;
             } while (mpb == null);
             mpb.IsChecked = true;
         }
-        private bool IsFileDrop(IDataObject data) {
-            var dataFormats = new List<string>(data.GetFormats());
-            if (dataFormats.Contains(DataFormats.FileDrop)) {
-                return true;
-            }
-            return false;
+
+        private static DEModResource GetResourceFrom(object sender) {
+            return (sender as FrameworkElement).Tag as DEModResource;
         }
-        private static T FindVisualParent<T>(DependencyObject dp) where T : class {
-            while (dp != null) {
-                if (dp is T) {
-                    return dp as T;
-                }
-                dp = VisualTreeHelper.GetParent(dp);
-            }
-            return null;
-        }
-        private static T FindVisualChild<T>(DependencyObject depObj) where T : DependencyObject {
-            if (depObj == null) {
-                return null;
-            }
-            for (int i = 0; i < VisualTreeHelper.GetChildrenCount(depObj); i++) {
-                DependencyObject child = VisualTreeHelper.GetChild(depObj, i);
-                if (child is T) {
-                    return (T)child;
-                }
-                T childItem = FindVisualChild<T>(child);
-                if (childItem != null) {
-                    return childItem;
-                }
-            }
-            return null;
-        }
-        private static IModResource GetResourceFrom(object sender) {
-            return (sender as FrameworkElement).Tag as IModResource;
-        }
-        private static IModPack GetModPackFrom(object sender) {
-            return (sender as FrameworkElement).Tag as IModPack;
+        private static DEModPack GetModPackFrom(object sender) {
+            return (sender as FrameworkElement).Tag as DEModPack;
         }
     }
 }

@@ -1,9 +1,9 @@
 ﻿using System;
 
 namespace DEModLauncher_GUI.ViewModel {
-    public class DEModResource : ViewModelBase, IModResource, IComparable<DEModResource> {
+    public class DEModResource : ViewModelBase, IComparable<DEModResource> {
         private string _path;
-        private ResourceStatus _status;
+        private Status _status;
         private DEModInformation _information;
 
         public string Name {
@@ -31,16 +31,12 @@ namespace DEModLauncher_GUI.ViewModel {
                 OnPropertyChanged(nameof(Information));
             }
         }
-        public ResourceStatus Status {
+        public Status Status {
             get {
                 return _status;
             }
-            set {
-                _status = value;
-                OnPropertyChanged(nameof(Status));
-            }
         }
-        public IModInformation Information {
+        public DEModInformation Information {
             get {
                 return _information;
             }
@@ -51,7 +47,7 @@ namespace DEModLauncher_GUI.ViewModel {
         }
         public DEModResource(string path) {
             _path = path;
-            _status = ResourceStatus.Enabled;
+            _status = Status.Enable;
             try {
                 _information = DEModInformation.Read($"{DOOMEternal.ModPacksDirectory}\\{path}");
             }
@@ -60,11 +56,14 @@ namespace DEModLauncher_GUI.ViewModel {
             }
         }
 
-        public void Enable() {
-            _status = ResourceStatus.Enabled;
-        }
-        public void Disable() {
-            _status = ResourceStatus.Disabled;
+        public void Toggle() {
+            if (_status == Status.Disable) {
+                _status = Status.Enable;
+            }
+            else {
+                _status = Status.Disable;
+            }
+            OnPropertyChanged(nameof(Status));
         }
         public DEModResource GetDeepCopy() {
             DEModResource copy = new DEModResource();

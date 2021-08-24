@@ -3,14 +3,14 @@ using System.Globalization;
 using System.Windows.Data;
 
 namespace DEModLauncher_GUI.ViewModel.ValueConverter {
-    public class ResourceStatusToBoolean : IValueConverter {
+    public class StatusToBoolean : IValueConverter {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture) {
             try {
-                ResourceStatus status = (ResourceStatus)value;
+                Status status = (Status)value;
                 switch (status) {
-                    case ResourceStatus.Enabled:
+                    case Status.Enable:
                         return true;
-                    case ResourceStatus.Disabled:
+                    case Status.Disable:
                         return false;
                     default:
                         return true;
@@ -26,13 +26,13 @@ namespace DEModLauncher_GUI.ViewModel.ValueConverter {
                 bool isOn = (bool)value;
                 switch (isOn) {
                     case true:
-                        return ResourceStatus.Enabled;
+                        return Status.Enable;
                     case false:
-                        return ResourceStatus.Disabled;
+                        return Status.Disable;
                 }
             }
             catch {
-                return ResourceStatus.Enabled;
+                return Status.Enable;
             }
         }
     }

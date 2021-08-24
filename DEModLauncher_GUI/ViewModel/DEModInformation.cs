@@ -5,7 +5,7 @@ using System.Text.RegularExpressions;
 using System.Windows;
 
 namespace DEModLauncher_GUI.ViewModel {
-    public record DEModInformation : IModInformation {
+    public record DEModInformation {
         private static readonly Regex nameReg = new Regex("(?<=\"name\":\")[\\s\\S]+(?=\"[,]*)");
         private static readonly Regex descriptionReg = new Regex("(?<=\"description\":\")[\\s\\S]+(?=\"[,]*)");
         private static readonly Regex authorReg = new Regex("(?<=\"author\":\")[\\s\\S]+(?=\"[,]*)");

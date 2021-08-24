@@ -10,20 +10,25 @@
     <Grid Background="{StaticResource MainColor}">
         <Grid Margin="10" VerticalAlignment="Center">
             <Grid.RowDefinitions>
-                <RowDefinition Height="60"/>
+                <RowDefinition Height="Auto"/>
                 <RowDefinition />
             </Grid.RowDefinitions>
             <Grid Grid.Row="0">
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="25"/>
+                    <RowDefinition Height="40"/>
                     <RowDefinition Height="35"/>
                 </Grid.RowDefinitions>
                 <Label Grid.Row="0" Content="{StaticResource GAME_DIRECTORY}" ToolTip="{StaticResource GAME_DIRECTORY_TOOLTIP}" Width="65" VerticalContentAlignment="Center" HorizontalContentAlignment="Center"
-                       BorderThickness="0" Padding="0" Background="{StaticResource MainColor}" Foreground="{StaticResource TextColor}"/>
-                <TextBox Grid.Row="1" x:Name="GameDirectory" IsReadOnly="True" VerticalContentAlignment="Center" BorderThickness="1" BorderBrush="{StaticResource BorderColor}"  
-                         Background="{StaticResource MainColor}" Foreground="{StaticResource TextColor}">
+                       BorderThickness="0" Padding="0" FontSize="16" Background="{StaticResource MainColor}" Foreground="{StaticResource TextColor}"/>
+                <TextBox Grid.Row="1" x:Name="GameDirectory">
                     <TextBox.Style>
                         <Style TargetType="TextBox">
+                            <Setter Property="IsReadOnly" Value="True" />
+                            <Setter Property="VerticalContentAlignment" Value="Center" />
+                            <Setter Property="BorderThickness" Value="1" />
+                            <Setter Property="Foreground" Value="{StaticResource TextColor}" />
+                            <Setter Property="Background" Value="{StaticResource MainColor}" />
+                            <Setter Property="BorderBrush" Value="{StaticResource BorderColor}" />
                             <Setter Property="Template">
                                 <Setter.Value>
                                     <ControlTemplate TargetType="TextBox">
@@ -45,7 +50,7 @@
                     <Button Height="50" Content="{StaticResource ADVANCED_OPTION_CLEAN_UNUSED_IMAGE_FILES}" ToolTip="{StaticResource ADVANCED_OPTION_CLEAN_UNUSED_IMAGE_FILES_TOOLTIP}" Style="{StaticResource AGButton}" Click="ClearUnusedImageFiles_Click"/>
                     <Button Height="50" Content="{StaticResource ADVANCED_OPTION_UPDATE_MODS}" ToolTip="{StaticResource ADVANCED_OPTION_UPDATE_MODS_TOOLTIP}" Style="{StaticResource AGButton}" Click="UpdateModFile_Click"/>
                     <Button Height="50" Content="{StaticResource ADVANCED_OPTION_RESET_MOD_LOADER}" ToolTip="{StaticResource ADVANCED_OPTION_RESET_MOD_LOADER_TOOLTIP}" Style="{StaticResource AGButton}" Click="ResetModLoader_Click"/>
-                    <Button Height="50" Content="{StaticResource ADVANCED_OPTION_EXPORT_MODPACKSS}" ToolTip="{StaticResource ADVANCED_OPTION_EXPORT_MODPACKSS_TOOLTIP}" Style="{StaticResource AGButton}" Click="ExportModPacks_Click"/>
+                    <Button Height="50" Content="{StaticResource ADVANCED_OPTION_EXPORT_MODPACKS}" ToolTip="{StaticResource ADVANCED_OPTION_EXPORT_MODPACKS_TOOLTIP}" Style="{StaticResource AGButton}" Click="ExportModPacks_Click"/>
                 </UniformGrid>
             </Grid>
         </Grid>

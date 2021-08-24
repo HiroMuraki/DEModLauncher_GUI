@@ -2,6 +2,130 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:View="clr-namespace:DEModLauncher_GUI.View"
                     xmlns:ValueConverter="clr-namespace:DEModLauncher_GUI.ViewModel.ValueConverter">
+    <Style TargetType="{x:Type View:ModPack}">
+        <Setter Property="Background" Value="{StaticResource ModPackItemColor}" />
+        <Setter Property="BorderBrush" Value="{StaticResource TextColor}" />
+        <Setter Property="BorderThickness" Value="0" />
+        <Setter Property="FontSize" Value="12" />
+        <Setter Property="Width" Value="150" />
+        <Setter Property="Height" Value="80" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type View:ModPack}">
+                    <Grid>
+                        <Grid.Resources>
+                            <ValueConverter:DoubleGroupToRect x:Key="DoubleGroupToRect"/>
+                        </Grid.Resources>
+                        <Border Background="{StaticResource ItemShadowColor}" Opacity="0.5" Margin="2,2,-2,-2" CornerRadius="5"/>
+                        <Grid>
+                            <Grid.Clip>
+                                <RectangleGeometry RadiusX="5" RadiusY="5">
+                                    <RectangleGeometry.Rect>
+                                        <MultiBinding Converter="{StaticResource DoubleGroupToRect}">
+                                            <Binding Path="Width" RelativeSource="{RelativeSource Mode=TemplatedParent}"/>
+                                            <Binding Path="Height" RelativeSource="{RelativeSource Mode=TemplatedParent}"/>
+                                        </MultiBinding>
+                                    </RectangleGeometry.Rect>
+                                </RectangleGeometry>
+                            </Grid.Clip>
+                            <Grid.RowDefinitions>
+                                <RowDefinition/>
+                                <RowDefinition Height="25"/>
+                            </Grid.RowDefinitions>
+                            <Grid Grid.Row="0" Grid.RowSpan="2" >
+                                <Border Background="{TemplateBinding Background}"/>
+                                <Image Source="{Binding Path=ImagePath,RelativeSource={RelativeSource Mode=TemplatedParent}}" VerticalAlignment="Center" HorizontalAlignment="Center" Stretch="UniformToFill"/>
+                                <Border Background="Transparent" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" CornerRadius="3"/>
+                                <Border x:Name="MaskBackground" Background="Black" Opacity="0.50"/>
+                            </Grid>
+                            <Grid Grid.Row="1">
+                                <Border x:Name="TextMask" Background="Black" Opacity="0.70" VerticalAlignment="Bottom" Height="25"/>
+                                <Label x:Name="TextContent" Content="{Binding Path=PackName,RelativeSource={RelativeSource Mode=TemplatedParent}}" Foreground="{StaticResource TextColor}" VerticalContentAlignment="Center" HorizontalContentAlignment="Center"/>
+                            </Grid>
+                        </Grid>
+                        <Border x:Name="PART_TipBorder" BorderBrush="{StaticResource FocusColor}" IsHitTestVisible="False"/>
+                    </Grid>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter Property="Background" Value="{StaticResource MainColor}" />
+                            <Setter Property="Foreground" Value="{StaticResource TextHoveredColor}" />
+                        </Trigger>
+                        <Trigger Property="Status" Value="Enable" >
+                            <Setter Property="FontSize" Value="14" />
+                            <Setter Property="FontWeight" Value="Bold" />
+                            <Setter TargetName="TextMask" Property="Visibility" Value="Hidden" />
+                            <Setter TargetName="MaskBackground" Property="Visibility" Value="Hidden" />
+                            <Setter TargetName="TextContent" Property="Visibility" Value="Hidden" />
+                            <Setter Property="BorderThickness" Value="2" />
+                            <Trigger.EnterActions>
+                                <BeginStoryboard>
+                                    <Storyboard Storyboard.TargetProperty="Height">
+                                        <DoubleAnimation To="90" AccelerationRatio="0.2" DecelerationRatio="0.8" Duration="0:0:0.1"/>
+                                    </Storyboard>
+                                </BeginStoryboard>
+                                <BeginStoryboard>
+                                    <Storyboard Storyboard.TargetProperty="Width">
+                                        <DoubleAnimation To="200" AccelerationRatio="0.2" DecelerationRatio="0.8" Duration="0:0:0.1"/>
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </Trigger.EnterActions>
+                            <Trigger.ExitActions>
+                                <BeginStoryboard>
+                                    <Storyboard Storyboard.TargetProperty="Height">
+                                        <DoubleAnimation AccelerationRatio="0.2" DecelerationRatio="0.8" Duration="0:0:0.1"/>
+                                    </Storyboard>
+                                </BeginStoryboard>
+                                <BeginStoryboard>
+                                    <Storyboard Storyboard.TargetProperty="Width">
+                                        <DoubleAnimation AccelerationRatio="0.2" DecelerationRatio="0.8" Duration="0:0:0.1"/>
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </Trigger.ExitActions>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style TargetType="{x:Type View:ModResource}">
+        <Setter Property="Background" Value="{StaticResource ResourceItemColor}" />
+        <Setter Property="Foreground" Value="{StaticResource TextColor}" />
+        <Setter Property="BorderBrush" Value="{StaticResource BorderColor}" />
+        <Setter Property="BorderThickness" Value="0,0,0,1" />
+        <Setter Property="VerticalContentAlignment" Value="Center" />
+        <Setter Property="HorizontalContentAlignment" Value="Left" />
+        <Setter Property="FontSize" Value="12" />
+        <Setter Property="Height" Value="30" />
+        <Setter Property="Padding" Value="7,0" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type View:ModResource}">
+                    <Grid>
+                        <Border Background="{StaticResource ItemShadowColor}"
+                                Opacity="0.15" Margin="2,2,-2,-2" CornerRadius="2"/>
+                        <Border Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}" 
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                CornerRadius="2"/>
+                        <TextBlock Text="{Binding ResourceName,RelativeSource={RelativeSource Mode=TemplatedParent}}" Foreground="{TemplateBinding Foreground}"
+                                   VerticalAlignment="{TemplateBinding VerticalContentAlignment}" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" Margin="{TemplateBinding Padding}"/>
+                        <Border x:Name="PART_TipBorder" CornerRadius="2" IsHitTestVisible="False" BorderBrush="{StaticResource FocusColor}" BorderThickness="0"/>
+                    </Grid>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter Property="Foreground" Value="{StaticResource MainColor}" />
+                            <Setter Property="Background" Value="{StaticResource FocusColor}" />
+                        </Trigger>
+                        <Trigger Property="Status" Value="Disable" >
+                            <Setter Property="Foreground" Value="{StaticResource TextDisabledColor}" />
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
     <Style TargetType="MenuItem">
         <Setter Property="Background" Value="{StaticResource MainColor}" />
         <Setter Property="Foreground" Value="{StaticResource TextColor}" />
@@ -32,6 +156,7 @@
             </Setter.Value>
         </Setter>
     </Style>
+
     <Style TargetType="ContextMenu">
         <Setter Property="Background" Value="{StaticResource MainColor}" />
         <Setter Property="BorderBrush" Value="Transparent" />
@@ -54,6 +179,7 @@
             </Setter.Value>
         </Setter>
     </Style>
+
     <Style x:Key="GButton" TargetType="Button">
         <Setter Property="Background" Value="{StaticResource AccentColor}" />
         <Setter Property="Foreground" Value="{StaticResource TextColor}" />
@@ -80,6 +206,7 @@
             </Setter.Value>
         </Setter>
     </Style>
+
     <Style x:Key="AGButton" TargetType="Button">
         <Setter Property="Background" Value="{StaticResource MainColor}" />
         <Setter Property="Foreground" Value="{StaticResource TextColor}" />
@@ -103,6 +230,7 @@
             </Setter.Value>
         </Setter>
     </Style>
+
     <Style x:Key="GButtonTitle" TargetType="Button">
         <Setter Property="Background" Value="Transparent" />
         <Setter Property="Foreground" Value="{StaticResource TextColor}" />
@@ -129,6 +257,7 @@
             </Setter.Value>
         </Setter>
     </Style>
+
     <Style x:Key="GAddButton" TargetType="Button" BasedOn="{StaticResource GButton}">
         <Setter Property="Width" Value="30" />
         <Setter Property="Height" Value="30" />
@@ -166,6 +295,7 @@
             </Trigger>
         </Style.Triggers>
     </Style>
+
     <Style x:Key="GAddButtonStatic" TargetType="Button" BasedOn="{StaticResource GButton}">
         <Setter Property="Width" Value="30" />
         <Setter Property="Height" Value="30" />
@@ -180,199 +310,7 @@
             </Trigger>
         </Style.Triggers>
     </Style>
-    <Style TargetType="{x:Type View:ModPackButton}">
-        <Setter Property="Background" Value="{StaticResource ModPackItemColor}" />
-        <Setter Property="BorderBrush" Value="{StaticResource TextColor}" />
-        <Setter Property="BorderThickness" Value="0" />
-        <Setter Property="FontSize" Value="12" />
-        <Setter Property="Width" Value="150" />
-        <Setter Property="Height" Value="80" />
-        <Setter Property="Template">
-            <Setter.Value>
-                <ControlTemplate TargetType="{x:Type View:ModPackButton}">
-                    <Grid>
-                        <Grid.Resources>
-                            <ValueConverter:DoubleGroupToRect x:Key="DoubleGroupToRect"/>
-                        </Grid.Resources>
-                        <Border Background="{StaticResource ItemShadowColor}" Opacity="0.5" Margin="2,2,-2,-2" CornerRadius="5"/>
-                        <Grid>
-                            <Grid.Clip>
-                                <RectangleGeometry RadiusX="5" RadiusY="5">
-                                    <RectangleGeometry.Rect>
-                                        <MultiBinding Converter="{StaticResource DoubleGroupToRect}">
-                                            <Binding Path="Width" RelativeSource="{RelativeSource Mode=TemplatedParent}"/>
-                                            <Binding Path="Height" RelativeSource="{RelativeSource Mode=TemplatedParent}"/>
-                                        </MultiBinding>
-                                    </RectangleGeometry.Rect>
-                                </RectangleGeometry>
-                            </Grid.Clip>
-                            <Grid.RowDefinitions>
-                                <RowDefinition/>
-                                <RowDefinition Height="25"/>
-                            </Grid.RowDefinitions>
-                            <Grid Grid.Row="0" Grid.RowSpan="2" >
-                                <Border Background="{TemplateBinding Background}"/>
-                                <Image Source="{Binding Path=ImagePath,RelativeSource={RelativeSource Mode=TemplatedParent}}" VerticalAlignment="Center" HorizontalAlignment="Center" Stretch="UniformToFill"/>
-                                <Border Background="Transparent" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" CornerRadius="3"/>
-                                <Border x:Name="MaskBackground" Background="Black" Opacity="0.50"/>
-                            </Grid>
-                            <Grid Grid.Row="1">
-                                <Border x:Name="TextMask" Background="Black" Opacity="0.70" VerticalAlignment="Bottom" Height="25"/>
-                                <Label x:Name="TextContent" Content="{Binding Path=PackName,RelativeSource={RelativeSource Mode=TemplatedParent}}" Foreground="{StaticResource TextColor}" VerticalContentAlignment="Center" HorizontalContentAlignment="Center"/>
-                            </Grid>
-                            <Border Grid.RowSpan="2" x:Name="DragTip" BorderBrush="{StaticResource FocusColor}" IsHitTestVisible="False" BorderThickness="5,0,0,0" Opacity="0"/>
-                        </Grid>
-                    </Grid>
-                    <ControlTemplate.Triggers>
-                        <Trigger Property="IsMouseOver" Value="True">
-                            <Setter Property="Background" Value="{StaticResource MainColor}" />
-                            <Setter Property="Foreground" Value="{StaticResource TextHoveredColor}" />
-                        </Trigger>
-                        <EventTrigger RoutedEvent="RadioButton.Checked">
-                            <EventTrigger.Actions>
-                                <BeginStoryboard>
-                                    <Storyboard Storyboard.TargetProperty="Height">
-                                        <DoubleAnimation AccelerationRatio="0.2"
-                                                         DecelerationRatio="0.8"
-                                                         Duration="0:0:0.1"
-                                                         By="10"/>
-                                    </Storyboard>
-                                </BeginStoryboard>
-                                <BeginStoryboard>
-                                    <Storyboard Storyboard.TargetProperty="Width">
-                                        <DoubleAnimation AccelerationRatio="0.2"
-                                                         DecelerationRatio="0.8"
-                                                         Duration="0:0:0.1"
-                                                         By="50"/>
-                                    </Storyboard>
-                                </BeginStoryboard>
-                            </EventTrigger.Actions>
-                        </EventTrigger>
-                        <EventTrigger RoutedEvent="RadioButton.Unchecked">
-                            <EventTrigger.Actions>
-                                <BeginStoryboard>
-                                    <Storyboard Storyboard.TargetProperty="Height">
-                                        <DoubleAnimation AccelerationRatio="0.2"
-                                                         DecelerationRatio="0.8"
-                                                         Duration="0:0:0.1"/>
-                                    </Storyboard>
-                                </BeginStoryboard>
-                                <BeginStoryboard>
-                                    <Storyboard Storyboard.TargetProperty="Width">
-                                        <DoubleAnimation AccelerationRatio="0.2"
-                                                         DecelerationRatio="0.8"
-                                                         Duration="0:0:0.1"/>
-                                    </Storyboard>
-                                </BeginStoryboard>
-                            </EventTrigger.Actions>
-                        </EventTrigger>
-                        <EventTrigger RoutedEvent="DragDrop.DragEnter">
-                            <EventTrigger.Actions>
-                                <BeginStoryboard>
-                                    <Storyboard Storyboard.TargetName="DragTip" Storyboard.TargetProperty="Opacity">
-                                        <DoubleAnimation To="0.75" AccelerationRatio="0.2" DecelerationRatio="0.8" Duration="0:0:0.01"/>
-                                    </Storyboard>
-                                </BeginStoryboard>
-                            </EventTrigger.Actions>
-                        </EventTrigger>
-                        <EventTrigger RoutedEvent="DragDrop.DragLeave">
-                            <EventTrigger.Actions>
-                                <BeginStoryboard>
-                                    <Storyboard Storyboard.TargetName="DragTip" Storyboard.TargetProperty="Opacity">
-                                        <DoubleAnimation AccelerationRatio="0.2" DecelerationRatio="0.8" Duration="0:0:0.1"/>
-                                    </Storyboard>
-                                </BeginStoryboard>
-                            </EventTrigger.Actions>
-                        </EventTrigger>
-                        <EventTrigger RoutedEvent="DragDrop.Drop">
-                            <EventTrigger.Actions>
-                                <BeginStoryboard>
-                                    <Storyboard Storyboard.TargetName="DragTip" Storyboard.TargetProperty="Opacity">
-                                        <DoubleAnimation AccelerationRatio="0.2" DecelerationRatio="0.8" Duration="0:0:0.1"/>
-                                    </Storyboard>
-                                </BeginStoryboard>
-                            </EventTrigger.Actions>
-                        </EventTrigger>
-                        <Trigger Property="IsChecked" Value="True" >
-                            <Setter Property="FontSize" Value="14" />
-                            <Setter Property="FontWeight" Value="Bold" />
-                            <Setter TargetName="TextMask" Property="Visibility" Value="Hidden" />
-                            <Setter TargetName="MaskBackground" Property="Visibility" Value="Hidden" />
-                            <Setter TargetName="TextContent" Property="Visibility" Value="Hidden" />
-                            <Setter Property="BorderThickness" Value="2" />
-                        </Trigger>
-                    </ControlTemplate.Triggers>
-                </ControlTemplate>
-            </Setter.Value>
-        </Setter>
-    </Style>
-    <Style x:Key="GResourceItemButton" TargetType="ToggleButton">
-        <Setter Property="Background" Value="{StaticResource ResourceItemColor}" />
-        <Setter Property="Foreground" Value="{StaticResource TextColor}" />
-        <Setter Property="BorderBrush" Value="{StaticResource BorderColor}" />
-        <Setter Property="BorderThickness" Value="0,0,0,1" />
-        <Setter Property="VerticalContentAlignment" Value="Center" />
-        <Setter Property="HorizontalContentAlignment" Value="Left" />
-        <Setter Property="FontSize" Value="12" />
-        <Setter Property="Height" Value="30" />
-        <Setter Property="Padding" Value="7,0" />
-        <Setter Property="Template">
-            <Setter.Value>
-                <ControlTemplate TargetType="ToggleButton">
-                    <Grid>
-                        <Border Background="{StaticResource ItemShadowColor}"
-                                Opacity="0.15"
-                                Margin="2,2,-2,-2"
-                                CornerRadius="2"/>
-                        <Border Background="{TemplateBinding Background}"
-                                BorderBrush="{TemplateBinding BorderBrush}" 
-                                BorderThickness="{TemplateBinding BorderThickness}"
-                                CornerRadius="2"/>
-                        <Border x:Name="DragTip" CornerRadius="2" BorderBrush="{StaticResource FocusColor}" BorderThickness="0,2,0,0" Opacity="0"/>
-                        <ContentPresenter VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
-                                          HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
-                                          Margin="{TemplateBinding Padding}"/>
-                    </Grid>
-                    <ControlTemplate.Triggers>
-                        <Trigger Property="IsMouseOver" Value="True">
-                            <Setter Property="Foreground" Value="{StaticResource MainColor}" />
-                            <Setter Property="Background" Value="{StaticResource FocusColor}" />
-                        </Trigger>
-                        <Trigger Property="IsChecked" Value="False" >
-                            <Setter Property="Foreground" Value="{StaticResource TextDisabledColor}" />
-                        </Trigger>
-                        <EventTrigger RoutedEvent="DragDrop.DragEnter">
-                            <EventTrigger.Actions>
-                                <BeginStoryboard>
-                                    <Storyboard Storyboard.TargetName="DragTip" Storyboard.TargetProperty="Opacity">
-                                        <DoubleAnimation To="0.75" AccelerationRatio="0.2" DecelerationRatio="0.8" Duration="0:0:0.01"/>
-                                    </Storyboard>
-                                </BeginStoryboard>
-                            </EventTrigger.Actions>
-                        </EventTrigger>
-                        <EventTrigger RoutedEvent="DragDrop.DragLeave">
-                            <EventTrigger.Actions>
-                                <BeginStoryboard>
-                                    <Storyboard Storyboard.TargetName="DragTip" Storyboard.TargetProperty="Opacity">
-                                        <DoubleAnimation AccelerationRatio="0.2" DecelerationRatio="0.8" Duration="0:0:0.1"/>
-                                    </Storyboard>
-                                </BeginStoryboard>
-                            </EventTrigger.Actions>
-                        </EventTrigger>
-                        <EventTrigger RoutedEvent="DragDrop.Drop">
-                            <EventTrigger.Actions>
-                                <BeginStoryboard>
-                                    <Storyboard Storyboard.TargetName="DragTip" Storyboard.TargetProperty="Opacity">
-                                        <DoubleAnimation AccelerationRatio="0.2" DecelerationRatio="0.8" Duration="0:0:0.1"/>
-                                    </Storyboard>
-                                </BeginStoryboard>
-                            </EventTrigger.Actions>
-                        </EventTrigger>
-                    </ControlTemplate.Triggers>
-                </ControlTemplate>
-            </Setter.Value>
-        </Setter>
-    </Style>
+
     <Style x:Key="GResourceSelectorButton" TargetType="ToggleButton">
         <Setter Property="Background" Value="{StaticResource ModPackItemColor}" />
         <Setter Property="Foreground" Value="{StaticResource TextColor}" />

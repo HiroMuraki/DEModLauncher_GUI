@@ -7,7 +7,7 @@
         xmlns:ViewModel="clr-namespace:DEModLauncher_GUI.ViewModel"
         DataContext="{Binding RelativeSource={RelativeSource Mode=Self}}"
         WindowStartupLocation="CenterOwner"
-        Title="DEModPackSelectWindow" Height="600" Width="500">
+        Title="" Height="600" Width="500">
     <WindowChrome.WindowChrome>
         <WindowChrome UseAeroCaptionButtons="False" CaptionHeight="0"/>
     </WindowChrome.WindowChrome>
@@ -20,7 +20,7 @@
             </Grid.RowDefinitions>
             <Grid Grid.Row="0">
                 <Border Background="{StaticResource AccentColor}" MouseLeftButtonDown="Window_Move"/>
-                <Label Content="{StaticResource UPDATE_MOD_FILE_TITLE}" FontSize="14" Foreground="{StaticResource TextColor}" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" IsHitTestVisible="False"/>
+                <Label Content="{StaticResource ADVANCED_OPTION_UPDATE_MOD_FILE_TITLE}" FontSize="14" Foreground="{StaticResource TextColor}" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" IsHitTestVisible="False"/>
                 <Button Grid.Column="1" Content="&#x2573;" Width="40" FontSize="18" Style="{StaticResource GButtonTitle}" BorderThickness="0" HorizontalAlignment="Right" Click="Window_Close"/>
             </Grid>
             <Grid Grid.Row="1">
