@@ -310,47 +310,4 @@
             </Trigger>
         </Style.Triggers>
     </Style>
-
-    <Style x:Key="GResourceSelectorButton" TargetType="ToggleButton">
-        <Setter Property="Background" Value="{StaticResource ModPackItemColor}" />
-        <Setter Property="Foreground" Value="{StaticResource TextColor}" />
-        <Setter Property="BorderBrush" Value="{StaticResource BorderColor}" />
-        <Setter Property="BorderThickness" Value="0,0,0,1" />
-        <Setter Property="VerticalContentAlignment" Value="Center" />
-        <Setter Property="HorizontalContentAlignment" Value="Center" />
-        <Setter Property="FontSize" Value="14" />
-        <Setter Property="Height" Value="40"/>
-        <Setter Property="Padding" Value="0" />
-        <Setter Property="Template">
-            <Setter.Value>
-                <ControlTemplate TargetType="ToggleButton">
-                    <Grid>
-                        <Border Background="{StaticResource ItemShadowColor}"
-                                Opacity="0.15"
-                                CornerRadius="3"
-                                Margin="1,1,-1,-1"/>
-                        <Border Background="{TemplateBinding Background}"
-                                BorderBrush="{TemplateBinding BorderBrush}"
-                                BorderThickness="{TemplateBinding BorderThickness}"
-                                CornerRadius="3">
-                        </Border>
-                        <ContentPresenter VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
-                                          HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
-                                          Margin="{TemplateBinding Padding}"/>
-                    </Grid>
-                    <ControlTemplate.Triggers>
-                        <Trigger Property="IsMouseOver" Value="True">
-                            <Setter Property="Background" Value="{StaticResource MainColor}" />
-                            <Setter Property="Foreground" Value="{StaticResource TextColor}" />
-                        </Trigger>
-                        <Trigger Property="IsChecked" Value="True" >
-                            <Setter Property="FontWeight" Value="Bold" />
-                            <Setter Property="Background" Value="{StaticResource FocusColor}" />
-                            <Setter Property="Foreground" Value="{StaticResource MainColor}" />
-                        </Trigger>
-                    </ControlTemplate.Triggers>
-                </ControlTemplate>
-            </Setter.Value>
-        </Setter>
-    </Style>
 </ResourceDictionary>

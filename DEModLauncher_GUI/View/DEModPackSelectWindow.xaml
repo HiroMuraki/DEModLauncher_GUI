@@ -35,7 +35,52 @@
                         <ItemsControl.ItemTemplate>
                             <DataTemplate DataType="{x:Type ViewModel:DEModPack}">
                                 <Grid>
-                                    <ToggleButton Content="{Binding PackName}" ToolTip="{Binding Description}" Tag="{Binding}" IsChecked="{Binding Status,Converter={StaticResource StatusToBoolean}}" Style="{StaticResource GResourceSelectorButton}"/>
+                                    <View:ModPack PackName="{Binding PackName}" ToolTip="{Binding Description}" Tag="{Binding}" Status="{Binding Status}" MouseLeftButtonDown="ModPack_Toggle">
+                                        <View:ModPack.Style>
+                                            <Style TargetType="{x:Type View:ModPack}">
+                                                <Setter Property="Background" Value="{StaticResource ModPackItemColor}" />
+                                                <Setter Property="Foreground" Value="{StaticResource TextColor}" />
+                                                <Setter Property="BorderBrush" Value="{StaticResource BorderColor}" />
+                                                <Setter Property="BorderThickness" Value="0,0,0,1" />
+                                                <Setter Property="VerticalContentAlignment" Value="Center" />
+                                                <Setter Property="HorizontalContentAlignment" Value="Center" />
+                                                <Setter Property="FontSize" Value="14" />
+                                                <Setter Property="Height" Value="40"/>
+                                                <Setter Property="Padding" Value="0" />
+                                                <Setter Property="Template">
+                                                    <Setter.Value>
+                                                        <ControlTemplate TargetType="{x:Type View:ModPack}">
+                                                            <Grid>
+                                                                <Border Background="{StaticResource ItemShadowColor}"
+                                                                        Opacity="0.15"
+                                                                        CornerRadius="3"
+                                                                        Margin="1,1,-1,-1"/>
+                                                                <Border Background="{TemplateBinding Background}"
+                                                                        BorderBrush="{TemplateBinding BorderBrush}"
+                                                                        BorderThickness="{TemplateBinding BorderThickness}"
+                                                                        CornerRadius="3">
+                                                                </Border>
+                                                                <TextBlock Text="{Binding PackName,RelativeSource={RelativeSource Mode=TemplatedParent}}" 
+                                                                           VerticalAlignment="{TemplateBinding VerticalContentAlignment}" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                                                           Margin="{TemplateBinding Padding}"/>
+                                                            </Grid>
+                                                            <ControlTemplate.Triggers>
+                                                                <Trigger Property="IsMouseOver" Value="True">
+                                                                    <Setter Property="Background" Value="{StaticResource MainColor}" />
+                                                                    <Setter Property="Foreground" Value="{StaticResource TextColor}" />
+                                                                </Trigger>
+                                                                <Trigger Property="Status" Value="Enable" >
+                                                                    <Setter Property="FontWeight" Value="Bold" />
+                                                                    <Setter Property="Background" Value="{StaticResource FocusColor}" />
+                                                                    <Setter Property="Foreground" Value="{StaticResource MainColor}" />
+                                                                </Trigger>
+                                                            </ControlTemplate.Triggers>
+                                                        </ControlTemplate>
+                                                    </Setter.Value>
+                                                </Setter>
+                                            </Style>
+                                        </View:ModPack.Style>
+                                    </View:ModPack>
                                 </Grid>
                             </DataTemplate>
                         </ItemsControl.ItemTemplate>

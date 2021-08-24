@@ -79,6 +79,14 @@ namespace DEModLauncher_GUI.ViewModel {
         #endregion
 
         #region 公共方法
+        public void Toggle() {
+            if (_status == Status.Enable) {
+                ToggleOff();
+            }
+            else if (_status == Status.Disable) {
+                ToggleOn();
+            }
+        }
         public void ToggleOn() {
             _status = Status.Enable;
             OnPropertyChanged(nameof(Status));

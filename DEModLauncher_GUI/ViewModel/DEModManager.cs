@@ -223,6 +223,7 @@ namespace DEModLauncher_GUI.ViewModel {
             if (_modPacks.Count <= 0) {
                 SetDefaultModPack();
             }
+            SetCurrentModPack(_modPacks[0]);
             DOOMEternal.ModificationSaved = false;
         }
 

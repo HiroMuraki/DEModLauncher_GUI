@@ -33,6 +33,10 @@ namespace DEModLauncher_GUI.View {
             InitializeComponent();
         }
 
+        private void ModPack_Toggle(object sender, MouseButtonEventArgs e) {
+            ((sender as ModPack).Tag as DEModPack).Toggle();
+        }
+
         private void Confirm_Click(object sender, RoutedEventArgs e) {
             DialogResult = true;
         }
@@ -47,5 +51,6 @@ namespace DEModLauncher_GUI.View {
 
             }
         }
+
     }
 }
