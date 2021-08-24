@@ -77,30 +77,30 @@ namespace DEModLauncher_GUI {
             GetModPackFrom(sender).CheckModConfliction();
         }
         private void ExportMergedResource_Click(object sender, RoutedEventArgs e) {
-            _modManager.CurrentMod?.ExportMergedResource(GetModPackFrom(sender));
+            _modManager.CurrentModPack?.ExportMergedResource(GetModPackFrom(sender));
         }
         #endregion
 
         #region 资源操作
         private void AddResource_Click(object sender, RoutedEventArgs e) {
-            _modManager.CurrentMod?.NewResource();
+            _modManager.CurrentModPack?.NewResource();
             ResourcesDisplayer.ScrollToVerticalOffset(ResourcesDisplayer.ScrollableHeight * 2);
         }
         private void AddModPackReference_Click(object sender, RoutedEventArgs e) {
-            _modManager.CurrentMod?.AddResourcesReference();
+            _modManager.CurrentModPack?.AddResourcesReference();
         }
         private void DeleteResource_Click(object sender, RoutedEventArgs e) {
-            _modManager.CurrentMod?.RemoveResource(GetResourceFrom(sender));
+            _modManager.CurrentModPack?.RemoveResource(GetResourceFrom(sender));
         }
-        private void CurrentModDisplayer_FileDrop(object sender, DragEventArgs e) {
-            _modManager.CurrentMod?.InsertResources(0, (string[])e.Data.GetData(DataFormats.FileDrop));
+        private void CurrentModPackDisplayer_FileDrop(object sender, DragEventArgs e) {
+            _modManager.CurrentModPack?.InsertResources(0, (string[])e.Data.GetData(DataFormats.FileDrop));
             ResourcesDisplayer.ScrollToVerticalOffset(ResourcesDisplayer.ScrollableHeight * 2);
             FileDragArea.IsHitTestVisible = false;
         }
-        private void CurrentModDisplayer_DragEnter(object sender, DragEventArgs e) {
+        private void CurrentModPackDisplayer_DragEnter(object sender, DragEventArgs e) {
             FileDragArea.IsHitTestVisible = true;
         }
-        private void CurrentModDisplayer_DragLeave(object sender, DragEventArgs e) {
+        private void CurrentModPackDisplayer_DragLeave(object sender, DragEventArgs e) {
             FileDragArea.IsHitTestVisible = false;
         }
         private void OpenResourceFile_Click(object sender, RoutedEventArgs e) {
@@ -232,7 +232,7 @@ namespace DEModLauncher_GUI {
             }
             // 如果拖入的是文件列表
             if (e.Data.IsTargetType(DataFormats.FileDrop)) {
-                _modManager.CurrentMod?.InsertResources(_modManager.CurrentMod.Resources.IndexOf(target), (string[])e.Data.GetData(DataFormats.FileDrop));
+                _modManager.CurrentModPack?.InsertResources(_modManager.CurrentModPack.Resources.IndexOf(target), (string[])e.Data.GetData(DataFormats.FileDrop));
                 return;
             }
             // 否则视为资源排序
@@ -240,11 +240,11 @@ namespace DEModLauncher_GUI {
             if (source == null) {
                 return;
             }
-            var newIndex = _modManager.CurrentMod.Resources.IndexOf(target);
+            var newIndex = _modManager.CurrentModPack.Resources.IndexOf(target);
             if (e.Direction == Direction.Down) {
                 newIndex += 1;
             }
-            _modManager.CurrentMod.ResortResource(newIndex, source);
+            _modManager.CurrentModPack.ResortResource(newIndex, source);
         }
         private void ResourceList_DragOver(object sender, DragEventArgs e) {
             Point hoverPos = e.GetPosition(ResourcesDisplayer);
@@ -326,7 +326,7 @@ namespace DEModLauncher_GUI {
                     return;
                 }
                 await Task.Delay(50);
-                mpb = Util.FindVisualChild<RadioButton>(ModPacksList.ItemContainerGenerator.ContainerFromItem(_modManager.CurrentMod));
+                mpb = Util.FindVisualChild<RadioButton>(ModPacksList.ItemContainerGenerator.ContainerFromItem(_modManager.CurrentModPack));
                 tryTimes--;
             } while (mpb == null);
             mpb.IsChecked = true;

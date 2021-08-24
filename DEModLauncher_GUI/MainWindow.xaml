@@ -33,7 +33,7 @@
                     <ColumnDefinition Width="0.9*" MinWidth="100"/>
                 </Grid.ColumnDefinitions>
                 <!--当前模组主信息-->
-                <Grid Grid.Column="0" AllowDrop="True" x:Name="CurrentModDisplayer" DragEnter="CurrentModDisplayer_DragEnter" DragLeave="CurrentModDisplayer_DragLeave" Drop="CurrentModDisplayer_FileDrop">
+                <Grid Grid.Column="0" AllowDrop="True" x:Name="CurrentModPackDisplayer" DragEnter="CurrentModPackDisplayer_DragEnter" DragLeave="CurrentModPackDisplayer_DragLeave" Drop="CurrentModPackDisplayer_FileDrop">
                     <Grid.RowDefinitions>
                         <RowDefinition/>
                         <RowDefinition Height="40"/>
@@ -60,19 +60,19 @@
                     </Grid.Triggers>
                     <Grid.ContextMenu>
                         <ContextMenu>
-                            <MenuItem Tag="{Binding CurrentMod}" Header="{StaticResource ADD_MOD_RESOURCE_TOOLTIP}" Click="AddResource_Click"/>
-                            <MenuItem Tag="{Binding CurrentMod}" Header="{StaticResource EDIT_MOD_PACK}" Click="EditModPack_Click"/>
-                            <MenuItem Tag="{Binding CurrentMod}" Header="{StaticResource CHECK_MOD_PACK_CONFLICT}" Click="CheckConflict_Click"/>
-                            <MenuItem Tag="{Binding CurrentMod}" Header="{StaticResource GENERATE_MERGED_FILE}" Click="ExportMergedResource_Click"/>
+                            <MenuItem Tag="{Binding CurrentModPack}" Header="{StaticResource ADD_MOD_RESOURCE_TOOLTIP}" Click="AddResource_Click"/>
+                            <MenuItem Tag="{Binding CurrentModPack}" Header="{StaticResource EDIT_MOD_PACK}" Click="EditModPack_Click"/>
+                            <MenuItem Tag="{Binding CurrentModPack}" Header="{StaticResource CHECK_MOD_PACK_CONFLICT}" Click="CheckConflict_Click"/>
+                            <MenuItem Tag="{Binding CurrentModPack}" Header="{StaticResource GENERATE_MERGED_FILE}" Click="ExportMergedResource_Click"/>
                         </ContextMenu>
                     </Grid.ContextMenu>
                     <Grid Grid.Row="0" Grid.RowSpan="2" MouseLeftButtonDown="Window_Move">
-                        <Image Source="{Binding CurrentMod.ImagePath}" Stretch="UniformToFill" VerticalAlignment="Center" HorizontalAlignment="Center" MouseDown="EditModPack_Click" Tag="{Binding CurrentMod}"/>
+                        <Image Source="{Binding CurrentModPack.ImagePath}" Stretch="UniformToFill" VerticalAlignment="Center" HorizontalAlignment="Center" MouseDown="EditModPack_Click" Tag="{Binding CurrentModPack}"/>
                         <View:FileDragControl x:Name="FileDragArea" IsHitTestVisible="False"/>
                     </Grid>
                     <Grid Grid.Row="1">
                         <Border Background="Black" Opacity="0.85"/>
-                        <Label Content="{Binding CurrentMod.PackName}" Foreground="{StaticResource TextColor}" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" FontSize="18"/>
+                        <Label Content="{Binding CurrentModPack.PackName}" Foreground="{StaticResource TextColor}" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" FontSize="18"/>
                     </Grid>
                     <Grid x:Name="LaunchOptionBar" Grid.Row="1" Opacity="0">
                         <Grid.ColumnDefinitions>
@@ -127,13 +127,13 @@
                         <ScrollViewer x:Name="ResourcesDisplayer" VerticalScrollBarVisibility="Hidden">
                             <ScrollViewer.ContextMenu>
                                 <ContextMenu>
-                                    <MenuItem Tag="{Binding CurrentMod}" Header="{StaticResource ADD_MOD_RESOURCE_TOOLTIP}" Click="AddResource_Click"/>
-                                    <MenuItem Tag="{Binding CurrentMod}" Header="{StaticResource EDIT_MOD_PACK}" Click="EditModPack_Click"/>
-                                    <MenuItem Tag="{Binding CurrentMod}" Header="{StaticResource CHECK_MOD_PACK_CONFLICT}" Click="CheckConflict_Click"/>
-                                    <MenuItem Tag="{Binding CurrentMod}" Header="{StaticResource GENERATE_MERGED_FILE}" Click="ExportMergedResource_Click"/>
+                                    <MenuItem Tag="{Binding CurrentModPack}" Header="{StaticResource ADD_MOD_RESOURCE_TOOLTIP}" Click="AddResource_Click"/>
+                                    <MenuItem Tag="{Binding CurrentModPack}" Header="{StaticResource EDIT_MOD_PACK}" Click="EditModPack_Click"/>
+                                    <MenuItem Tag="{Binding CurrentModPack}" Header="{StaticResource CHECK_MOD_PACK_CONFLICT}" Click="CheckConflict_Click"/>
+                                    <MenuItem Tag="{Binding CurrentModPack}" Header="{StaticResource GENERATE_MERGED_FILE}" Click="ExportMergedResource_Click"/>
                                 </ContextMenu>
                             </ScrollViewer.ContextMenu>
-                            <ItemsControl x:Name="ResourceList" DragOver="ResourceList_DragOver" ItemsSource="{Binding CurrentMod.Resources}" Margin="6">
+                            <ItemsControl x:Name="ResourceList" DragOver="ResourceList_DragOver" ItemsSource="{Binding CurrentModPack.Resources}" Margin="6">
                                 <ItemsControl.ItemTemplate>
                                     <DataTemplate DataType="{x:Type ViewModel:DEModResource}">
                                         <Grid>
@@ -200,10 +200,10 @@
                                     </EventTrigger.Actions>
                                 </EventTrigger>
                             </StackPanel.Triggers>
-                            <Button ToolTip="{StaticResource ADD_MOD_RESOURCES_FROM_MOD_PACK_TOOLTIP}" Tag="{Binding CurrentMod}"
+                            <Button ToolTip="{StaticResource ADD_MOD_RESOURCES_FROM_MOD_PACK_TOOLTIP}" Tag="{Binding CurrentModPack}"
                                     Click="AddModPackReference_Click" Style="{StaticResource GAddButtonStatic}" BorderThickness="0" Width="Auto">
                             </Button>
-                            <Button ToolTip="{StaticResource ADD_MOD_RESOURCE_TOOLTIP}" Tag="{Binding CurrentMod}"
+                            <Button ToolTip="{StaticResource ADD_MOD_RESOURCE_TOOLTIP}" Tag="{Binding CurrentModPack}"
                                     Click="AddResource_Click" Style="{StaticResource GAddButtonStatic}" BorderThickness="0" Width="Auto">
                             </Button>
                         </StackPanel>

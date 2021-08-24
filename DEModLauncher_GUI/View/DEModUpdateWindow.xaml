@@ -25,7 +25,7 @@
             </Grid>
             <Grid Grid.Row="1">
                 <ScrollViewer VerticalScrollBarVisibility="Auto">
-                    <ItemsControl ItemsSource="{Binding ModManager.UsingMods}" Margin="10,5">
+                    <ItemsControl ItemsSource="{Binding ModManager.UsedModResources}" Margin="10,5">
                         <ItemsControl.ItemTemplate>
                             <DataTemplate DataType="{x:Type ViewModel:DEModResource}">
                                 <Grid>

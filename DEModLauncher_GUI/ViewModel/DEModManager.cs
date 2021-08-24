@@ -34,7 +34,7 @@ namespace DEModLauncher_GUI.ViewModel {
                 OnPropertyChanged(nameof(IsLaunching));
             }
         }
-        public DEModPack CurrentMod {
+        public DEModPack CurrentModPack {
             get {
                 return _currentMod;
             }
@@ -216,7 +216,7 @@ namespace DEModLauncher_GUI.ViewModel {
                 else {
                     _currentMod = null;
                 }
-                OnPropertyChanged(nameof(CurrentMod));
+                OnPropertyChanged(nameof(CurrentModPack));
                 CurrentModPackChanged?.Invoke();
             }
             if (_modPacks.Count <= 0) {
@@ -412,7 +412,7 @@ namespace DEModLauncher_GUI.ViewModel {
         /// CurrentModPack修改时调用 
         /// </summary>
         private void OnCurrentModPackChanged() {
-            OnPropertyChanged(nameof(CurrentMod));
+            OnPropertyChanged(nameof(CurrentModPack));
             CurrentModPackChanged?.Invoke();
         }
         /// <summary>
