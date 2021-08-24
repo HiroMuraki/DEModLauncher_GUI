@@ -78,8 +78,7 @@ namespace DEModLauncher_GUI.ViewModel {
         public async void LoadMod() {
             try {
                 DOOMEternal.SetModLoaderProfile("AUTO_LAUNCH_GAME", 0);
-                await Task.Run(() => { LoadModHelper(); });
-
+                await LoadModHelper();
             }
             catch (Exception exp) {
                 View.InformationWindow.Show(exp.Message, "模组启动错误", Application.Current.MainWindow);
@@ -88,7 +87,7 @@ namespace DEModLauncher_GUI.ViewModel {
         public async void LaunchMod() {
             try {
                 DOOMEternal.SetModLoaderProfile("AUTO_LAUNCH_GAME", 1);
-                await Task.Run(() => { LoadModHelper(); });
+                await LoadModHelper();
                 App.Close();
             }
             catch (Exception exp) {
@@ -106,6 +105,7 @@ namespace DEModLauncher_GUI.ViewModel {
                 return;
             }
         }
+
         public void SetCurrentModPack(DEModPack modPack) {
             foreach (var item in _modPacks) {
                 item.ToggleOff();
@@ -370,8 +370,10 @@ namespace DEModLauncher_GUI.ViewModel {
         #endregion
 
         #region 辅助方法
-        // 调用模组加载器
-        private void LoadModHelper() {
+        /// <summary>
+        /// 调用模组加载器
+        /// </summary>
+        private async Task LoadModHelper() {
             if (_currentMod == null) {
                 MessageBox.Show("请先选择一个模组配置", "警告", MessageBoxButton.OK, MessageBoxImage.Warning);
                 return;
@@ -386,7 +388,9 @@ namespace DEModLauncher_GUI.ViewModel {
             }
             IsLaunching = true;
             try {
-                LaunchModLoaderHelper();
+                await Task.Run(() => {
+                    LaunchModLoaderHelper();
+                });
             }
             catch (Exception exp) {
                 View.InformationWindow.Show(exp.Message, "模组启动错误", Application.Current.MainWindow);
