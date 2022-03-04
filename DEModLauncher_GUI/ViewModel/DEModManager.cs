@@ -8,7 +8,6 @@ using System.Runtime.Serialization.Json;
 using System.Threading.Tasks;
 using System.Windows;
 using ModPacks = System.Collections.ObjectModel.ObservableCollection<DEModLauncher_GUI.ViewModel.DEModPack>;
-using Resources = System.Collections.ObjectModel.ObservableCollection<DEModLauncher_GUI.ViewModel.DEModResource>;
 
 namespace DEModLauncher_GUI.ViewModel {
     public class DEModManager : ViewModelBase {
