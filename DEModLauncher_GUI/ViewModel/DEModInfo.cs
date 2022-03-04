@@ -1,10 +1,8 @@
-﻿using System.Collections.Generic;
-using System.IO;
+﻿using System.IO;
 using System.IO.Compression;
-using System.Text;
-using System.Text.RegularExpressions;
 using System.Runtime.Serialization;
 using System.Runtime.Serialization.Json;
+using System.Text;
 
 namespace DEModLauncher_GUI.ViewModel {
     public record DEModInfo : IDeepCopyable<DEModInfo> {

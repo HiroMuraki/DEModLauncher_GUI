@@ -332,7 +332,7 @@ namespace DEModLauncher_GUI.ViewModel {
             Description = model.Description;
             SetImage(model.ImagePath);
             Resources.Clear();
-            foreach (var item in model.Resources) {
+            foreach (string? item in model.Resources) {
                 Resources.Add(new DEModResource(item));
             }
             return this;
