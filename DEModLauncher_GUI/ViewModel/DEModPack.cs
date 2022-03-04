@@ -465,39 +465,3 @@ namespace DEModLauncher_GUI.ViewModel {
         }
     }
 }
-
-///// <summary>
-///// 上移模组资源
-///// </summary>
-///// <param name="resourcePath">要上移的模组资源</param>
-//public void MoveUpResource(DEModResource resourcePath) {
-//    int currentIndex = _resources.IndexOf(resourcePath);
-//    if (currentIndex <= 0) {
-//        return;
-//    }
-//    int newIndex = currentIndex - 1;
-//    var t = _resources[currentIndex];
-//    _resources[currentIndex] = _resources[newIndex];
-//    _resources[newIndex] = t;
-//    DOOMEternal.ModificationSaved = false;
-//}
-///// <summary>
-///// 下移模组资源
-///// </summary>
-///// <param name="resourcePath">要下移的模组资源</param>
-//public void MoveDownResource(DEModResource resourcePath) {
-//    int currentIndex = _resources.IndexOf(resourcePath);
-//    if (currentIndex < 0) {
-//        return;
-//    }
-//    if (currentIndex >= _resources.Count - 1) {
-//        return;
-//    }
-//    int newIndex = currentIndex + 1;
-//    var t = _resources[currentIndex];
-//    _resources[currentIndex] = _resources[newIndex];
-//    _resources[newIndex] = t;
-//    DOOMEternal.ModificationSaved = false;
-//}
-
-

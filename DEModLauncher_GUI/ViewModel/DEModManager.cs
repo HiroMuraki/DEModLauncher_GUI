@@ -351,6 +351,30 @@ namespace DEModLauncher_GUI.ViewModel {
 
         #region 辅助方法
         /// <summary>
+        /// 备份模组文件
+        /// </summary>
+        /// <param name="filePath"></param>
+        private static void BackupModResourceFile(string filePath) {
+            if (DOOMEternal.GameDirectory == null) {
+                throw new ArgumentException("请先选择游戏文件夹");
+            }
+            if (!Directory.Exists(DOOMEternal.ModPacksDirectory)) {
+                Directory.CreateDirectory(DOOMEternal.ModPacksDirectory);
+            }
+            string resourceName = Path.GetFileName(filePath);
+            string modPackBackup = $@"{DOOMEternal.ModPacksDirectory}\{resourceName}";
+            if (!File.Exists(modPackBackup)) {
+                File.Copy(filePath, modPackBackup);
+            }
+        }
+        /// <summary>
+        ///  移除模组文件备份
+        /// </summary>
+        /// <param name="modName"></param>
+        private static void RemoveModResourceFileBackup(string modName) {
+            File.Delete($"{DOOMEternal.ModPacksDirectory}\\{modName}");
+        }
+        /// <summary>
         /// 调用模组加载器
         /// </summary>
         private async Task<bool> LoadModHelper() {
@@ -381,37 +405,12 @@ namespace DEModLauncher_GUI.ViewModel {
                 IsLaunching = false;
             }
         }
-
         /// <summary>
         /// CurrentModPack修改时调用 
         /// </summary>
         private void OnCurrentModPackChanged() {
             OnPropertyChanged(nameof(CurrentModPack));
             CurrentModPackChanged?.Invoke();
-        }
-        /// <summary>
-        /// 备份模组文件
-        /// </summary>
-        /// <param name="filePath"></param>
-        private static void BackupModResourceFile(string filePath) {
-            if (DOOMEternal.GameDirectory == null) {
-                throw new ArgumentException("请先选择游戏文件夹");
-            }
-            if (!Directory.Exists(DOOMEternal.ModPacksDirectory)) {
-                Directory.CreateDirectory(DOOMEternal.ModPacksDirectory);
-            }
-            string resourceName = Path.GetFileName(filePath);
-            string modPackBackup = $@"{DOOMEternal.ModPacksDirectory}\{resourceName}";
-            if (!File.Exists(modPackBackup)) {
-                File.Copy(filePath, modPackBackup);
-            }
-        }
-        /// <summary>
-        ///  移除模组文件备份
-        /// </summary>
-        /// <param name="modName"></param>
-        private static void RemoveModResourceFileBackup(string modName) {
-            File.Delete($"{DOOMEternal.ModPacksDirectory}\\{modName}");
         }
         /// <summary>
         /// 添加默认模组
