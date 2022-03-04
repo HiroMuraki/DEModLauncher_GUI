@@ -11,7 +11,7 @@ namespace DEModLauncher_GUI.View {
         public static readonly DependencyProperty StatusProperty =
             DependencyProperty.Register(nameof(Status), typeof(Status), typeof(ModPack), new PropertyMetadata(Status.Disable));
 
-        public event EventHandler<DataDragDropEventArgs> DataDragDrop;
+        public event EventHandler<DataDragDropEventArgs>? DataDragDrop;
 
         public string PackName {
             get {
@@ -64,7 +64,7 @@ namespace DEModLauncher_GUI.View {
             ResetTipBorder();
         }
         private void ShowTipBorder(Direction direction) {
-            var tipBorder = Template.FindName("PART_TipBorder", this) as Border;
+            var tipBorder = (Border)Template.FindName("PART_TipBorder", this);
             var thickness = new Thickness(0);
             switch (direction) {
                 case Direction.Up:
@@ -85,8 +85,7 @@ namespace DEModLauncher_GUI.View {
             tipBorder.BorderThickness = thickness;
         }
         private void ResetTipBorder() {
-            var tipBorder = Template.FindName("PART_TipBorder", this) as Border;
-            tipBorder.BorderThickness = new Thickness(0);
+            ((Border)Template.FindName("PART_TipBorder", this)).BorderThickness = new Thickness(0);
         }
 
         static ModPack() {

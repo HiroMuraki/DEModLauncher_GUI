@@ -9,7 +9,6 @@ namespace DEModLauncher_GUI.View {
     /// DEModPackSelectWindow.xaml 的交互逻辑
     /// </summary>
     public partial class DEModPackSelectWindow : Window {
-        private readonly DEModPacks _modPackSelectors;
         public DEModPacks ModPackSelectors {
             get {
                 return _modPackSelectors;
@@ -33,10 +32,10 @@ namespace DEModLauncher_GUI.View {
             InitializeComponent();
         }
 
+        private readonly DEModPacks _modPackSelectors;
         private void ModPack_Toggle(object sender, MouseButtonEventArgs e) {
             ((sender as ModPack).Tag as DEModPack).Toggle();
         }
-
         private void Confirm_Click(object sender, RoutedEventArgs e) {
             DialogResult = true;
         }
@@ -51,6 +50,5 @@ namespace DEModLauncher_GUI.View {
 
             }
         }
-
     }
 }

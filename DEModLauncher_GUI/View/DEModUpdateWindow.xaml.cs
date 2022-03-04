@@ -7,10 +7,9 @@ namespace DEModLauncher_GUI.View {
     /// DEModListWindow.xaml 的交互逻辑
     /// </summary>
     public partial class DEModUpdateWindow : Window {
-        public DEModManager ModManager { get; }
+        public DEModManager ModManager { get; } = DEModManager.GetInstance();
 
         public DEModUpdateWindow() {
-            ModManager = DEModManager.GetInstance();
             InitializeComponent();
         }
 

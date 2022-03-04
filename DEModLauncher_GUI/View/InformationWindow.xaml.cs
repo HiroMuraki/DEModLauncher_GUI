@@ -6,7 +6,7 @@ namespace DEModLauncher_GUI.View {
     /// InformationWindow.xaml 的交互逻辑
     /// </summary>
     public partial class InformationWindow : Window, INotifyPropertyChanged {
-        public event PropertyChangedEventHandler PropertyChanged;
+        public event PropertyChangedEventHandler? PropertyChanged;
         public void OnPropertyChanged(string propertyName) {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
@@ -29,21 +29,12 @@ namespace DEModLauncher_GUI.View {
             }
         }
 
-        public InformationWindow() {
-            InitializeComponent();
-        }
         public InformationWindow(string message, string caption) {
             InitializeComponent();
             Caption = caption;
             Message = message;
         }
 
-        public static void Show(string message) {
-            ShowCore(message, null, null);
-        }
-        public static void Show(string message, string caption) {
-            ShowCore(message, caption, null);
-        }
         public static void Show(string message, string caption, Window parentWindow) {
             ShowCore(message, caption, parentWindow);
         }

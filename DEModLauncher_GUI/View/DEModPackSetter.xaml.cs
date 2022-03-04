@@ -9,7 +9,6 @@ namespace DEModLauncher_GUI.View {
     /// TextInputWindow.xaml 的交互逻辑
     /// </summary>
     public partial class DEModPackSetter : Window {
-        private static string _preImagesDirectory = DOOMEternal.ModPackImagesDirectory;
 
         public static readonly DependencyProperty PackNameProperty =
             DependencyProperty.Register(nameof(PackName), typeof(string), typeof(DEModPackSetter), new PropertyMetadata(""));
@@ -47,6 +46,7 @@ namespace DEModLauncher_GUI.View {
             InitializeComponent();
         }
 
+        private static string _preImagesDirectory = DOOMEternal.ModPackImagesDirectory;
         private void ChangeImage_Click(object sender, MouseButtonEventArgs e) {
             var ofd = new OpenFileDialog();
             ofd.Filter = "图像文件|*.jpg;*.png;*.bmp;*.gif|JPG图片|*.jpg|PNG图片|*.png|BMP图片|*.bmp|GIF图片|*.gif";
