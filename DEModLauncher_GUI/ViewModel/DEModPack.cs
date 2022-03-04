@@ -8,13 +8,7 @@ using System.Windows;
 using Resources = System.Collections.ObjectModel.ObservableCollection<DEModLauncher_GUI.ViewModel.DEModResource>;
 
 namespace DEModLauncher_GUI.ViewModel {
-    public class DEModPack : ViewModelBase {
-        private static string _preOpenModDirectory = "";
-        private string _packName = "";
-        private string _description = "";
-        private string _imagePath = "";
-        private Status _status = Status.Disable;
-
+    public class DEModPack : ViewModelBase, IViewModel<Model.DEModPack, DEModPack> {
         #region ¹«¹²ÊôÐÔ
         public string PackName {
             get {
@@ -341,14 +335,23 @@ namespace DEModLauncher_GUI.ViewModel {
             OnPropertyChanged(nameof(ImagePath));
             DOOMEternal.ModificationSaved = false;
         }
-        public Model.DEModPack GetDataModel() {
-            var mp = new Model.DEModPack {
+        public Model.DEModPack ConvertToModel () {
+            return new Model.DEModPack {
                 PackName = _packName,
                 Description = _description,
                 ImagePath = _imagePath,
                 Resources = (from res in Resources select res.Path).ToArray()
             };
-            return mp;
+        }
+        public DEModPack LoadFromModel(Model.DEModPack model) {
+            PackName= model.PackName;
+            Description=model.Description;
+            SetImage(model.ImagePath);
+            Resources.Clear();
+            foreach (var item in model.Resources) {
+                Resources.Add(new DEModResource(item));
+            }
+            return this;
         }
         public DEModPack GetDeepCopy() {
             var copy = new DEModPack();
@@ -369,6 +372,11 @@ namespace DEModLauncher_GUI.ViewModel {
         }
         #endregion
 
+        private static string _preOpenModDirectory = "";
+        private string _packName = "";
+        private string _description = "";
+        private string _imagePath = "";
+        private Status _status = Status.Disable;
         private static IEnumerable<string> GetZippedFiles(string fileName) {
             var zipFile = ZipFile.OpenRead(fileName);
             foreach (var file in zipFile.Entries) {

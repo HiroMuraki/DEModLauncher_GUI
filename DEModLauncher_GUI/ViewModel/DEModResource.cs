@@ -71,7 +71,6 @@ namespace DEModLauncher_GUI.ViewModel {
         public override string ToString() {
             return Name;
         }
-
         public int CompareTo(DEModResource? other) {
             return _path.CompareTo(other?._path);
         }
