@@ -8,7 +8,6 @@ using System.Windows;
 
 namespace DEModLauncher_GUI.ViewModel {
     public static class DEModManagerExtensions {
-
         public static void TipToNewModPack(this DEModManager self) {
             try {
                 var setter = new View.DEModPackSetter() { Owner = Application.Current.MainWindow };

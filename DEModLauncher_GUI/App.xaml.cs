@@ -15,7 +15,7 @@ namespace DEModLauncher_GUI {
             DOOMEternal.InitNecessaryDirectory();
             // 若已有配置文件，则读取，否则进行初始化
             if (File.Exists(DOOMEternal.LauncherProfileFile)) {
-                DEModManagerExtensions.TipToLoadProfile(DEModManager.GetInstance(), DOOMEternal.LauncherProfileFile);
+                DEModManager.GetInstance().LoadProfile(DOOMEternal.LauncherProfileFile);
             }
             else {
                 DEModManager.GetInstance().Initialize();

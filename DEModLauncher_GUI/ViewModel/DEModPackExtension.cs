@@ -50,7 +50,7 @@ namespace DEModLauncher_GUI.ViewModel {
         public static void TipToCheckModConfliction(this DEModPack self) {
             var sb = new StringBuilder();
             try {
-                var checkResult = self.GetConflictInfo();
+                var checkResult = self.GetConflictionInfo();
                 string title = "";
                 sb.Append($"总文件数: {checkResult.TotalCount}, 无冲突文件数: {checkResult.ValidCount}, 冲突文件数: {checkResult.ConflictedCount}\n");
                 if (checkResult.ConflictedCount <= 0) {
@@ -138,7 +138,7 @@ namespace DEModLauncher_GUI.ViewModel {
             if (sfd.ShowDialog() == System.Windows.Forms.DialogResult.OK) {
                 try {
                     string outputFile = sfd.FileName;
-                    int conflictedItems = self.GetConflictInfo().ConflictedCount;
+                    int conflictedItems = self.GetConflictionInfo().ConflictedCount;
                     string fileName = Path.GetFileNameWithoutExtension(outputFile);
                     string mergeWorkingFolder = $@"{DOOMEternal.ModPacksDirectory}\MERGE_WORKING_FOLDER_{fileName}";
                     if (conflictedItems > 0) {

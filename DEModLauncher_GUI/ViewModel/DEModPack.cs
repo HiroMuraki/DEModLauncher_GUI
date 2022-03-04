@@ -204,7 +204,7 @@ namespace DEModLauncher_GUI.ViewModel {
         public bool ContainsResource(DEModResource resource) {
             return CheckIfContainsResource(resource.Path);
         }
-        public ModPackConflictInfo GetConflictInfo() {
+        public ModPackConflictInfo GetConflictionInfo() {
             var resourceDict = new Dictionary<string, List<string>>();
             int totalCount = 0;
             int validCount = 0;

@@ -30,7 +30,7 @@ namespace DEModLauncher_GUI {
             ModManager.TipToSaveProfile();
         }
         private void LoadFromFile_Click(object sender, RoutedEventArgs e) {
-            ModManager.LoadProfile(DOOMEternal.LauncherProfileFile);
+            ModManager.TipToLoadProfile(DOOMEternal.LauncherProfileFile);
         }
         private void OpenOptionMenu_Click(object sender, RoutedEventArgs e) {
             var menu = ((Button)sender).ContextMenu;
