@@ -6,15 +6,11 @@ namespace DEModLauncher_GUI.ViewModel.ValueConverter {
     public class StatusToBoolean : IValueConverter {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture) {
             try {
-                var status = (Status)value;
-                switch (status) {
-                    case Status.Enable:
-                        return true;
-                    case Status.Disable:
-                        return false;
-                    default:
-                        return true;
-                }
+                return (Status)value switch {
+                    Status.Enable => true,
+                    Status.Disable => false,
+                    _ => true,
+                };
             }
             catch {
                 return true;
@@ -23,13 +19,10 @@ namespace DEModLauncher_GUI.ViewModel.ValueConverter {
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture) {
             try {
-                bool isOn = (bool)value;
-                switch (isOn) {
-                    case true:
-                        return Status.Enable;
-                    case false:
-                        return Status.Disable;
-                }
+                return (bool)value switch {
+                    true => Status.Enable,
+                    false => Status.Disable
+                };
             }
             catch {
                 return Status.Enable;
