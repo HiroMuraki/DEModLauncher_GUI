@@ -31,7 +31,16 @@ namespace DEModLauncher_GUI.ViewModel {
                 OnPropertyChanged(nameof(IsLaunching));
             }
         }
-        public DEModPack CurrentModPack { get; private set; } = _noModPack;
+        public DEModPack CurrentModPack {
+            get {
+                return _currentModPack;
+            }
+            private set {
+                _currentModPack = value;
+                OnPropertyChanged(nameof(CurrentModPack));
+                CurrentModPackChanged?.Invoke();
+            }
+        }
         public ModPacks ModPacks { get; } = new ModPacks();
         public DEModResource[] UsedModResources {
             get {
@@ -98,7 +107,6 @@ namespace DEModLauncher_GUI.ViewModel {
             }
             modPack.ToggleOn();
             CurrentModPack = modPack;
-            OnCurrentModPackChanged();
         }
         public void NewModPack() {
             try {
@@ -156,7 +164,7 @@ namespace DEModLauncher_GUI.ViewModel {
                 return;
             }
             ModPacks.Remove(modPack);
-            if (IsValidModPackSelected()) {
+            if (ReferenceEquals(CurrentModPack, modPack)) {
                 if (ModPacks.Count > 0) {
                     CurrentModPack = ModPacks[0];
                 }
@@ -350,6 +358,7 @@ namespace DEModLauncher_GUI.ViewModel {
         #endregion
 
         #region 辅助方法
+        private DEModPack _currentModPack = _noModPack;
         /// <summary>
         /// 备份模组文件
         /// </summary>
@@ -413,13 +422,6 @@ namespace DEModLauncher_GUI.ViewModel {
             }
         }
         /// <summary>
-        /// CurrentModPack修改时调用 
-        /// </summary>
-        private void OnCurrentModPackChanged() {
-            OnPropertyChanged(nameof(CurrentModPack));
-            CurrentModPackChanged?.Invoke();
-        }
-        /// <summary>
         /// 添加默认模组
         /// </summary>
         private void SetDefaultModPack() {
@@ -457,7 +459,6 @@ namespace DEModLauncher_GUI.ViewModel {
             }
             ModPacks.Add(modPack);
             CurrentModPack = modPack;
-            OnCurrentModPackChanged();
         }
         /// <summary>
         /// 保存配置至文件
@@ -507,7 +508,7 @@ namespace DEModLauncher_GUI.ViewModel {
             foreach (var item in dm.ModPacks) {
                 var modPack = new DEModPack().LoadFromModel(item);
                 ModPacks.Add(modPack);
-                if (IsValidModPackSelected() && item.PackName == dm.CurrentMod) {
+                if (!IsValidModPackSelected() && item.PackName == dm.CurrentMod) {
                     SetCurrentModPack(modPack);
                 }
             }
