@@ -163,7 +163,7 @@ namespace DEModLauncher_GUI.ViewModel {
             var ofd = new System.Windows.Forms.OpenFileDialog();
             ofd.Title = "选择模组文件";
             ofd.Filter = "zip压缩包|*.zip";
-            ofd.InitialDirectory = _preOpenModDirectory ?? DOOMEternal.ModPacksDirectory;
+            ofd.InitialDirectory = string.IsNullOrEmpty(_preOpenModDirectory) ? DOOMEternal.ModPacksDirectory : _preOpenModDirectory;
             ofd.Multiselect = true;
             if (ofd.ShowDialog() == System.Windows.Forms.DialogResult.OK) {
                 _preOpenModDirectory = Path.GetDirectoryName(ofd.FileName);
