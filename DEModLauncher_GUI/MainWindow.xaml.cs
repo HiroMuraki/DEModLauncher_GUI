@@ -10,36 +10,27 @@ namespace DEModLauncher_GUI {
     /// Interaction logic for MainWindow.xaml
     /// </summary>
     public partial class MainWindow : Window {
-        private Point _heldPoint;
-        private DEModManager _modManager;
-
-        public DEModManager ModManager {
-            get {
-                return _modManager;
-            }
-        }
+        public DEModManager ModManager { get; } = DEModManager.GetInstance();
 
         public MainWindow() {
-            _modManager = DEModManager.GetInstance();
             InitializeComponent();
         }
 
-
         #region 启动与保存
         private void LoadMod_Click(object sender, RoutedEventArgs e) {
-            _modManager.LoadMod();
+            ModManager.LoadMod();
         }
         private void LaunchMod_Click(object sender, RoutedEventArgs e) {
-            _modManager.LaunchMod();
+            ModManager.LaunchMod();
         }
         private void LaunchGame_Click(object sender, RoutedEventArgs e) {
-            _modManager.LaunchGame();
+            ModManager.LaunchGame();
         }
         private void SaveToFile_Click(object sender, RoutedEventArgs e) {
-            _modManager.SaveProfile();
+            ModManager.SaveProfile();
         }
         private void LoadFromFile_Click(object sender, RoutedEventArgs e) {
-            _modManager.LoadProfile();
+            ModManager.LoadProfile();
         }
         private void OpenOptionMenu_Click(object sender, RoutedEventArgs e) {
             var menu = ((Button)sender).ContextMenu;
@@ -54,17 +45,17 @@ namespace DEModLauncher_GUI {
 
         #region 模组配置操作
         private void SelectModPack_Click(object sender, RoutedEventArgs e) {
-            _modManager.SetCurrentModPack(GetModPackFrom(sender)); ;
+            ModManager.SetCurrentModPack(GetModPackFrom(sender)); ;
         }
         private void DuplicateModPack_Click(object sender, RoutedEventArgs e) {
-            _modManager.DuplicateModPack(GetModPackFrom(sender));
+            ModManager.DuplicateModPack(GetModPackFrom(sender));
         }
         private void AddModPack_Click(object sender, RoutedEventArgs e) {
-            _modManager.NewModPack();
+            ModManager.NewModPack();
             ModPackDisplayer.ScrollToHorizontalOffset(ModPackDisplayer.ScrollableWidth * 2);
         }
         private void RemoveModPack_Click(object sender, RoutedEventArgs e) {
-            _modManager.RemoveModPack(GetModPackFrom(sender));
+            ModManager.RemoveModPack(GetModPackFrom(sender));
         }
         private void EditModPack_Click(object sender, RoutedEventArgs e) {
             GetModPackFrom(sender).Edit();
@@ -73,23 +64,23 @@ namespace DEModLauncher_GUI {
             GetModPackFrom(sender).CheckModConfliction();
         }
         private void ExportMergedResource_Click(object sender, RoutedEventArgs e) {
-            _modManager.CurrentModPack?.ExportMergedResource(GetModPackFrom(sender));
+            ModManager.CurrentModPack?.ExportMergedResource(GetModPackFrom(sender));
         }
         #endregion
 
         #region 资源操作
         private void AddResource_Click(object sender, RoutedEventArgs e) {
-            _modManager.CurrentModPack?.NewResource();
+            ModManager.CurrentModPack?.NewResource();
             ResourcesDisplayer.ScrollToEnd();
         }
         private void AddModPackReference_Click(object sender, RoutedEventArgs e) {
-            _modManager.CurrentModPack?.AddResourcesReference();
+            ModManager.CurrentModPack?.AddResourcesReference();
         }
         private void RemoveResource_Click(object sender, RoutedEventArgs e) {
-            _modManager.CurrentModPack?.RemoveResource(GetResourceFrom(sender));
+            ModManager.CurrentModPack?.RemoveResource(GetResourceFrom(sender));
         }
         private void CurrentModPackDisplayer_FileDrop(object sender, DragEventArgs e) {
-            _modManager.CurrentModPack?.InsertResources(_modManager.CurrentModPack.Resources.Count, (string[])e.Data.GetData(DataFormats.FileDrop));
+            ModManager.CurrentModPack?.InsertResources(ModManager.CurrentModPack.Resources.Count, (string[])e.Data.GetData(DataFormats.FileDrop));
             ResourcesDisplayer.ScrollToEnd();
             FileDragArea.IsHitTestVisible = false;
         }
@@ -100,7 +91,7 @@ namespace DEModLauncher_GUI {
             FileDragArea.IsHitTestVisible = false;
         }
         private void OpenResourceFile_Click(object sender, RoutedEventArgs e) {
-            _modManager.OpenResourceFile(GetResourceFrom(sender));
+            ModManager.OpenResourceFile(GetResourceFrom(sender));
         }
         #endregion
 
@@ -123,7 +114,7 @@ namespace DEModLauncher_GUI {
             if (Keyboard.IsKeyDown(Key.LeftCtrl)) {
                 switch (e.Key) {
                     case Key.S:
-                        _modManager.SaveProfile();
+                        ModManager.SaveProfile();
                         break;
                 }
             }
@@ -154,7 +145,7 @@ namespace DEModLauncher_GUI {
 
         #region 模组配置列表拖动排序实现
         private async void ModPack_PreviewMouseDown(object sender, MouseButtonEventArgs e) {
-            _modManager.SetCurrentModPack(GetModPackFrom(sender));
+            ModManager.SetCurrentModPack(GetModPackFrom(sender));
             // 拖拽触发检测
             bool isOk = await Task.Run(() => {
                 for (int i = 0; i < 4; i++) {
@@ -181,7 +172,7 @@ namespace DEModLauncher_GUI {
             if (target == null) {
                 return;
             }
-            int newIndex = _modManager.ModPacks.IndexOf(target);
+            int newIndex = ModManager.ModPacks.IndexOf(target);
             switch (e.Direction) {
                 case Direction.Left:
                     break;
@@ -189,7 +180,7 @@ namespace DEModLauncher_GUI {
                     newIndex += 1;
                     break;
             }
-            _modManager.ResortModPack(newIndex, source);
+            ModManager.ResortModPack(newIndex, source);
         }
         private void ModPacksList_DragOver(object sender, DragEventArgs e) {
             var hoverPos = e.GetPosition(ModPackDisplayer);
@@ -230,11 +221,11 @@ namespace DEModLauncher_GUI {
             }
             // 如果拖入的是文件列表
             if (e.Data.IsTargetType(DataFormats.FileDrop)) {
-                int insertIndex = _modManager.CurrentModPack.Resources.IndexOf(target);
+                int insertIndex = ModManager.CurrentModPack.Resources.IndexOf(target);
                 if (e.Direction == Direction.Down) {
                     insertIndex += 1;
                 }
-                _modManager.CurrentModPack?.InsertResources(insertIndex, (string[])e.Data.GetData(DataFormats.FileDrop));
+                ModManager.CurrentModPack?.InsertResources(insertIndex, (string[])e.Data.GetData(DataFormats.FileDrop));
                 return;
             }
             // 否则视为资源排序
@@ -242,11 +233,11 @@ namespace DEModLauncher_GUI {
             if (source == null) {
                 return;
             }
-            int newIndex = _modManager.CurrentModPack.Resources.IndexOf(target);
+            int newIndex = ModManager.CurrentModPack.Resources.IndexOf(target);
             if (e.Direction == Direction.Down) {
                 newIndex += 1;
             }
-            _modManager.CurrentModPack.ResortResource(newIndex, source);
+            ModManager.CurrentModPack.ResortResource(newIndex, source);
         }
         private void ResourceList_DragOver(object sender, DragEventArgs e) {
             var hoverPos = e.GetPosition(ResourcesDisplayer);
@@ -320,11 +311,12 @@ namespace DEModLauncher_GUI {
         //}
         #endregion
 
+        private Point _heldPoint;
         private static DEModResource GetResourceFrom(object sender) {
-            return (sender as FrameworkElement).Tag as DEModResource;
+            return (DEModResource)((FrameworkElement)sender).Tag;
         }
         private static DEModPack GetModPackFrom(object sender) {
-            return (sender as FrameworkElement).Tag as DEModPack;
+            return (DEModPack)((FrameworkElement)sender).Tag;
         }
     }
 }
