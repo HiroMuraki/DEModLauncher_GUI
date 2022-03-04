@@ -51,6 +51,10 @@ namespace DEModLauncher_GUI.ViewModel {
             get {
                 return _status;
             }
+            set {
+                _status = value;
+                OnPropertyChanged(nameof(Status));
+            }
         }
         public Resources Resources { get; } = new Resources();
         #endregion
@@ -82,12 +86,10 @@ namespace DEModLauncher_GUI.ViewModel {
             }
         }
         public void ToggleOn() {
-            _status = Status.Enable;
-            OnPropertyChanged(nameof(Status));
+            Status = Status.Enable;
         }
         public void ToggleOff() {
-            _status = Status.Disable;
-            OnPropertyChanged(nameof(Status));
+            Status = Status.Disable;
         }
         public void Deploy() {
             // 检查模组加载器是否存在
