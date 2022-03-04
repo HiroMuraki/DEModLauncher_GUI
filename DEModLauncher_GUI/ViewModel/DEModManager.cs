@@ -438,7 +438,7 @@ namespace DEModLauncher_GUI.ViewModel {
         /// 启动模组加载器
         /// </summary>
         private void LaunchModLoaderHelper() {
-            if (IsValidModPackSelected()) {
+            if (!IsValidModPackSelected()) {
                 throw new InvalidOperationException("当前未选择有效模组");
             }
             CurrentModPack.Deploy();
