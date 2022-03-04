@@ -104,7 +104,6 @@ namespace DEModLauncher_GUI.ViewModel {
             }
             catch (Exception exp) {
                 View.InformationWindow.Show(exp.Message, "游戏启动错误", Application.Current.MainWindow);
-                return;
             }
         }
 
