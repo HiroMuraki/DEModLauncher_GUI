@@ -12,11 +12,11 @@ using Resources = System.Collections.ObjectModel.ObservableCollection<DEModLaunc
 
 namespace DEModLauncher_GUI.ViewModel {
     public class DEModManager : ViewModelBase {
+        private static readonly DEModPack _noModPack = new DEModPack();
         private static readonly DEModManager _singletonIntance;
         private static readonly DataContractJsonSerializer _serializer;
         private string _preOpenModDirectory = "";
         private bool _isLaunching;
-        private DEModPack _currentMod;
         private Resources _usedModResources;
 
         #region 事件
@@ -33,11 +33,7 @@ namespace DEModLauncher_GUI.ViewModel {
                 OnPropertyChanged(nameof(IsLaunching));
             }
         }
-        public DEModPack CurrentModPack {
-            get {
-                return _currentMod;
-            }
-        }
+        public DEModPack CurrentModPack { get; private set; } = _noModPack;
         public ModPacks ModPacks { get; } = new ModPacks();
         public Resources UsedModResources {
             get {
@@ -107,7 +103,7 @@ namespace DEModLauncher_GUI.ViewModel {
                 item.ToggleOff();
             }
             modPack.ToggleOn();
-            _currentMod = modPack;
+            CurrentModPack = modPack;
             OnCurrentModPackChanged();
         }
         public void NewModPack() {
@@ -166,12 +162,12 @@ namespace DEModLauncher_GUI.ViewModel {
                 return;
             }
             ModPacks.Remove(modPack);
-            if (_currentMod == modPack) {
+            if (CurrentModPack == modPack) {
                 if (ModPacks.Count > 0) {
-                    _currentMod = ModPacks[0];
+                    CurrentModPack = ModPacks[0];
                 }
                 else {
-                    _currentMod = null;
+                    CurrentModPack = null;
                 }
                 OnPropertyChanged(nameof(CurrentModPack));
                 CurrentModPackChanged?.Invoke();
@@ -368,13 +364,13 @@ namespace DEModLauncher_GUI.ViewModel {
         /// 调用模组加载器
         /// </summary>
         private async Task<bool> LoadModHelper() {
-            if (_currentMod == null) {
+            if (CurrentModPack == null) {
                 MessageBox.Show("请先选择一个模组配置", "警告", MessageBoxButton.OK, MessageBoxImage.Warning);
                 return false;
             }
             // 弹出提示窗口，避免误操作
             var result = MessageBox.Show($"加载模组将需要一定时间，在此期间请勿关闭本程序。是否继续?",
-                                         $"加载模组：{_currentMod.PackName}",
+                                         $"加载模组：{CurrentModPack.PackName}",
                                          MessageBoxButton.YesNo,
                                          MessageBoxImage.Question);
             if (result != MessageBoxResult.Yes) {
@@ -444,10 +440,10 @@ namespace DEModLauncher_GUI.ViewModel {
         /// 启动模组加载器
         /// </summary>
         private void LaunchModLoaderHelper() {
-            if (_currentMod == null) {
+            if (CurrentModPack == null) {
                 throw new InvalidOperationException("当前未选择有效模组");
             }
-            _currentMod.Deploy();
+            CurrentModPack.Deploy();
             DOOMEternal.LaunchModLoader();
         }
         /// <summary>
@@ -464,7 +460,7 @@ namespace DEModLauncher_GUI.ViewModel {
                 }
             }
             ModPacks.Add(modPack);
-            _currentMod = modPack;
+            CurrentModPack = modPack;
             OnCurrentModPackChanged();
         }
         /// <summary>
@@ -480,7 +476,7 @@ namespace DEModLauncher_GUI.ViewModel {
                 ModDirectory = "",
                 ModPacksDirectory = "",
                 ModPackImageDirectory = "",
-                CurrentMod = _currentMod?.PackName ?? "",
+                CurrentMod = CurrentModPack?.PackName ?? "",
                 // 写入ModPacks信息
                 ModPacks = (from modPack in ModPacks select modPack.GetDataModel()).ToArray()
             };
@@ -522,12 +518,12 @@ namespace DEModLauncher_GUI.ViewModel {
             //    DOOMEternal.ModPackImagesDirectory = dm.ModPackImageDirectory;
             //}
             // 读取模组包，同时设置CurrentMod
-            _currentMod = null;
+            CurrentModPack = null;
             ModPacks.Clear();
             foreach (var item in dm.ModPacks) {
                 var modPack = new DEModPack(item);
                 ModPacks.Add(modPack);
-                if (_currentMod == null && item.PackName == dm.CurrentMod) {
+                if (CurrentModPack == null && item.PackName == dm.CurrentMod) {
                     SetCurrentModPack(modPack);
                 }
             }
