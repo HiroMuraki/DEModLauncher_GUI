@@ -42,7 +42,7 @@ namespace DEModLauncher_GUI {
             _modManager.LoadProfile();
         }
         private void OpenOptionMenu_Click(object sender, RoutedEventArgs e) {
-            ContextMenu menu = ((Button)sender).ContextMenu;
+            var menu = ((Button)sender).ContextMenu;
             menu.IsOpen = !menu.IsOpen;
         }
         private void ShowAdvancedSetting_Click(object sender, RoutedEventArgs e) {
@@ -135,7 +135,7 @@ namespace DEModLauncher_GUI {
             if (e.LeftButton != MouseButtonState.Pressed && e.MiddleButton != MouseButtonState.Pressed) {
                 return;
             }
-            Point newPont = e.GetPosition(this);
+            var newPont = e.GetPosition(this);
             double movedDistance = newPont.X - _heldPoint.X;
             double movedDistanceAbs = Math.Abs(movedDistance);
             if (movedDistance < 0) {
@@ -167,21 +167,21 @@ namespace DEModLauncher_GUI {
             });
 
             if (isOk) {
-                View.ModPack source = sender as View.ModPack;
-                DataObject dataObj = new DataObject(source.Tag);
+                var source = sender as View.ModPack;
+                var dataObj = new DataObject(source.Tag);
                 DragDrop.DoDragDrop(ResourceList, dataObj, DragDropEffects.Move);
             }
         }
         private void ModPack_DataDragDrop(object sender, DataDragDropEventArgs e) {
-            DEModPack source = e.Data.GetData(typeof(DEModPack)) as DEModPack;
+            var source = e.Data.GetData(typeof(DEModPack)) as DEModPack;
             if (source == null) {
                 return;
             }
-            DEModPack target = (sender as FrameworkElement).Tag as DEModPack;
+            var target = (sender as FrameworkElement).Tag as DEModPack;
             if (target == null) {
                 return;
             }
-            var newIndex = _modManager.ModPacks.IndexOf(target);
+            int newIndex = _modManager.ModPacks.IndexOf(target);
             switch (e.Direction) {
                 case Direction.Left:
                     break;
@@ -192,7 +192,7 @@ namespace DEModLauncher_GUI {
             _modManager.ResortModPack(newIndex, source);
         }
         private void ModPacksList_DragOver(object sender, DragEventArgs e) {
-            Point hoverPos = e.GetPosition(ModPackDisplayer);
+            var hoverPos = e.GetPosition(ModPackDisplayer);
             if (hoverPos.X <= 50) {
                 ModPackDisplayer.ScrollToHorizontalOffset(ModPackDisplayer.HorizontalOffset - hoverPos.X - 50);
             }
@@ -216,7 +216,7 @@ namespace DEModLauncher_GUI {
             });
 
             if (isOk) {
-                DataObject dataObj = new DataObject((sender as FrameworkElement).Tag);
+                var dataObj = new DataObject((sender as FrameworkElement).Tag);
                 DragDrop.DoDragDrop(ResourceList, dataObj, DragDropEffects.Move);
             }
             else {
@@ -224,7 +224,7 @@ namespace DEModLauncher_GUI {
             }
         }
         private void ModResource_DataDragDrop(object sender, DataDragDropEventArgs e) {
-            DEModResource target = (sender as FrameworkElement).Tag as DEModResource;
+            var target = (sender as FrameworkElement).Tag as DEModResource;
             if (target == null) {
                 return;
             }
@@ -238,18 +238,18 @@ namespace DEModLauncher_GUI {
                 return;
             }
             // 否则视为资源排序
-            DEModResource source = e.Data.GetData(typeof(DEModResource)) as DEModResource;
+            var source = e.Data.GetData(typeof(DEModResource)) as DEModResource;
             if (source == null) {
                 return;
             }
-            var newIndex = _modManager.CurrentModPack.Resources.IndexOf(target);
+            int newIndex = _modManager.CurrentModPack.Resources.IndexOf(target);
             if (e.Direction == Direction.Down) {
                 newIndex += 1;
             }
             _modManager.CurrentModPack.ResortResource(newIndex, source);
         }
         private void ResourceList_DragOver(object sender, DragEventArgs e) {
-            Point hoverPos = e.GetPosition(ResourcesDisplayer);
+            var hoverPos = e.GetPosition(ResourcesDisplayer);
             if (hoverPos.Y <= 30) {
                 ResourcesDisplayer.ScrollToVerticalOffset(ResourcesDisplayer.VerticalOffset - hoverPos.Y - 30);
             }

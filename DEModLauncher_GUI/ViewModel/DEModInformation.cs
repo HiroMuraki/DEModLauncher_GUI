@@ -74,7 +74,7 @@ namespace DEModLauncher_GUI.ViewModel {
             return output;
         }
         public DEModInformation GetDeepCopy() {
-            DEModInformation copy = new DEModInformation();
+            var copy = new DEModInformation();
             copy._name = _name;
             copy._description = _description;
             copy._author = _author;
@@ -85,15 +85,15 @@ namespace DEModLauncher_GUI.ViewModel {
 
         public static DEModInformation Read(string path) {
             // 读取压缩包中的EternalMod.json
-            ZipArchive zipArchive = ZipFile.Open(path, ZipArchiveMode.Read);
-            ZipArchiveEntry entry = zipArchive.GetEntry("EternalMod.json");
+            var zipArchive = ZipFile.Open(path, ZipArchiveMode.Read);
+            var entry = zipArchive.GetEntry("EternalMod.json");
             if (entry == null) {
                 throw new FileNotFoundException("未找到EternalMod.json");
             }
 
             // 读取
-            DEModInformation attribute = new DEModInformation();
-            using (StreamReader reader = new StreamReader(entry.Open())) {
+            var attribute = new DEModInformation();
+            using (var reader = new StreamReader(entry.Open())) {
                 while (!reader.EndOfStream) {
                     string line = reader.ReadLine().Trim();
                     if (line.StartsWith("\"name\"")) {
@@ -119,7 +119,7 @@ namespace DEModLauncher_GUI.ViewModel {
 
 
         private static string ImproveReadability(string source) {
-            StringBuilder output = new StringBuilder();
+            var output = new StringBuilder();
             string[] words = source.Split(' ', '\t', '\n');
             for (int i = 0; i < words.Length; i++) {
                 output.Append($"{words[i]} ");

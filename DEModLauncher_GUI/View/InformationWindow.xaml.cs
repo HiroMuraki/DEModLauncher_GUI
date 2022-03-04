@@ -49,7 +49,7 @@ namespace DEModLauncher_GUI.View {
         }
 
         private static void ShowCore(string message, string caption, Window parentWindow) {
-            InformationWindow window = new InformationWindow(message, caption);
+            var window = new InformationWindow(message, caption);
             if (parentWindow != null) {
                 window.Owner = parentWindow;
             }

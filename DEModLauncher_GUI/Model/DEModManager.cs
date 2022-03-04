@@ -1,26 +1,25 @@
-using System.Collections.Generic;
-using System.Runtime.Serialization;
 using System;
+using System.Runtime.Serialization;
 
 namespace DEModLauncher_GUI.Model {
     [DataContract]
     public class DEModManager {
         [DataMember(Order = 0)]
-        public string GameMainExecutor = "";
+        public string GameMainExecutor { get; init; } = "";
         [DataMember(Order = 1)]
-        public string ModLoader = "";
+        public string ModLoader { get; init; } = "";
         [DataMember(Order = 2)]
-        public string GameDirectory = "";
+        public string GameDirectory { get; init; } = "";
         [DataMember(Order = 3)]
-        public string ModDirectory = "";
+        public string ModDirectory { get; init; } = "";
         [DataMember(Order = 4)]
-        public string ModPacksDirectory = "";
+        public string ModPacksDirectory { get; init; } = "";
         [DataMember(Order = 5)]
-        public string ModPackImageDirectory = "";
+        public string ModPackImageDirectory { get; init; } = "";
         [DataMember(Order = 6)]
-        public string CurrentMod = "";
+        public string CurrentMod { get; init; } = "";
         [DataMember(Order = 7)]
-        public DEModPack[] ModPacks = Array.Empty<DEModPack>();
+        public DEModPack[] ModPacks { get; init; } = Array.Empty<DEModPack>();
     }
 }
 

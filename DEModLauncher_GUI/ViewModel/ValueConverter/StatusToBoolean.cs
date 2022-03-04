@@ -6,7 +6,7 @@ namespace DEModLauncher_GUI.ViewModel.ValueConverter {
     public class StatusToBoolean : IValueConverter {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture) {
             try {
-                Status status = (Status)value;
+                var status = (Status)value;
                 switch (status) {
                     case Status.Enable:
                         return true;

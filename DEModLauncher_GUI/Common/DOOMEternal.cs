@@ -38,7 +38,7 @@ namespace DEModLauncher_GUI {
         }
 
         public static void LaunchGame() {
-            Process p = new Process();
+            var p = new Process();
             p.StartInfo.FileName = $@"{GameDirectory}\{GameMainExecutor}";
             if (!File.Exists(p.StartInfo.FileName)) {
                 throw new FileNotFoundException($"无法找到游戏主程序{GameMainExecutor}");
@@ -46,19 +46,19 @@ namespace DEModLauncher_GUI {
             p.Start();
         }
         public static void LaunchModLoader() {
-            Process p = new Process();
+            var p = new Process();
             p.StartInfo.FileName = $@"{GameDirectory}\{ModLoader}";
             p.Start();
             p.WaitForExit();
         }
         public static void OpenGameDirectory() {
-            Process p = new Process();
+            var p = new Process();
             p.StartInfo.FileName = "explorer.exe";
             p.StartInfo.Arguments = $@"/e, {GameDirectory}";
             p.Start();
         }
         public static void OpenLauncherProfile() {
-            Process p = new Process();
+            var p = new Process();
             p.StartInfo.FileName = "explorer.exe";
             p.StartInfo.Arguments = $@"/select, {LauncherProfileFile}";
             p.Start();
@@ -78,9 +78,9 @@ namespace DEModLauncher_GUI {
             if (!File.Exists(ModLoaderProfileFile)) {
                 return;
             }
-            Regex reg = new Regex(@$"(?<=:{option}=)[0-9\.]+");
-            StringBuilder text = new StringBuilder();
-            using (StreamReader reader = new StreamReader(ModLoaderProfileFile)) {
+            var reg = new Regex(@$"(?<=:{option}=)[0-9\.]+");
+            var text = new StringBuilder();
+            using (var reader = new StreamReader(ModLoaderProfileFile)) {
                 while (!reader.EndOfStream) {
                     string currentLine = reader.ReadLine();
                     if (reg.IsMatch(currentLine)) {
@@ -89,7 +89,7 @@ namespace DEModLauncher_GUI {
                     text.AppendLine(currentLine);
                 }
             }
-            using (StreamWriter writer = new StreamWriter(ModLoaderProfileFile)) {
+            using (var writer = new StreamWriter(ModLoaderProfileFile)) {
                 writer.Write(text);
             }
         }

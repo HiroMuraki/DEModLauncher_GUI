@@ -48,7 +48,7 @@ namespace DEModLauncher_GUI.View {
         }
 
         private void ChangeImage_Click(object sender, MouseButtonEventArgs e) {
-            OpenFileDialog ofd = new OpenFileDialog();
+            var ofd = new OpenFileDialog();
             ofd.Filter = "图像文件|*.jpg;*.png;*.bmp;*.gif|JPG图片|*.jpg|PNG图片|*.png|BMP图片|*.bmp|GIF图片|*.gif";
             ofd.InitialDirectory = _preImagesDirectory;
             ofd.Title = "选择模组图片";

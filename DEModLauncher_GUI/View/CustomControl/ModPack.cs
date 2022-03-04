@@ -65,7 +65,7 @@ namespace DEModLauncher_GUI.View {
         }
         private void ShowTipBorder(Direction direction) {
             var tipBorder = Template.FindName("PART_TipBorder", this) as Border;
-            Thickness thickness = new Thickness(0);
+            var thickness = new Thickness(0);
             switch (direction) {
                 case Direction.Up:
                     thickness.Top = 5;

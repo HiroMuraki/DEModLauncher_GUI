@@ -62,11 +62,11 @@ namespace DEModLauncher_GUI {
                 return null;
             }
             for (int i = 0; i < VisualTreeHelper.GetChildrenCount(obj); i++) {
-                DependencyObject child = VisualTreeHelper.GetChild(obj, i);
+                var child = VisualTreeHelper.GetChild(obj, i);
                 if (child is T) {
                     return (T)child;
                 }
-                T childItem = FindVisualChild<T>(child);
+                var childItem = FindVisualChild<T>(child);
                 if (childItem != null) {
                     return childItem;
                 }
@@ -74,18 +74,18 @@ namespace DEModLauncher_GUI {
             return null;
         }
         public static IEnumerable<string> TravelFiles(string directory) {
-            foreach (var file in Directory.GetFiles(directory)) {
+            foreach (string file in Directory.GetFiles(directory)) {
                 yield return file;
             }
-            foreach (var subDirectory in Directory.GetDirectories(directory)) {
-                foreach (var file in TravelFiles(subDirectory)) {
+            foreach (string subDirectory in Directory.GetDirectories(directory)) {
+                foreach (string file in TravelFiles(subDirectory)) {
                     yield return file;
                 }
             }
         }
         public static List<string> FilesCleaner(ICollection<string> preservedFiles, IEnumerable<string> allFiles) {
             var removedFiles = new List<string>();
-            foreach (var file in allFiles) {
+            foreach (string file in allFiles) {
                 if (!preservedFiles.Contains(file)) {
                     File.Delete(file);
                     removedFiles.Add(Path.GetFileName(file));

@@ -66,7 +66,7 @@ namespace DEModLauncher_GUI.ViewModel {
             OnPropertyChanged(nameof(Status));
         }
         public DEModResource GetDeepCopy() {
-            DEModResource copy = new DEModResource();
+            var copy = new DEModResource();
             copy._path = _path;
             copy._status = _status;
             copy._information = _information.GetDeepCopy();

@@ -9,7 +9,7 @@ namespace DEModLauncher_GUI {
     /// </summary>
     public partial class App : Application {
         private void Application_Startup(object sender, StartupEventArgs e) {
-            MainWindow window = new MainWindow();
+            var window = new MainWindow();
             // 强制将游戏文件夹路径设置为当前文件夹
             DOOMEternal.GameDirectory = Environment.CurrentDirectory;
             DOOMEternal.InitNecessaryDirectory();
