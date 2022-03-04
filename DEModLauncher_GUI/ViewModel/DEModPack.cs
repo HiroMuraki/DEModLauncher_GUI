@@ -14,7 +14,6 @@ namespace DEModLauncher_GUI.ViewModel {
         private string _description = "";
         private string _imagePath = "";
         private Status _status = Status.Disable;
-        private readonly Resources _resources = new Resources();
 
         #region 公共属性
         public string PackName {
@@ -53,11 +52,7 @@ namespace DEModLauncher_GUI.ViewModel {
                 return _status;
             }
         }
-        public Resources Resources {
-            get {
-                return _resources;
-            }
-        }
+        public Resources Resources { get; } = new Resources();
         #endregion
 
         #region 构造方法
@@ -68,11 +63,11 @@ namespace DEModLauncher_GUI.ViewModel {
             _packName = model.PackName;
             _description = model.Description;
             _imagePath = model.ImagePath;
-            _resources = new Resources();
+            Resources = new Resources();
             _status = Status.Disable;
             foreach (string res in model.Resources) {
                 var resource = new DEModResource(res);
-                _resources.Add(resource);
+                Resources.Add(resource);
             }
         }
         #endregion
@@ -101,7 +96,7 @@ namespace DEModLauncher_GUI.ViewModel {
             }
             // 检查模组资源是否缺失
             var lackedFiles = new List<string>();
-            foreach (var resource in _resources) {
+            foreach (var resource in Resources) {
                 if (resource.Status == Status.Disable) {
                     continue;
                 }
@@ -121,7 +116,7 @@ namespace DEModLauncher_GUI.ViewModel {
                 File.Delete(file);
             }
             // 装入选定模组
-            foreach (var resource in _resources) {
+            foreach (var resource in Resources) {
                 if (resource.Status == Status.Disable) {
                     continue;
                 }
@@ -216,7 +211,7 @@ namespace DEModLauncher_GUI.ViewModel {
             if (ContainsResourceHelper(resourceName)) {
                 throw new ArgumentException($"模组包[{resourceName}]已添加，不可重复添加");
             }
-            _resources.Insert(index, new DEModResource(resourceName));
+            Resources.Insert(index, new DEModResource(resourceName));
             DOOMEternal.ModificationSaved = false;
         }
         public void InsertResources(int index, IEnumerable<string> fileList) {
@@ -226,7 +221,7 @@ namespace DEModLauncher_GUI.ViewModel {
                     if (index < 0) {
                         InsertResource(0, item);
                     }
-                    else if (index > _resources.Count - 1) {
+                    else if (index > Resources.Count - 1) {
                         AddResourceHelper(item);
                     }
                     else {
@@ -243,11 +238,11 @@ namespace DEModLauncher_GUI.ViewModel {
             }
         }
         public void RemoveResource(DEModResource resource) {
-            _resources.Remove(resource);
+            Resources.Remove(resource);
             DOOMEternal.ModificationSaved = false;
         }
         public void ResortResource(int index, DEModResource source) {
-            _resources.ReInsert(index, source);
+            Resources.ReInsert(index, source);
             DOOMEternal.ModificationSaved = false;
         }
         public void ExportMergedResource(DEModPack modPack) {
@@ -270,7 +265,7 @@ namespace DEModLauncher_GUI.ViewModel {
                             Directory.Delete(mergeWorkingFolder, true);
                         }
                         Directory.CreateDirectory(mergeWorkingFolder);
-                        foreach (var resource in _resources) {
+                        foreach (var resource in Resources) {
                             using (var zipFile = ZipFile.OpenRead($@"{DOOMEternal.ModPacksDirectory}\{resource.Path}")) {
                                 zipFile.ExtractToDirectory(mergeWorkingFolder);
                             }
@@ -362,13 +357,13 @@ namespace DEModLauncher_GUI.ViewModel {
             // 模组描述
             copy._description = _description;
             // 复制资源列表
-            foreach (var res in _resources) {
+            foreach (var res in Resources) {
                 copy.Resources.Add(res.GetDeepCopy());
             }
             return copy;
         }
         public override string ToString() {
-            return $"{_packName}({_resources.Count}个模组)";
+            return $"{_packName}({Resources.Count}个模组)";
         }
         #endregion
 
@@ -390,7 +385,7 @@ namespace DEModLauncher_GUI.ViewModel {
             return string.Join("", array);
         }
         private bool ContainsResourceHelper(string resourcePath) {
-            foreach (var item in _resources) {
+            foreach (var item in Resources) {
                 if (item.Path == resourcePath) {
                     return true;
                 }
@@ -409,7 +404,7 @@ namespace DEModLauncher_GUI.ViewModel {
             if (ContainsResourceHelper(resourceName)) {
                 throw new ArgumentException($"模组包[{resourceName}]已添加，不可重复添加");
             }
-            _resources.Add(new DEModResource(resourceName));
+            Resources.Add(new DEModResource(resourceName));
         }
         private void AddResourcesHelper(IEnumerable<string> fileList) {
             var errorList = new List<string>();
@@ -430,7 +425,7 @@ namespace DEModLauncher_GUI.ViewModel {
             var resourceDict = new Dictionary<string, List<string>>();
             int totalCount = 0;
             int validCount = 0;
-            foreach (var resource in _resources) {
+            foreach (var resource in Resources) {
                 if (resource.Status == Status.Disable) {
                     continue;
                 }
