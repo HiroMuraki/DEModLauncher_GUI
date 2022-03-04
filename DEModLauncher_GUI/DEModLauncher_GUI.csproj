@@ -2,13 +2,14 @@
 
 	<PropertyGroup>
 		<OutputType>WinExe</OutputType>
-		<TargetFramework>net5.0-windows</TargetFramework>
+		<TargetFramework>net6.0-windows</TargetFramework>
 		<UseWPF>true</UseWPF>
 		<UseWindowsForms>true</UseWindowsForms>
 		<ApplicationIcon>Resources\ICO.ico</ApplicationIcon>
 		<Authors>Hiro Muraki</Authors>
 		<Description />
 		<Company />
+		<SupportedOSPlatformVersion>7.0</SupportedOSPlatformVersion>
 	</PropertyGroup>
 
 	<ItemGroup>

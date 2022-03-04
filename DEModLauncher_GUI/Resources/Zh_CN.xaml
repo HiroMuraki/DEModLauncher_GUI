@@ -24,8 +24,8 @@
     <Sys:String x:Key="ADVANCED_OPTION_CLEAN_UNUSED_IMAGE_FILES">清理未使用的模组图像</Sys:String>
     <Sys:String x:Key="ADVANCED_OPTION_CLEAN_UNUSED_IMAGE_FILES_TOOLTIP">将没有使用的图片文件移出备份</Sys:String>
     <!--高级选项 导出备份包-->
-    <Sys:String x:Key="ADVANCED_OPTION_EXPORT_MODPACKSS">导出备份包</Sys:String>
-    <Sys:String x:Key="ADVANCED_OPTION_EXPORT_MODPACKSS_TOOLTIP">导出备份的模组包</Sys:String>
+    <Sys:String x:Key="ADVANCED_OPTION_EXPORT_MODPACKS">导出备份包</Sys:String>
+    <Sys:String x:Key="ADVANCED_OPTION_EXPORT_MODPACKS_TOOLTIP">导出备份的模组包</Sys:String>
     <!--高级选项 模组替换-->
     <Sys:String x:Key="ADVANCED_OPTION_UPDATE_MOD_FILE_TITLE">点击模组以进行替换</Sys:String>
     <Sys:String x:Key="ADVANCED_OPTION_UPDATE_MODS">替换模组文件</Sys:String>
