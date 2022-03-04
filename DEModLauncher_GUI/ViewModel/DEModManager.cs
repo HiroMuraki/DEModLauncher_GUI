@@ -12,8 +12,8 @@ using ModPacks = System.Collections.ObjectModel.ObservableCollection<DEModLaunch
 namespace DEModLauncher_GUI.ViewModel {
     public class DEModManager : ViewModelBase {
         private static readonly DEModPack _noModPack = new DEModPack();
-        private static readonly DEModManager _singletonIntance;
-        private static readonly DataContractJsonSerializer _serializer;
+        private static readonly DataContractJsonSerializer _serializer = new DataContractJsonSerializer(typeof(Model.DEModManager));
+        private static readonly DEModManager _singletonIntance = new DEModManager();
         private string _preOpenModDirectory = "";
         private bool _isLaunching;
 
@@ -338,10 +338,6 @@ namespace DEModLauncher_GUI.ViewModel {
         #endregion
 
         #region 构造方法
-        static DEModManager() {
-            _singletonIntance = new DEModManager();
-            _serializer = new DataContractJsonSerializer(typeof(Model.DEModManager));
-        }
         private DEModManager() {
 
         }
