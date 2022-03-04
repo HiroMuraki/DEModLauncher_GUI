@@ -58,29 +58,29 @@ namespace DEModLauncher_GUI {
             ModManager.RemoveModPack(GetModPackFrom(sender));
         }
         private void EditModPack_Click(object sender, RoutedEventArgs e) {
-            GetModPackFrom(sender).Edit();
+            GetModPackFrom(sender).OpenWithEditor();
         }
         private void CheckConflict_Click(object sender, RoutedEventArgs e) {
             GetModPackFrom(sender).CheckModConfliction();
         }
         private void ExportMergedResource_Click(object sender, RoutedEventArgs e) {
-            ModManager.CurrentModPack?.ExportMergedResource(GetModPackFrom(sender));
+            ModManager.CurrentModPack.ExportMergedResource();
         }
         #endregion
 
         #region 资源操作
         private void AddResource_Click(object sender, RoutedEventArgs e) {
-            ModManager.CurrentModPack?.NewResource();
+            ModManager.CurrentModPack.NewResourcesAddition();
             ResourcesDisplayer.ScrollToEnd();
         }
         private void AddModPackReference_Click(object sender, RoutedEventArgs e) {
-            ModManager.CurrentModPack?.AddResourcesReference();
+            ModManager.CurrentModPack.AddResourcesReference();
         }
         private void RemoveResource_Click(object sender, RoutedEventArgs e) {
-            ModManager.CurrentModPack?.RemoveResource(GetResourceFrom(sender));
+            ModManager.CurrentModPack.RemoveResource(GetResourceFrom(sender));
         }
         private void CurrentModPackDisplayer_FileDrop(object sender, DragEventArgs e) {
-            ModManager.CurrentModPack?.InsertResources(ModManager.CurrentModPack.Resources.Count, (string[])e.Data.GetData(DataFormats.FileDrop));
+            ModManager.CurrentModPack.InsertResources(ModManager.CurrentModPack.Resources.Count, (string[])e.Data.GetData(DataFormats.FileDrop));
             ResourcesDisplayer.ScrollToEnd();
             FileDragArea.IsHitTestVisible = false;
         }
