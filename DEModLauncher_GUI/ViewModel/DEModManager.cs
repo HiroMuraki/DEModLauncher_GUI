@@ -17,7 +17,6 @@ namespace DEModLauncher_GUI.ViewModel {
         private static readonly DataContractJsonSerializer _serializer;
         private string _preOpenModDirectory = "";
         private bool _isLaunching;
-        private Resources _usedModResources;
 
         #region 事件
         public event Action? CurrentModPackChanged;
@@ -35,7 +34,7 @@ namespace DEModLauncher_GUI.ViewModel {
         }
         public DEModPack CurrentModPack { get; private set; } = _noModPack;
         public ModPacks ModPacks { get; } = new ModPacks();
-        public Resources UsedModResources {
+        public DEModResource[] UsedModResources {
             get {
                 var ress = new List<DEModResource>();
                 foreach (var modPack in ModPacks) {
@@ -56,11 +55,7 @@ namespace DEModLauncher_GUI.ViewModel {
                 ress.Distinct();
                 ress.Sort();
 
-                _usedModResources.Clear();
-                foreach (var item in ress) {
-                    _usedModResources.Add(item);
-                }
-                return _usedModResources;
+                return ress.ToArray();
             }
         }
         #endregion
