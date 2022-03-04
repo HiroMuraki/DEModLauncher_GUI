@@ -1,11 +1,7 @@
 ﻿using System;
 
 namespace DEModLauncher_GUI.ViewModel {
-    public class DEModResource : ViewModelBase, IComparable<DEModResource> {
-        private string _path;
-        private Status _status;
-        private DEModInformation _information;
-
+    public class DEModResource : ViewModelBase, IComparable<DEModResource>, IDeepCopyable<DEModResource> {
         public string Name {
             get {
                 if (_path.EndsWith(".zip")) {
@@ -23,10 +19,10 @@ namespace DEModLauncher_GUI.ViewModel {
                 OnPropertyChanged(nameof(Path));
                 OnPropertyChanged(nameof(Name));
                 try {
-                    _information = DEModInformation.Read($"{DOOMEternal.ModPacksDirectory}\\{_path}");
+                    _information = DEModInfo.Read($"{DOOMEternal.ModPacksDirectory}\\{_path}");
                 }
                 catch (Exception) {
-                    _information = new DEModInformation();
+                    _information = new DEModInfo();
                 }
                 OnPropertyChanged(nameof(Information));
             }
@@ -36,7 +32,7 @@ namespace DEModLauncher_GUI.ViewModel {
                 return _status;
             }
         }
-        public DEModInformation Information {
+        public DEModInfo Information {
             get {
                 return _information;
             }
@@ -49,10 +45,10 @@ namespace DEModLauncher_GUI.ViewModel {
             _path = path;
             _status = Status.Enable;
             try {
-                _information = DEModInformation.Read($"{DOOMEternal.ModPacksDirectory}\\{path}");
+                _information = DEModInfo.Read($"{DOOMEternal.ModPacksDirectory}\\{path}");
             }
             catch {
-                _information = new DEModInformation();
+                _information = new DEModInfo();
             }
         }
 
@@ -66,18 +62,22 @@ namespace DEModLauncher_GUI.ViewModel {
             OnPropertyChanged(nameof(Status));
         }
         public DEModResource GetDeepCopy() {
-            var copy = new DEModResource();
-            copy._path = _path;
-            copy._status = _status;
-            copy._information = _information.GetDeepCopy();
-            return copy;
+            return new DEModResource {
+                _path = _path,
+                _status = _status,
+                _information = _information.GetDeepCopy()
+            };
         }
         public override string ToString() {
             return Name;
         }
 
-        public int CompareTo(DEModResource other) {
+        public int CompareTo(DEModResource? other) {
             return _path.CompareTo(other?._path);
         }
+
+        private string _path = "";
+        private Status _status = Status.Enable;
+        private DEModInfo _information = new DEModInfo();
     }
 }

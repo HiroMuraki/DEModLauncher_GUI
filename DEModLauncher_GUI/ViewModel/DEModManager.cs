@@ -590,36 +590,3 @@ namespace DEModLauncher_GUI.ViewModel {
         #endregion
     }
 }
-///// <summary>
-///// 上移模组配置
-///// </summary>
-///// <param name="modPack">要上移的模组配置</param>
-//public void MoveUpModPack(DEModPack modPack) {
-//    int currentIndex = _dEModPacks.IndexOf(modPack);
-//    if (currentIndex <= 0) {
-//        return;
-//    }
-//    int newIndex = currentIndex - 1;
-//    var t = _dEModPacks[currentIndex];
-//    _dEModPacks[currentIndex] = _dEModPacks[newIndex];
-//    _dEModPacks[newIndex] = t;
-//    DOOMEternal.ModificationSaved = false;
-//}
-///// <summary>
-///// 下移模组配置
-///// </summary>
-///// <param name="modPack">要下移的模组配置</param>
-//public void MoveDownModPack(DEModPack modPack) {
-//    int currentIndex = _dEModPacks.IndexOf(modPack);
-//    if (currentIndex < 0) {
-//        return;
-//    }
-//    if (currentIndex >= _dEModPacks.Count - 1) {
-//        return;
-//    }
-//    int newIndex = currentIndex + 1;
-//    var t = _dEModPacks[currentIndex];
-//    _dEModPacks[currentIndex] = _dEModPacks[newIndex];
-//    _dEModPacks[newIndex] = t;
-//    DOOMEternal.ModificationSaved = false;
-//}

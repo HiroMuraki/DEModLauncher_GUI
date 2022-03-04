@@ -6,7 +6,6 @@ namespace DEModLauncher_GUI {
         public Direction Direction { get; }
         public IDataObject Data { get; }
 
-
         public DataDragDropEventArgs(Direction direction, IDataObject data) {
             Direction = direction;
             Data = data;
