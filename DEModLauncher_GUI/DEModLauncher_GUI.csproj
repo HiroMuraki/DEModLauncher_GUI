@@ -10,7 +10,6 @@
 		<Authors>Hiro Muraki</Authors>
 		<Description />
 		<Company />
-		<SupportedOSPlatformVersion>7.0</SupportedOSPlatformVersion>
 	</PropertyGroup>
 
 	<ItemGroup>
