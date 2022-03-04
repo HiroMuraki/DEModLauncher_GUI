@@ -490,12 +490,8 @@ namespace DEModLauncher_GUI.ViewModel {
             dm.ModPackImageDirectory = null;
             dm.CurrentMod = _currentMod?.PackName;
             // 写入ModPacks信息
-            dm.ModPacks = new List<Model.DEModPack>();
-            foreach (var modPack in _modPacks) {
-                DEModPack dEModPack = modPack;
-                var dp = dEModPack.GetDataModel();
-                dm.ModPacks.Add(dp);
-            }
+            dm.ModPacks = (from modPack in ModPacks select modPack.GetDataModel()).ToArray();
+
             using (FileStream fs = new FileStream(fileName, FileMode.Create, FileAccess.Write)) {
                 _serializer.WriteObject(fs, dm);
             }

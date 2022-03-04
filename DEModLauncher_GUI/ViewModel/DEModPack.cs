@@ -350,10 +350,7 @@ namespace DEModLauncher_GUI.ViewModel {
             mp.PackName = _packName;
             mp.Description = _description;
             mp.ImagePath = _imagePath;
-            mp.Resources = new List<string>();
-            foreach (var item in _resources) {
-                mp.Resources.Add(item.Path);
-            }
+            mp.Resources = (from res in Resources select res.Path).ToArray();
             return mp;
         }
         public DEModPack GetDeepCopy() {
