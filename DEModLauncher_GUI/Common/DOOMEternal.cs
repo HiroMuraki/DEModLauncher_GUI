@@ -82,9 +82,9 @@ namespace DEModLauncher_GUI {
             var text = new StringBuilder();
             using (var reader = new StreamReader(ModLoaderProfileFile)) {
                 while (!reader.EndOfStream) {
-                    string currentLine = reader.ReadLine();
+                    string currentLine = reader.ReadLine() ?? "";
                     if (reg.IsMatch(currentLine)) {
-                        currentLine = reg.Replace(currentLine, value.ToString());
+                        currentLine = reg.Replace(currentLine, value.ToString() ?? "");
                     }
                     text.AppendLine(currentLine);
                 }

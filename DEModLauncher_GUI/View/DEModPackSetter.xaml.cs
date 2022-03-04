@@ -55,7 +55,7 @@ namespace DEModLauncher_GUI.View {
             if (ofd.ShowDialog() == true) {
                 try {
                     ImagePath = ofd.FileName;
-                    _preImagesDirectory = Path.GetDirectoryName(ofd.FileName);
+                    _preImagesDirectory = Path.GetDirectoryName(ofd.FileName) ?? _preImagesDirectory;
                 }
                 catch (Exception exp) {
                     MessageBox.Show($"图片修改出错，原因：{exp.Message}", "", MessageBoxButton.OK, MessageBoxImage.Error);

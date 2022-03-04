@@ -48,23 +48,23 @@ namespace DEModLauncher_GUI {
         }
     }
     public static class Util {
-        public static T FindVisualParent<T>(DependencyObject obj) where T : DependencyObject {
+        public static T? FindVisualParent<T>(DependencyObject obj) where T : DependencyObject {
             while (obj != null) {
-                if (obj is T) {
-                    return (T)obj;
+                if (obj is T t) {
+                    return t;
                 }
                 obj = VisualTreeHelper.GetParent(obj);
             }
             return null;
         }
-        public static T FindVisualChild<T>(DependencyObject obj) where T : DependencyObject {
+        public static T? FindVisualChild<T>(DependencyObject obj) where T : DependencyObject {
             if (obj == null) {
                 return null;
             }
             for (int i = 0; i < VisualTreeHelper.GetChildrenCount(obj); i++) {
                 var child = VisualTreeHelper.GetChild(obj, i);
-                if (child is T) {
-                    return (T)child;
+                if (child is T t) {
+                    return t;
                 }
                 var childItem = FindVisualChild<T>(child);
                 if (childItem != null) {

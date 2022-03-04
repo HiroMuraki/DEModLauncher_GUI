@@ -5,6 +5,7 @@
 		<TargetFramework>net6.0-windows</TargetFramework>
 		<UseWPF>true</UseWPF>
 		<UseWindowsForms>true</UseWindowsForms>
+		<Nullable>enable</Nullable>
 		<ApplicationIcon>Resources\ICO.ico</ApplicationIcon>
 		<Authors>Hiro Muraki</Authors>
 		<Description />

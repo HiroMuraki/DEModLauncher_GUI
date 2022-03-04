@@ -30,11 +30,12 @@ namespace DEModLauncher_GUI.ViewModel {
         }
         public string ImagePath {
             get {
-                if (string.IsNullOrEmpty(_imagePath)) {
+                // 路径为空则使用默认图片
+                if (string.IsNullOrWhiteSpace(_imagePath)) {
                     return DOOMEternal.DefaultModPackImage;
                 }
-                // 如果图片文件不存在的话，则使用默认图片
                 string fullPath = $@"{DOOMEternal.ModPackImagesDirectory}\{_imagePath}";
+                // 如果图片文件不存在则使用默认图片
                 if (!File.Exists(fullPath)) {
                     return DOOMEternal.DefaultModPackImage;
                 }
@@ -51,23 +52,6 @@ namespace DEModLauncher_GUI.ViewModel {
             }
         }
         public Resources Resources { get; } = new Resources();
-        #endregion
-
-        #region 构造方法
-        public DEModPack() {
-
-        }
-        public DEModPack(Model.DEModPack model) {
-            _packName = model.PackName;
-            _description = model.Description;
-            _imagePath = model.ImagePath;
-            Resources = new Resources();
-            _status = Status.Disable;
-            foreach (string res in model.Resources) {
-                var resource = new DEModResource(res);
-                Resources.Add(resource);
-            }
-        }
         #endregion
 
         #region 公共方法
@@ -160,7 +144,7 @@ namespace DEModLauncher_GUI.ViewModel {
             ofd.InitialDirectory = string.IsNullOrEmpty(_preOpenModDirectory) ? DOOMEternal.ModPacksDirectory : _preOpenModDirectory;
             ofd.Multiselect = true;
             if (ofd.ShowDialog() == System.Windows.Forms.DialogResult.OK) {
-                _preOpenModDirectory = Path.GetDirectoryName(ofd.FileName);
+                _preOpenModDirectory = Path.GetDirectoryName(ofd.FileName) ?? _preOpenModDirectory;
                 try {
                     AddResourcesHelper(ofd.FileNames);
                     DOOMEternal.ModificationSaved = false;
@@ -204,7 +188,7 @@ namespace DEModLauncher_GUI.ViewModel {
             if (!File.Exists(modPackBackup)) {
                 File.Copy(resourcePath, modPackBackup);
             }
-            if (ContainsResourceHelper(resourceName)) {
+            if (CheckIfContainsResource(resourceName)) {
                 throw new ArgumentException($"模组包[{resourceName}]已添加，不可重复添加");
             }
             Resources.Insert(index, new DEModResource(resourceName));
@@ -281,8 +265,8 @@ namespace DEModLauncher_GUI.ViewModel {
                 }
             }
         }
-        public bool ContainResource(DEModResource resource) {
-            return ContainsResourceHelper(resource.Path);
+        public bool ContainsResource(DEModResource resource) {
+            return CheckIfContainsResource(resource.Path);
         }
         public void CheckModConfliction() {
             var sb = new StringBuilder();
@@ -313,7 +297,7 @@ namespace DEModLauncher_GUI.ViewModel {
         }
         public void SetImage(string imagePath) {
             if (imagePath == DOOMEternal.DefaultModPackImage) {
-                _imagePath = null;
+                _imagePath = "";
                 return;
             }
             if (string.IsNullOrEmpty(imagePath)) {
@@ -380,7 +364,7 @@ namespace DEModLauncher_GUI.ViewModel {
             }
             return string.Join("", array);
         }
-        private bool ContainsResourceHelper(string resourcePath) {
+        private bool CheckIfContainsResource(string resourcePath) {
             foreach (var item in Resources) {
                 if (item.Path == resourcePath) {
                     return true;
@@ -397,7 +381,7 @@ namespace DEModLauncher_GUI.ViewModel {
             if (!File.Exists(modPackBackup)) {
                 File.Copy(resourcePath, modPackBackup);
             }
-            if (ContainsResourceHelper(resourceName)) {
+            if (CheckIfContainsResource(resourceName)) {
                 throw new ArgumentException($"模组包[{resourceName}]已添加，不可重复添加");
             }
             Resources.Add(new DEModResource(resourceName));

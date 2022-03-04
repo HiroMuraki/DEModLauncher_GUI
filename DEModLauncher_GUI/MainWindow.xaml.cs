@@ -158,8 +158,7 @@ namespace DEModLauncher_GUI {
             });
 
             if (isOk) {
-                var source = sender as View.ModPack;
-                var dataObj = new DataObject(source.Tag);
+                var dataObj = new DataObject(((View.ModPack)sender).Tag);
                 DragDrop.DoDragDrop(ResourceList, dataObj, DragDropEffects.Move);
             }
         }
@@ -168,7 +167,7 @@ namespace DEModLauncher_GUI {
             if (source == null) {
                 return;
             }
-            var target = (sender as FrameworkElement).Tag as DEModPack;
+            var target = ((FrameworkElement)sender).Tag as DEModPack;
             if (target == null) {
                 return;
             }
@@ -207,7 +206,7 @@ namespace DEModLauncher_GUI {
             });
 
             if (isOk) {
-                var dataObj = new DataObject((sender as FrameworkElement).Tag);
+                var dataObj = new DataObject(((FrameworkElement)sender).Tag);
                 DragDrop.DoDragDrop(ResourceList, dataObj, DragDropEffects.Move);
             }
             else {
@@ -215,7 +214,7 @@ namespace DEModLauncher_GUI {
             }
         }
         private void ModResource_DataDragDrop(object sender, DataDragDropEventArgs e) {
-            var target = (sender as FrameworkElement).Tag as DEModResource;
+            var target = ((FrameworkElement)sender).Tag as DEModResource;
             if (target == null) {
                 return;
             }

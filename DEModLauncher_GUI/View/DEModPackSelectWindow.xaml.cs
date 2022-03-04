@@ -9,14 +9,10 @@ namespace DEModLauncher_GUI.View {
     /// DEModPackSelectWindow.xaml 的交互逻辑
     /// </summary>
     public partial class DEModPackSelectWindow : Window {
-        public DEModPacks ModPackSelectors {
-            get {
-                return _modPackSelectors;
-            }
-        }
+        public DEModPacks ModPackSelectors { get; } = new DEModPacks();
         public IEnumerable<DEModPack> SelectedModPacks {
             get {
-                foreach (var item in _modPackSelectors) {
+                foreach (var item in ModPackSelectors) {
                     if (item.Status == Status.Enable) {
                         yield return item;
                     }
@@ -25,16 +21,14 @@ namespace DEModLauncher_GUI.View {
         }
 
         public DEModPackSelectWindow(IEnumerable<DEModPack> modPacks) {
-            _modPackSelectors = new DEModPacks();
             foreach (var modPack in modPacks) {
-                _modPackSelectors.Add(modPack.GetDeepCopy());
+                ModPackSelectors.Add(new DEModPack().LoadFromModel(modPack.ConvertToModel()));
             }
             InitializeComponent();
         }
 
-        private readonly DEModPacks _modPackSelectors;
         private void ModPack_Toggle(object sender, MouseButtonEventArgs e) {
-            ((sender as ModPack).Tag as DEModPack).Toggle();
+            ((DEModPack)((ModPack)sender).Tag).Toggle();
         }
         private void Confirm_Click(object sender, RoutedEventArgs e) {
             DialogResult = true;
