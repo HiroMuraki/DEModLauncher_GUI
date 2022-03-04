@@ -385,7 +385,7 @@ namespace DEModLauncher_GUI.ViewModel {
         /// 调用模组加载器
         /// </summary>
         private async Task<bool> LoadModHelper() {
-            if (IsValidModPackSelected()) {
+            if (!IsValidModPackSelected()) {
                 MessageBox.Show("请先选择一个模组配置", "警告", MessageBoxButton.OK, MessageBoxImage.Warning);
                 return false;
             }
