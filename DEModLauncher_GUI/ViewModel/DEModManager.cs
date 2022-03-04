@@ -488,7 +488,7 @@ namespace DEModLauncher_GUI.ViewModel {
                 ModDirectory = "",
                 ModPacksDirectory = "",
                 ModPackImageDirectory = "",
-                CurrentMod = _currentMod?.PackName,
+                CurrentMod = _currentMod?.PackName ?? "",
                 // 写入ModPacks信息
                 ModPacks = (from modPack in ModPacks select modPack.GetDataModel()).ToArray()
             };

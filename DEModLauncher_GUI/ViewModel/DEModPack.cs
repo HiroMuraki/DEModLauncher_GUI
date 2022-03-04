@@ -411,7 +411,7 @@ namespace DEModLauncher_GUI.ViewModel {
                 View.InformationWindow.Show($"无法添加以下模组文件：\n{string.Join("", errorList)}", "错误", Application.Current.MainWindow);
             }
         }
-        private ModPackConflictInformation GetConflictInformation() {
+        private ModPackConflictInfo GetConflictInformation() {
             var resourceDict = new Dictionary<string, List<string>>();
             int totalCount = 0;
             int validCount = 0;
@@ -439,7 +439,12 @@ namespace DEModLauncher_GUI.ViewModel {
                 conflictedFiles[file] = new List<string>(resourceDict[file]);
             }
 
-            return new ModPackConflictInformation(totalCount, validCount, conflictedCount, conflictedFiles);
+            return new ModPackConflictInfo() {
+                TotalCount = totalCount,
+                ValidCount = validCount,
+                ConflictedCount = conflictedCount,
+                ConflictedFiles = conflictedFiles
+            }; 
         }
         private static IEnumerable<string> GetZippedFiles(string fileName) {
             var zipFile = ZipFile.OpenRead(fileName);
