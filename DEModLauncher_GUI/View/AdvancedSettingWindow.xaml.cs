@@ -22,13 +22,13 @@ namespace DEModLauncher_GUI.View {
             }
         }
         private void ExportModPacks_Click(object sender, RoutedEventArgs e) {
-            DEModManager.GetInstance().ExportModPacks();
+            DEModManagerExtensions.TipToExportModPacks();
         }
         private void ClearUnusedImageFiles_Click(object sender, RoutedEventArgs e) {
-            DEModManager.GetInstance().ClearUnusedImageFiles();
+            DEModManager.GetInstance().TipToClearUnusedImageFiles();
         }
         private void ClearUnusedModFiles_Click(object sender, RoutedEventArgs e) {
-            DEModManager.GetInstance().ClearUnusedModFiles();
+            DEModManager.GetInstance().TipToClearUnusedModFiles();
         }
         private void UpdateModFile_Click(object sender, RoutedEventArgs e) {
             new DEModUpdateWindow() {
@@ -41,7 +41,7 @@ namespace DEModLauncher_GUI.View {
         }
 
         private void ResetModLoader_Click(object sender, RoutedEventArgs e) {
-            DEModManager.GetInstance().ResetModLoader();
+            DEModManagerExtensions.TipToResetModLoader();
         }
     }
 }

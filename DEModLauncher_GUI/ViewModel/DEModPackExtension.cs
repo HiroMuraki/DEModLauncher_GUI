@@ -47,7 +47,7 @@ namespace DEModLauncher_GUI.ViewModel {
                 self.ToggleOn();
             }
         }
-        public static void CheckModConfliction(this DEModPack self) {
+        public static void TipToCheckModConfliction(this DEModPack self) {
             var sb = new StringBuilder();
             try {
                 var checkResult = self.GetConflictInfo();
@@ -74,7 +74,7 @@ namespace DEModLauncher_GUI.ViewModel {
                 MessageBox.Show($"冲突检查出错，原因：{exp.Message}", "错误", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
-        public static void NewResourcesAddition(this DEModPack self) {
+        public static void TipToNewResources(this DEModPack self) {
             var ofd = new System.Windows.Forms.OpenFileDialog();
             ofd.Title = "选择模组文件";
             ofd.Filter = "zip压缩包|*.zip";
@@ -96,7 +96,7 @@ namespace DEModLauncher_GUI.ViewModel {
                 }
             }
         }
-        public static void AddResourcesReference(this DEModPack self) {
+        public static void TipToNewResourcesReference(this DEModPack self) {
             try {
                 var allowedModPack = from i in DEModManager.GetInstance().ModPacks
                                      where !ReferenceEquals(i, self)
@@ -122,14 +122,14 @@ namespace DEModLauncher_GUI.ViewModel {
                 MessageBox.Show($"添加时模组文件时发生错误，原因：{exp.Message}", "错误", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
-        public static void InsertResources(this DEModPack self, int index, IEnumerable<string> fileList) {
+        public static void TipToInsertResources(this DEModPack self, int index, IEnumerable<string> fileList) {
             self.InsertResources(index, fileList, out string[] errorList);
 
             if (errorList.Length > 0) {
                 View.InformationWindow.Show(string.Join("", errorList), "", Application.Current.MainWindow);
             }
         }
-        public static void ExportMergedResource(this DEModPack self) {
+        public static void TipToExportMergedResource(this DEModPack self) {
             var sfd = new System.Windows.Forms.SaveFileDialog();
             sfd.FileName = self.PackName;
             sfd.InitialDirectory = Environment.CurrentDirectory;

@@ -26,7 +26,7 @@ namespace DEModLauncher_GUI.View {
         }
 
         private void UpdateMod_Click(object sender, RoutedEventArgs e) {
-            ModManager.UpdateResource((DEModResource)((FrameworkElement)sender).Tag);
+            ModManager.TipToUpdateResource((DEModResource)((FrameworkElement)sender).Tag);
         }
     }
 }

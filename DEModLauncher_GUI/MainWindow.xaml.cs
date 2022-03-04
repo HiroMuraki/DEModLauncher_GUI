@@ -17,20 +17,20 @@ namespace DEModLauncher_GUI {
         }
 
         #region 启动与保存
-        private void LoadMod_Click(object sender, RoutedEventArgs e) {
-            ModManager.LoadMod();
+        private async void LoadMod_Click(object sender, RoutedEventArgs e) {
+            await ModManager.TipToStartGame(StartMode.LoadOnly);
         }
-        private void LaunchMod_Click(object sender, RoutedEventArgs e) {
-            ModManager.LaunchMod();
+        private async void LaunchMod_Click(object sender, RoutedEventArgs e) {
+            await ModManager.TipToStartGame(StartMode.LoadAndStart);
         }
-        private void LaunchGame_Click(object sender, RoutedEventArgs e) {
-            ModManager.LaunchGame();
+        private async void LaunchGame_Click(object sender, RoutedEventArgs e) {
+            await ModManager.TipToStartGame(StartMode.StartOnly);
         }
         private void SaveToFile_Click(object sender, RoutedEventArgs e) {
-            ModManager.SaveProfile();
+            ModManager.TipToSaveProfile();
         }
         private void LoadFromFile_Click(object sender, RoutedEventArgs e) {
-            ModManager.LoadProfile();
+            ModManager.LoadProfile(DOOMEternal.LauncherProfileFile);
         }
         private void OpenOptionMenu_Click(object sender, RoutedEventArgs e) {
             var menu = ((Button)sender).ContextMenu;
@@ -51,36 +51,36 @@ namespace DEModLauncher_GUI {
             ModManager.DuplicateModPack(GetModPackFrom(sender));
         }
         private void AddModPack_Click(object sender, RoutedEventArgs e) {
-            ModManager.NewModPack();
+            ModManager.TipToNewModPack();
             ModPackDisplayer.ScrollToHorizontalOffset(ModPackDisplayer.ScrollableWidth * 2);
         }
         private void RemoveModPack_Click(object sender, RoutedEventArgs e) {
-            ModManager.RemoveModPack(GetModPackFrom(sender));
+            ModManager.TipToRemoveModPack(GetModPackFrom(sender));
         }
         private void EditModPack_Click(object sender, RoutedEventArgs e) {
             GetModPackFrom(sender).OpenWithEditor();
         }
         private void CheckConflict_Click(object sender, RoutedEventArgs e) {
-            GetModPackFrom(sender).CheckModConfliction();
+            GetModPackFrom(sender).TipToCheckModConfliction();
         }
         private void ExportMergedResource_Click(object sender, RoutedEventArgs e) {
-            ModManager.CurrentModPack.ExportMergedResource();
+            ModManager.CurrentModPack.TipToExportMergedResource();
         }
         #endregion
 
         #region 资源操作
         private void AddResource_Click(object sender, RoutedEventArgs e) {
-            ModManager.CurrentModPack.NewResourcesAddition();
+            ModManager.CurrentModPack.TipToNewResources();
             ResourcesDisplayer.ScrollToEnd();
         }
         private void AddModPackReference_Click(object sender, RoutedEventArgs e) {
-            ModManager.CurrentModPack.AddResourcesReference();
+            ModManager.CurrentModPack.TipToNewResourcesReference();
         }
         private void RemoveResource_Click(object sender, RoutedEventArgs e) {
             ModManager.CurrentModPack.RemoveResource(GetResourceFrom(sender));
         }
         private void CurrentModPackDisplayer_FileDrop(object sender, DragEventArgs e) {
-            ModManager.CurrentModPack.InsertResources(ModManager.CurrentModPack.Resources.Count, (string[])e.Data.GetData(DataFormats.FileDrop));
+            ModManager.CurrentModPack.TipToInsertResources(ModManager.CurrentModPack.Resources.Count, (string[])e.Data.GetData(DataFormats.FileDrop));
             ResourcesDisplayer.ScrollToEnd();
             FileDragArea.IsHitTestVisible = false;
         }
@@ -91,7 +91,7 @@ namespace DEModLauncher_GUI {
             FileDragArea.IsHitTestVisible = false;
         }
         private void OpenResourceFile_Click(object sender, RoutedEventArgs e) {
-            ModManager.OpenResourceFile(GetResourceFrom(sender));
+            DEModManagerExtensions.TipToOpenResourceFile(GetResourceFrom(sender));
         }
         #endregion
 
@@ -114,7 +114,7 @@ namespace DEModLauncher_GUI {
             if (Keyboard.IsKeyDown(Key.LeftCtrl)) {
                 switch (e.Key) {
                     case Key.S:
-                        ModManager.SaveProfile();
+                        ModManager.TipToSaveProfile();
                         break;
                 }
             }
@@ -224,7 +224,7 @@ namespace DEModLauncher_GUI {
                 if (e.Direction == Direction.Down) {
                     insertIndex += 1;
                 }
-                ModManager.CurrentModPack?.InsertResources(insertIndex, (string[])e.Data.GetData(DataFormats.FileDrop));
+                ModManager.CurrentModPack?.TipToInsertResources(insertIndex, (string[])e.Data.GetData(DataFormats.FileDrop));
                 return;
             }
             // 否则视为资源排序
