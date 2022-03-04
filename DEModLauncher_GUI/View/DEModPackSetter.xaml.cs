@@ -1,5 +1,6 @@
 ﻿using Microsoft.Win32;
 using System;
+using System.ComponentModel;
 using System.IO;
 using System.Windows;
 using System.Windows.Input;
@@ -8,37 +9,43 @@ namespace DEModLauncher_GUI.View {
     /// <summary>
     /// TextInputWindow.xaml 的交互逻辑
     /// </summary>
-    public partial class DEModPackSetter : Window {
+    public partial class DEModPackSetter : Window, INotifyPropertyChanged {
+        public event PropertyChangedEventHandler? PropertyChanged;
 
-        public static readonly DependencyProperty PackNameProperty =
-            DependencyProperty.Register(nameof(PackName), typeof(string), typeof(DEModPackSetter), new PropertyMetadata(""));
-        public static readonly DependencyProperty DescriptionProperty =
-            DependencyProperty.Register(nameof(Description), typeof(string), typeof(DEModPackSetter), new PropertyMetadata(""));
-        public static readonly DependencyProperty ImagePathProperty =
-            DependencyProperty.Register(nameof(ImagePath), typeof(string), typeof(DEModPackSetter), new PropertyMetadata(""));
-
+        /// <summary>
+        /// PackName
+        /// </summary>
         public string PackName {
             get {
-                return (string)GetValue(PackNameProperty);
+                return _packName;
             }
             set {
-                SetValue(PackNameProperty, value);
+                _packName = value;
+                OnPropertyChanged(nameof(PackName));
             }
         }
+        /// <summary>
+        /// Description
+        /// </summary>
         public string Description {
             get {
-                return (string)GetValue(DescriptionProperty);
+                return _description;
             }
             set {
-                SetValue(DescriptionProperty, value);
+                _description = value;
+                OnPropertyChanged(nameof(Description));
             }
         }
+        /// <summary>
+        /// ImagePath
+        /// </summary>
         public string ImagePath {
             get {
-                return (string)GetValue(ImagePathProperty);
+                return _imagePath;
             }
             set {
-                SetValue(ImagePathProperty, value);
+                _imagePath = value;
+                OnPropertyChanged(nameof(ImagePath));
             }
         }
 
@@ -47,6 +54,9 @@ namespace DEModLauncher_GUI.View {
         }
 
         private static string _preImagesDirectory = DOOMEternal.ModPackImagesDirectory;
+        private string _imagePath = DOOMEternal.DefaultModPackImage;
+        private string _description = "";
+        private string _packName = "";
         private void ChangeImage_Click(object sender, MouseButtonEventArgs e) {
             var ofd = new OpenFileDialog();
             ofd.Filter = "图像文件|*.jpg;*.png;*.bmp;*.gif|JPG图片|*.jpg|PNG图片|*.png|BMP图片|*.bmp|GIF图片|*.gif";
@@ -68,6 +78,10 @@ namespace DEModLauncher_GUI.View {
         }
         private void Cancel_Click(object sender, RoutedEventArgs e) {
             DialogResult = false;
+        }
+
+        private void OnPropertyChanged(string propertyName) {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
     }
 }

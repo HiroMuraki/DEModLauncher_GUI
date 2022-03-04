@@ -124,7 +124,7 @@
                         </Grid>
                     </Grid>
                     <Grid Grid.Row="1" AllowDrop="True">
-                        <ScrollViewer x:Name="ResourcesDisplayer" VerticalScrollBarVisibility="Hidden">
+                        <ScrollViewer x:Name="ResourcesDisplayer" Style="{StaticResource Simple}">
                             <ScrollViewer.ContextMenu>
                                 <ContextMenu>
                                     <MenuItem Tag="{Binding CurrentModPack}" Header="{StaticResource ADD_MOD_RESOURCE_TOOLTIP}" Click="AddResource_Click"/>
