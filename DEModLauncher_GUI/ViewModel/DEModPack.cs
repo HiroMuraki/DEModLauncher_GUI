@@ -9,12 +9,12 @@ using Resources = System.Collections.ObjectModel.ObservableCollection<DEModLaunc
 
 namespace DEModLauncher_GUI.ViewModel {
     public class DEModPack : ViewModelBase {
-        private static string _preOpenModDirectory = null;
-        private string _packName;
-        private string _description;
-        private string _imagePath;
-        private Status _status;
-        private readonly Resources _resources;
+        private static string _preOpenModDirectory = "";
+        private string _packName = "";
+        private string _description = "";
+        private string _imagePath = "";
+        private Status _status = Status.Disable;
+        private readonly Resources _resources = new Resources();
 
         #region 公共属性
         public string PackName {
@@ -62,8 +62,7 @@ namespace DEModLauncher_GUI.ViewModel {
 
         #region 构造方法
         public DEModPack() {
-            _resources = new Resources();
-            _status = Status.Disable;
+
         }
         public DEModPack(Model.DEModPack model) {
             _packName = model.PackName;
@@ -369,11 +368,27 @@ namespace DEModLauncher_GUI.ViewModel {
             return copy;
         }
         public override string ToString() {
-            int resourceCount = _resources.Count;
-            return $"{_packName}({resourceCount}个模组)";
+            return $"{_packName}({_resources.Count}个模组)";
         }
         #endregion
 
+        private static IEnumerable<string> GetZippedFiles(string fileName) {
+            var zipFile = ZipFile.OpenRead(fileName);
+            foreach (var file in zipFile.Entries) {
+                if (file.FullName.EndsWith("\\") || file.FullName.EndsWith("/")) {
+                    continue;
+                }
+                yield return file.FullName;
+            }
+        }
+        private static string GetImageID() {
+            var rnd = new Random();
+            int[] array = new int[16];
+            for (int i = 0; i < array.Length; i++) {
+                array[i] = rnd.Next(0, 10);
+            }
+            return string.Join("", array);
+        }
         private bool ContainsResourceHelper(string resourcePath) {
             foreach (var item in _resources) {
                 if (item.Path == resourcePath) {
@@ -444,24 +459,7 @@ namespace DEModLauncher_GUI.ViewModel {
                 ValidCount = validCount,
                 ConflictedCount = conflictedCount,
                 ConflictedFiles = conflictedFiles
-            }; 
-        }
-        private static IEnumerable<string> GetZippedFiles(string fileName) {
-            var zipFile = ZipFile.OpenRead(fileName);
-            foreach (var file in zipFile.Entries) {
-                if (file.FullName.EndsWith("\\") || file.FullName.EndsWith("/")) {
-                    continue;
-                }
-                yield return file.FullName;
-            }
-        }
-        private string GetImageID() {
-            var rnd = new Random();
-            int[] array = new int[16];
-            for (int i = 0; i < array.Length; i++) {
-                array[i] = rnd.Next(0, 10);
-            }
-            return string.Join("", array);
+            };
         }
     }
 }
