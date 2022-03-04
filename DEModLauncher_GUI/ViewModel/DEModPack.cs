@@ -335,7 +335,7 @@ namespace DEModLauncher_GUI.ViewModel {
             OnPropertyChanged(nameof(ImagePath));
             DOOMEternal.ModificationSaved = false;
         }
-        public Model.DEModPack ConvertToModel () {
+        public Model.DEModPack ConvertToModel() {
             return new Model.DEModPack {
                 PackName = _packName,
                 Description = _description,
@@ -344,28 +344,14 @@ namespace DEModLauncher_GUI.ViewModel {
             };
         }
         public DEModPack LoadFromModel(Model.DEModPack model) {
-            PackName= model.PackName;
-            Description=model.Description;
+            PackName = model.PackName;
+            Description = model.Description;
             SetImage(model.ImagePath);
             Resources.Clear();
             foreach (var item in model.Resources) {
                 Resources.Add(new DEModResource(item));
             }
             return this;
-        }
-        public DEModPack GetDeepCopy() {
-            var copy = new DEModPack();
-            // 设置新模组包名
-            copy._packName = _packName;
-            // 模组图片
-            copy._imagePath = _imagePath;
-            // 模组描述
-            copy._description = _description;
-            // 复制资源列表
-            foreach (var res in Resources) {
-                copy.Resources.Add(res.GetDeepCopy());
-            }
-            return copy;
         }
         public override string ToString() {
             return $"{_packName}({Resources.Count}个模组)";
