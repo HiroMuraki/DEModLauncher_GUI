@@ -60,28 +60,26 @@ namespace DEModLauncher_GUI.ViewModel {
             Status = Status.Disable;
         }
         public void SetImage(string imagePath) {
-            if (imagePath == DOOMEternal.DefaultModPackImage) {
+            if (string.IsNullOrWhiteSpace(imagePath) || imagePath == DOOMEternal.DefaultModPackImage) {
                 _imagePath = "";
-                return;
             }
-            if (string.IsNullOrEmpty(imagePath)) {
-                return;
+            else {
+                // 获取唯一文件名
+                string destPath;
+                string imageName;
+                string imageExt = Path.GetExtension(imagePath);
+                do {
+                    imageName = $"{GetImageID()}{imageExt}";
+                    destPath = $@"{DOOMEternal.ModPackImagesDirectory}\{imageName}";
+                } while (File.Exists(destPath));
+                // 图片复制到图片库中
+                if (File.Exists(imagePath)) {
+                    File.Copy(imagePath, destPath);
+                }
+                _imagePath = imageName;
+                OnPropertyChanged(nameof(ImagePath));
+                DOOMEternal.ModificationSaved = false;
             }
-            // 获取唯一文件名
-            string destPath;
-            string imageName;
-            string imageExt = Path.GetExtension(imagePath);
-            do {
-                imageName = $"{GetImageID()}{imageExt}";
-                destPath = $@"{DOOMEternal.ModPackImagesDirectory}\{imageName}";
-            } while (File.Exists(destPath));
-            // 图片复制到图片库中
-            if (File.Exists(imagePath)) {
-                File.Copy(imagePath, destPath);
-            }
-            _imagePath = imageName;
-            OnPropertyChanged(nameof(ImagePath));
-            DOOMEternal.ModificationSaved = false;
         }
         public void Deploy() {
             // 检查模组加载器是否存在
@@ -250,7 +248,7 @@ namespace DEModLauncher_GUI.ViewModel {
         public DEModPack LoadFromModel(Model.DEModPack model) {
             PackName = model.PackName;
             Description = model.Description;
-            SetImage(model.ImagePath);
+            _imagePath = model.ImagePath;
             Resources.Clear();
             foreach (string? item in model.Resources) {
                 Resources.Add(new DEModResource(item));

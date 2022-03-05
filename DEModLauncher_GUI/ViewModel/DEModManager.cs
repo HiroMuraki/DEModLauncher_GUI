@@ -223,8 +223,7 @@ namespace DEModLauncher_GUI.ViewModel {
             CurrentModPack = _noModPack;
             ModPacks.Clear();
             foreach (var item in dm.ModPacks) {
-                var modPack = new DEModPack().LoadFromModel(item);
-                ModPacks.Add(modPack);
+                var modPack = NewModPack().LoadFromModel(item);
                 if (!IsValidModPackSelected() && item.PackName == dm.CurrentMod) {
                     SetCurrentModPack(modPack);
                 }
