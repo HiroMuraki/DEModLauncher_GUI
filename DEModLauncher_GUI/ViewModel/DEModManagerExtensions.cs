@@ -158,17 +158,19 @@ namespace DEModLauncher_GUI.ViewModel {
             }
         }
         public static async Task<bool> TipToStartGame(this DEModManager self, StartMode startMode) {
-            if (!self.IsValidModPackSelected()) {
-                MessageBox.Show("请先选择一个模组配置", "警告", MessageBoxButton.OK, MessageBoxImage.Warning);
-                return false;
-            }
-            // 弹出提示窗口，避免误操作
-            var result = MessageBox.Show($"加载模组将需要一定时间，在此期间请勿关闭本程序。是否继续?",
-                                         $"加载模组：{self.CurrentModPack.PackName}",
-                                         MessageBoxButton.YesNo,
-                                         MessageBoxImage.Question);
-            if (result != MessageBoxResult.Yes) {
-                return false;
+            if (startMode != StartMode.StartOnly) {
+                if (!self.IsValidModPackSelected()) {
+                    MessageBox.Show("请先选择一个模组配置", "警告", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    return false;
+                }
+                // 弹出提示窗口，避免误操作
+                var result = MessageBox.Show($"加载模组将需要一定时间，在此期间请勿关闭本程序。是否继续?",
+                                             $"加载模组：{self.CurrentModPack.PackName}",
+                                             MessageBoxButton.YesNo,
+                                             MessageBoxImage.Question);
+                if (result != MessageBoxResult.Yes) {
+                    return false;
+                }
             }
 
             self.IsLaunching = true;
@@ -177,11 +179,11 @@ namespace DEModLauncher_GUI.ViewModel {
                     case StartMode.LoadOnly:
                         await Task.Run(() => { self.LoadMod(); });
                         break;
-                    case StartMode.StartOnly:
-                        await Task.Run(() => { self.LaunchGame(); });
-                        break;
                     case StartMode.LoadAndStart:
                         await Task.Run(() => { self.LaunchMod(); });
+                        break;
+                    case StartMode.StartOnly:
+                        await Task.Run(() => { self.LaunchGame(); });
                         break;
                     default:
                         break;
