@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.IO;
 using System.IO.Compression;
 using System.Linq;
@@ -234,7 +235,7 @@ namespace DEModLauncher_GUI.ViewModel {
                 TotalCount = totalCount,
                 ValidCount = validCount,
                 ConflictedCount = conflictedCount,
-                ConflictedFiles = conflictedFiles
+                ConflictedFiles = conflictedFiles.ToImmutableDictionary(k=>k.Key,v=>v.Value.ToArray())
             };
         }
         public Model.DEModPack ConvertToModel() {

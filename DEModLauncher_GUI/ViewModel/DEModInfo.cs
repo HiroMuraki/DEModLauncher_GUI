@@ -4,10 +4,13 @@ using System.Runtime.Serialization;
 using System.Runtime.Serialization.Json;
 using System.Text;
 
-namespace DEModLauncher_GUI.ViewModel {
-    public record DEModInfo : IDeepCopyable<DEModInfo> {
+namespace DEModLauncher_GUI.ViewModel
+{
+    public record DEModInfo : IDeepCloneable<DEModInfo>
+    {
         [DataContract]
-        class Info {
+        class Info
+        {
             [DataMember(Name = "name")]
             public string Name { get; init; } = "";
             [DataMember(Name = "description")]
@@ -19,16 +22,19 @@ namespace DEModLauncher_GUI.ViewModel {
             [DataMember(Name = "requiredVersion")]
             public string RequiredVersion { get; init; } = "";
 
-            public static Info Load(Stream stream) {
+            public static Info Load(Stream stream)
+            {
                 return _serializer.ReadObject(stream) as Info ?? new Info();
             }
-            public static Info Load(string fileName) {
-                using (var reader = new FileStream(fileName, FileMode.Open, FileAccess.Read)) {
+            public static Info Load(string fileName)
+            {
+                using (var reader = new FileStream(fileName, FileMode.Open, FileAccess.Read))
+                {
                     return Load(reader);
                 }
             }
 
-            private static readonly DataContractJsonSerializer _serializer = new DataContractJsonSerializer(typeof(Info));
+            private static readonly DataContractJsonSerializer _serializer = new(typeof(Info));
         }
 
         public string Name { get; init; } = "?";
@@ -37,15 +43,18 @@ namespace DEModLauncher_GUI.ViewModel {
         public string Version { get; init; } = "?";
         public string RequiredVersion { get; init; } = "?";
 
-        public override string ToString() {
+        public override string ToString()
+        {
             string output = $"名称：{Name}\n";
             output += $"作者：{Author}\n";
             output += $"版本：{Version}\n";
             output += $"描述：{ImproveReadability(Description)}";
             return output;
         }
-        public DEModInfo GetDeepCopy() {
-            return new DEModInfo() {
+        public DEModInfo GetDeepClone()
+        {
+            return new DEModInfo()
+            {
                 Name = Name,
                 Description = Description,
                 Author = Author,
@@ -54,18 +63,21 @@ namespace DEModLauncher_GUI.ViewModel {
             };
         }
 
-        public static DEModInfo Read(string path) {
+        public static DEModInfo Read(string path)
+        {
             // 读取压缩包中的EternalMod.json
             var zipArchive = ZipFile.Open(path, ZipArchiveMode.Read);
             var entry = zipArchive.GetEntry("EternalMod.json");
-            if (entry == null) {
+            if (entry == null)
+            {
                 throw new FileNotFoundException("未找到EternalMod.json");
             }
 
             // 读取
             var t = Info.Load(entry.Open());
             // 读取数据并实例化，返回
-            return new DEModInfo() {
+            return new DEModInfo()
+            {
                 Name = t.Name,
                 Description = t.Description,
                 Author = t.Author,
@@ -74,12 +86,15 @@ namespace DEModLauncher_GUI.ViewModel {
             };
         }
 
-        private static string ImproveReadability(string source) {
+        private static string ImproveReadability(string source)
+        {
             var output = new StringBuilder();
             string[] words = source.Split(' ', '\t', '\n');
-            for (int i = 0; i < words.Length; i++) {
+            for (int i = 0; i < words.Length; i++)
+            {
                 output.Append($"{words[i]} ");
-                if (i % 10 == 9) {
+                if (i % 10 == 9)
+                {
                     output.Append('\n');
                     output.Append("          ");
                 }

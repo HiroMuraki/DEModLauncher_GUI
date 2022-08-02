@@ -1,10 +1,12 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections.Immutable;
 
-namespace DEModLauncher_GUI {
-    public record ModPackConflictInfo {
+namespace DEModLauncher_GUI
+{
+    public record class ModPackConflictInfo
+    {
         public int TotalCount { get; init; }
         public int ValidCount { get; init; }
         public int ConflictedCount { get; init; }
-        public Dictionary<string, List<string>> ConflictedFiles { get; init; } = new Dictionary<string, List<string>>();
+        public ImmutableDictionary<string, string[]> ConflictedFiles { get; init; } = ImmutableDictionary<string, string[]>.Empty;
     }
 }

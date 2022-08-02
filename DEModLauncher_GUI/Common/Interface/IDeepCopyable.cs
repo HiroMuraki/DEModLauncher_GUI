@@ -1,5 +1,7 @@
-﻿namespace DEModLauncher_GUI {
-    public interface IDeepCopyable<T> {
-        T GetDeepCopy();
+﻿namespace DEModLauncher_GUI
+{
+    public interface IDeepCloneable<T>
+    {
+        T GetDeepClone();
     }
 }

@@ -1,8 +1,12 @@
-﻿namespace DEModLauncher_GUI {
-    public enum Direction {
-        Up = 0b0001,
-        Down = 0b0010,
-        Left = 0b0100,
-        Right = 0b1000
+﻿namespace DEModLauncher_GUI
+{
+    public enum Direction
+    {
+#pragma warning disable format
+        Up    = 1 << 0,
+        Down  = 1 << 1,
+        Left  = 1 << 2,
+        Right = 1 << 3
+#pragma warning disable format
     }
 }

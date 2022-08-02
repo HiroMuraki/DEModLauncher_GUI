@@ -1,9 +1,11 @@
 using System;
 using System.Runtime.Serialization;
 
-namespace DEModLauncher_GUI.Model {
+namespace DEModLauncher_GUI.Model
+{
     [DataContract]
-    public class DEModPack {
+    public class DEModPack
+    {
         [DataMember(Order = 0)]
         public string PackName { get; init; } = "";
         [DataMember(Order = 1)]

@@ -1,7 +1,7 @@
 ﻿using System;
 
 namespace DEModLauncher_GUI.ViewModel {
-    public class DEModResource : ViewModelBase, IComparable<DEModResource>, IDeepCopyable<DEModResource> {
+    public class DEModResource : ViewModelBase, IComparable<DEModResource>, IDeepCloneable<DEModResource> {
         public string Name {
             get {
                 if (_path.EndsWith(".zip")) {
@@ -61,11 +61,11 @@ namespace DEModLauncher_GUI.ViewModel {
             }
             OnPropertyChanged(nameof(Status));
         }
-        public DEModResource GetDeepCopy() {
+        public DEModResource GetDeepClone() {
             return new DEModResource {
                 _path = _path,
                 _status = _status,
-                _information = _information.GetDeepCopy()
+                _information = _information.GetDeepClone()
             };
         }
         public override string ToString() {

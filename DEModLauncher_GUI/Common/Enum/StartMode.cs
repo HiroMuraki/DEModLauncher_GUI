@@ -1,5 +1,7 @@
-﻿namespace DEModLauncher_GUI.ViewModel {
-    public enum StartMode {
+﻿namespace DEModLauncher_GUI
+{
+    public enum StartMode
+    {
         LoadOnly,
         StartOnly,
         LoadAndStart
