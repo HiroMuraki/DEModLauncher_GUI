@@ -1,43 +1,67 @@
-﻿<Window x:Class="DEModLauncher_GUI.View.DEModPackSelectWindow"
-        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:DEModLauncher_GUI"
-        xmlns:ViewModel="clr-namespace:DEModLauncher_GUI.ViewModel"
-        xmlns:View="clr-namespace:DEModLauncher_GUI.View"
-        xmlns:ValueConverter="clr-namespace:DEModLauncher_GUI.ViewModel.ValueConverter"
-        mc:Ignorable="d"
-        DataContext="{Binding RelativeSource={RelativeSource Mode=Self}}"
-        WindowStartupLocation="CenterOwner"
-        Title="" Height="600" Width="500">
+﻿<Window
+    x:Class="DEModLauncher_GUI.View.DEModPackSelectWindow"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:v="clr-namespace:DEModLauncher_GUI.View"
+    xmlns:vc="clr-namespace:DEModLauncher_GUI.ValueConverters"
+    xmlns:vm="clr-namespace:DEModLauncher_GUI.ViewModel"
+    Title=""
+    Width="500"
+    Height="600"
+    DataContext="{Binding RelativeSource={RelativeSource Mode=Self}}"
+    WindowStartupLocation="CenterOwner"
+    mc:Ignorable="d">
     <WindowChrome.WindowChrome>
-        <WindowChrome UseAeroCaptionButtons="False" CaptionHeight="0"/>
+        <WindowChrome CaptionHeight="0" UseAeroCaptionButtons="False" />
     </WindowChrome.WindowChrome>
     <Window.Resources>
-        <ValueConverter:StatusToBoolean x:Key="StatusToBoolean"/>
+        <vc:StatusToBoolean x:Key="StatusToBoolean" />
     </Window.Resources>
-    <Border Background="{StaticResource MainColor}" BorderBrush="{StaticResource BorderColor}" BorderThickness="1">
+    <Border
+        Background="{StaticResource MainColor}"
+        BorderBrush="{StaticResource BorderColor}"
+        BorderThickness="1">
         <Grid>
             <Grid.RowDefinitions>
-                <RowDefinition Height="40"/>
-                <RowDefinition/>
-                <RowDefinition Height="40"/>
+                <RowDefinition Height="40" />
+                <RowDefinition />
+                <RowDefinition Height="40" />
             </Grid.RowDefinitions>
             <Grid Grid.Row="0">
-                <Border Background="{StaticResource AccentColor}" MouseLeftButtonDown="Window_Move"/>
-                <Label Content="{StaticResource ADD_MOD_RESOURES_FROM_MOD_PACK_TITLE}" FontSize="14" Foreground="{StaticResource TextColor}" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" IsHitTestVisible="False"/>
-                <Button Grid.Column="1" Content="&#x2573;" Width="40" FontSize="18" Style="{StaticResource GButtonTitle}" BorderThickness="0" HorizontalAlignment="Right" Click="Window_Close"/>
+                <Border Background="{StaticResource AccentColor}" MouseLeftButtonDown="Window_Move" />
+                <Label
+                    HorizontalContentAlignment="Center"
+                    VerticalContentAlignment="Center"
+                    Content="{StaticResource ADD_MOD_RESOURES_FROM_MOD_PACK_TITLE}"
+                    FontSize="14"
+                    Foreground="{StaticResource TextColor}"
+                    IsHitTestVisible="False" />
+                <Button
+                    Grid.Column="1"
+                    Width="40"
+                    HorizontalAlignment="Right"
+                    BorderThickness="0"
+                    Click="Window_Close"
+                    Content="&#x2573;"
+                    FontSize="18"
+                    Style="{StaticResource GButtonTitle}" />
             </Grid>
             <Grid Grid.Row="1">
                 <ScrollViewer VerticalScrollBarVisibility="Auto">
-                    <ItemsControl ItemsSource="{Binding ModPackSelectors}" Margin="10,5">
+                    <ItemsControl Margin="10,5" ItemsSource="{Binding ModPackSelectors}">
                         <ItemsControl.ItemTemplate>
-                            <DataTemplate DataType="{x:Type ViewModel:DEModPack}">
+                            <DataTemplate DataType="{x:Type vm:DEModPackViewModel}">
                                 <Grid>
-                                    <View:ModPack PackName="{Binding PackName}" ToolTip="{Binding Description}" Tag="{Binding}" Status="{Binding Status}" MouseLeftButtonDown="ModPack_Toggle">
-                                        <View:ModPack.Style>
-                                            <Style TargetType="{x:Type View:ModPack}">
+                                    <v:ModPack
+                                        MouseLeftButtonDown="ModPack_Toggle"
+                                        PackName="{Binding PackName}"
+                                        Status="{Binding Status}"
+                                        Tag="{Binding}"
+                                        ToolTip="{Binding Description}">
+                                        <v:ModPack.Style>
+                                            <Style TargetType="{x:Type v:ModPack}">
                                                 <Setter Property="Background" Value="{StaticResource ModPackItemColor}" />
                                                 <Setter Property="Foreground" Value="{StaticResource TextColor}" />
                                                 <Setter Property="BorderBrush" Value="{StaticResource BorderColor}" />
@@ -45,31 +69,34 @@
                                                 <Setter Property="VerticalContentAlignment" Value="Center" />
                                                 <Setter Property="HorizontalContentAlignment" Value="Center" />
                                                 <Setter Property="FontSize" Value="14" />
-                                                <Setter Property="Height" Value="40"/>
+                                                <Setter Property="Height" Value="40" />
                                                 <Setter Property="Padding" Value="0" />
                                                 <Setter Property="Template">
                                                     <Setter.Value>
-                                                        <ControlTemplate TargetType="{x:Type View:ModPack}">
+                                                        <ControlTemplate TargetType="{x:Type v:ModPack}">
                                                             <Grid>
-                                                                <Border Background="{StaticResource ItemShadowColor}"
-                                                                        Opacity="0.15"
-                                                                        CornerRadius="3"
-                                                                        Margin="1,1,-1,-1"/>
-                                                                <Border Background="{TemplateBinding Background}"
-                                                                        BorderBrush="{TemplateBinding BorderBrush}"
-                                                                        BorderThickness="{TemplateBinding BorderThickness}"
-                                                                        CornerRadius="3">
-                                                                </Border>
-                                                                <TextBlock Text="{Binding PackName,RelativeSource={RelativeSource Mode=TemplatedParent}}" 
-                                                                           VerticalAlignment="{TemplateBinding VerticalContentAlignment}" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
-                                                                           Margin="{TemplateBinding Padding}"/>
+                                                                <Border
+                                                                    Margin="1,1,-1,-1"
+                                                                    Background="{StaticResource ItemShadowColor}"
+                                                                    CornerRadius="3"
+                                                                    Opacity="0.15" />
+                                                                <Border
+                                                                    Background="{TemplateBinding Background}"
+                                                                    BorderBrush="{TemplateBinding BorderBrush}"
+                                                                    BorderThickness="{TemplateBinding BorderThickness}"
+                                                                    CornerRadius="3" />
+                                                                <TextBlock
+                                                                    Margin="{TemplateBinding Padding}"
+                                                                    HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                                                    VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                                                                    Text="{Binding PackName, RelativeSource={RelativeSource Mode=TemplatedParent}}" />
                                                             </Grid>
                                                             <ControlTemplate.Triggers>
                                                                 <Trigger Property="IsMouseOver" Value="True">
                                                                     <Setter Property="Background" Value="{StaticResource MainColor}" />
                                                                     <Setter Property="Foreground" Value="{StaticResource TextColor}" />
                                                                 </Trigger>
-                                                                <Trigger Property="Status" Value="Enable" >
+                                                                <Trigger Property="Status" Value="Enable">
                                                                     <Setter Property="FontWeight" Value="Bold" />
                                                                     <Setter Property="Background" Value="{StaticResource FocusColor}" />
                                                                     <Setter Property="Foreground" Value="{StaticResource MainColor}" />
@@ -79,23 +106,26 @@
                                                     </Setter.Value>
                                                 </Setter>
                                             </Style>
-                                        </View:ModPack.Style>
-                                    </View:ModPack>
+                                        </v:ModPack.Style>
+                                    </v:ModPack>
                                 </Grid>
                             </DataTemplate>
                         </ItemsControl.ItemTemplate>
                         <ItemsControl.ItemsPanel>
                             <ItemsPanelTemplate>
-                                <StackPanel>
-
-                                </StackPanel>
+                                <StackPanel />
                             </ItemsPanelTemplate>
                         </ItemsControl.ItemsPanel>
                     </ItemsControl>
                 </ScrollViewer>
             </Grid>
             <Grid Grid.Row="2">
-                <Button Content="{StaticResource ADD_MOD_RESOURCES_CONFIRM}" FontSize="18" Style="{StaticResource GButton}" Click="Confirm_Click" BorderThickness="0"/>
+                <Button
+                    BorderThickness="0"
+                    Click="Confirm_Click"
+                    Content="{StaticResource ADD_MOD_RESOURCES_CONFIRM}"
+                    FontSize="18"
+                    Style="{StaticResource GButton}" />
             </Grid>
         </Grid>
     </Border>

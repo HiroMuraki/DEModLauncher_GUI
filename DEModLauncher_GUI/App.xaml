@@ -1,15 +1,15 @@
-﻿<Application x:Class="DEModLauncher_GUI.App"
-             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:local="clr-namespace:DEModLauncher_GUI"
-             Startup="Application_Startup">
+﻿<Application
+    x:Class="DEModLauncher_GUI.App"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    Startup="Application_Startup">
     <Application.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="/DEModLauncher_GUI;component/Resources/ColorDict.xaml"/>
-                <ResourceDictionary Source="/DEModLauncher_GUI;component/Resources/Zh_CN.xaml"/>
-                <ResourceDictionary Source="/DEModLauncher_GUI;component/Resources/StyleDict.xaml"/>
-                <ResourceDictionary Source="/DEModLauncher_GUI;component/Themes/Generic.xaml"/>
+                <ResourceDictionary Source="/DEModLauncher_GUI;component/Resources/ColorDict.xaml" />
+                <ResourceDictionary Source="/DEModLauncher_GUI;component/Resources/Zh_CN.xaml" />
+                <ResourceDictionary Source="/DEModLauncher_GUI;component/Resources/StyleDict.xaml" />
+                <ResourceDictionary Source="/DEModLauncher_GUI;component/Themes/Generic.xaml" />
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Application.Resources>

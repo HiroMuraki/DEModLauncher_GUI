@@ -1,100 +1,101 @@
-﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-                    xmlns:Sys="clr-namespace:System;assembly=mscorlib">
-    <!--保存配置文件-->
+﻿<ResourceDictionary
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:Sys="clr-namespace:System;assembly=mscorlib">
+    <!--  保存配置文件  -->
     <Sys:String x:Key="SAVE_PROFILE_FILE">保存配置</Sys:String>
     <Sys:String x:Key="SAVE_PROFILE_FILE_TOOLTIP">保存模组配置</Sys:String>
-    <!--重新加载配置文件-->
+    <!--  重新加载配置文件  -->
     <Sys:String x:Key="RELOAD_PROFILE_FILE">读取配置</Sys:String>
     <Sys:String x:Key="RELOAD_PROFILE_FILE_TOOLTIP">重新读取模组配置</Sys:String>
-    <!--重新加载配置文件-->
+    <!--  重新加载配置文件  -->
     <Sys:String x:Key="EXTRA_OPTION">E</Sys:String>
     <Sys:String x:Key="EXTRA_OPTION_TOOLTIP">打开额外选项</Sys:String>
-    
-    <!--高级选项-->
+
+    <!--  高级选项  -->
     <Sys:String x:Key="ADVANCED_OPTION">高级选项</Sys:String>
     <Sys:String x:Key="ADVANCED_OPTION_TOOLTIP">打开高级选项</Sys:String>
-    <!--打开游戏文件夹 打开游戏文件夹-->
+    <!--  打开游戏文件夹 打开游戏文件夹  -->
     <Sys:String x:Key="ADVANCED_OPTION_OPEN_GAME_DIRECTORY">打开游戏文件夹</Sys:String>
     <Sys:String x:Key="ADVANCED_OPTION_OPEN_GAME_DIRECTORY_TOOLTIP">打开游戏文件夹</Sys:String>
-    <!--高级选项 清理未使用的模组文件-->
+    <!--  高级选项 清理未使用的模组文件  -->
     <Sys:String x:Key="ADVANCED_OPTION_CLEAN_UNUSED_MOD_FILES">清理未使用的模组文件</Sys:String>
     <Sys:String x:Key="ADVANCED_OPTION_CLEAN_UNUSED_MOD_FILES_TOOLTIP">将没有使用的模组文件移出备份</Sys:String>
-    <!--高级选项 清理未使用的模组图像-->
+    <!--  高级选项 清理未使用的模组图像  -->
     <Sys:String x:Key="ADVANCED_OPTION_CLEAN_UNUSED_IMAGE_FILES">清理未使用的模组图像</Sys:String>
     <Sys:String x:Key="ADVANCED_OPTION_CLEAN_UNUSED_IMAGE_FILES_TOOLTIP">将没有使用的图片文件移出备份</Sys:String>
-    <!--高级选项 导出备份包-->
+    <!--  高级选项 导出备份包  -->
     <Sys:String x:Key="ADVANCED_OPTION_EXPORT_MODPACKS">导出备份包</Sys:String>
     <Sys:String x:Key="ADVANCED_OPTION_EXPORT_MODPACKS_TOOLTIP">导出备份的模组包</Sys:String>
-    <!--高级选项 模组替换-->
+    <!--  高级选项 模组替换  -->
     <Sys:String x:Key="ADVANCED_OPTION_UPDATE_MOD_FILE_TITLE">点击模组以进行替换</Sys:String>
     <Sys:String x:Key="ADVANCED_OPTION_UPDATE_MODS">替换模组文件</Sys:String>
     <Sys:String x:Key="ADVANCED_OPTION_UPDATE_MODS_TOOLTIP">全局替换指定模组文件</Sys:String>
-    <!--高级选项 查看启动器配置-->
+    <!--  高级选项 查看启动器配置  -->
     <Sys:String x:Key="ADVANCED_OPTION_VIEW_LAUNCHER_PROFILE">查看启动器配置文件</Sys:String>
     <Sys:String x:Key="ADVANCED_OPTION_VIEW_LAUNCHER_PROFILE_TOOLTIP">查看启动器配置文件</Sys:String>
-    <!--高级选项 重置模组加载器-->
+    <!--  高级选项 重置模组加载器  -->
     <Sys:String x:Key="ADVANCED_OPTION_RESET_MOD_LOADER">重置模组加载器</Sys:String>
     <Sys:String x:Key="ADVANCED_OPTION_RESET_MOD_LOADER_TOOLTIP">重置模组加载器状态，在此前请先验证游戏文件完整性</Sys:String>
 
-    <!--仅加载模组-->
+    <!--  仅加载模组  -->
     <Sys:String x:Key="LOAD_MOD">加载</Sys:String>
     <Sys:String x:Key="LOAD_MOD_TOOLTIP">仅加载模组文件，不启动游戏</Sys:String>
-    <!--加载模组后启动游戏-->
+    <!--  加载模组后启动游戏  -->
     <Sys:String x:Key="LAUNCH_AFTER_LOAD_MOD">加载模组并启动</Sys:String>
     <Sys:String x:Key="LAUNCH_AFTER_LOAD_MOD_TOOLTIP">调用加载器加载模组并启动游戏</Sys:String>
-    <!--直接启动游戏-->
+    <!--  直接启动游戏  -->
     <Sys:String x:Key="LAUNCH_DIRECTLY">启动</Sys:String>
     <Sys:String x:Key="LAUNCH_DIRECTLY_TOOLTIP">直接启动游戏</Sys:String>
-    <!--游戏文件夹-->
+    <!--  游戏文件夹  -->
     <Sys:String x:Key="GAME_DIRECTORY">游戏目录</Sys:String>
     <Sys:String x:Key="GAME_DIRECTORY_TOOLTIP">游戏文件夹路径</Sys:String>
-    <!--选择游戏文件夹-->
+    <!--  选择游戏文件夹  -->
     <Sys:String x:Key="SELECT_GAME_FOLDER">选择</Sys:String>
     <Sys:String x:Key="SELECT_GAME_FOLDER_TOOLTIP">手动设置游戏文件夹</Sys:String>
 
-    <!--选择模组包以添加-->
+    <!--  选择模组包以添加  -->
     <Sys:String x:Key="ADD_MOD_RESOURES_FROM_MOD_PACK_TITLE">选择模组包以添加</Sys:String>
-    <!--添加自现有模组配置ToolTip-->
+    <!--  添加自现有模组配置ToolTip  -->
     <Sys:String x:Key="ADD_MOD_RESOURCES_FROM_MOD_PACK_TOOLTIP">添加自现有模组配置</Sys:String>
-    <!--添加自现有模组配置 确定按钮-->
+    <!--  添加自现有模组配置 确定按钮  -->
     <Sys:String x:Key="ADD_MOD_RESOURCES_CONFIRM">添加所选模组</Sys:String>
-    <!--添加模组文件ToolTip-->
+    <!--  添加模组文件ToolTip  -->
     <Sys:String x:Key="ADD_MOD_RESOURCE_TOOLTIP">添加模组文件</Sys:String>
-    <!--在资源管理器中查看模组文件-->
+    <!--  在资源管理器中查看模组文件  -->
     <Sys:String x:Key="VIEW_MOD_RESOURCE">查看</Sys:String>
-    <!--向上移动模组文件-->
+    <!--  向上移动模组文件  -->
     <Sys:String x:Key="MOVE_UP_MOD_RESOURCE">上移</Sys:String>
-    <!--向下移动模组文件-->
+    <!--  向下移动模组文件  -->
     <Sys:String x:Key="MOVE_DOWN_MOD_RESOURCE">下移</Sys:String>
-    <!--删除模组文件-->
+    <!--  删除模组文件  -->
     <Sys:String x:Key="REMOVE_MOD_RESOURCE">删除</Sys:String>
 
-    <!--添加模组配置ToolTip-->
+    <!--  添加模组配置ToolTip  -->
     <Sys:String x:Key="ADD_MOD_PACK_TOOLTIP">添加模组配置</Sys:String>
-    <!--编辑模组配置-->
+    <!--  编辑模组配置  -->
     <Sys:String x:Key="EDIT_MOD_PACK">编辑</Sys:String>
-    <!--向上移动模组配置-->
+    <!--  向上移动模组配置  -->
     <Sys:String x:Key="MOVE_UP_MOD_PACK">上移</Sys:String>
-    <!--向下移动模组配置-->
+    <!--  向下移动模组配置  -->
     <Sys:String x:Key="MOVE_DOWN_MOD_PACK">下移</Sys:String>
-    <!--删除模组配置-->
+    <!--  删除模组配置  -->
     <Sys:String x:Key="REMOVE_MOD_PACK">删除</Sys:String>
-    <!--制作模组配置拷贝-->
+    <!--  制作模组配置拷贝  -->
     <Sys:String x:Key="DUPLICATE_MOD_PACK">创建副本</Sys:String>
-    <!--检查模组配置是否存在文件冲突-->
+    <!--  检查模组配置是否存在文件冲突  -->
     <Sys:String x:Key="CHECK_MOD_PACK_CONFLICT">冲突检查</Sys:String>
-    <!--导出模组组合包-->
+    <!--  导出模组组合包  -->
     <Sys:String x:Key="GENERATE_MERGED_FILE">导出组合包</Sys:String>
 
-    <!--模组配置名_ToolTip-->
+    <!--  模组配置名_ToolTip  -->
     <Sys:String x:Key="TEXT_OF_MOD_PACK_NAME">模组配置名</Sys:String>
-    <!--模组配置图片_ToolTip-->
+    <!--  模组配置图片_ToolTip  -->
     <Sys:String x:Key="TEXT_OF_MOD_PACK_IMAGE">点击修改模组配置图片</Sys:String>
-    <!--模组配置描述-->
+    <!--  模组配置描述  -->
     <Sys:String x:Key="TEXT_OF_MOD_PACK_DESCRIPTION">模组描述名</Sys:String>
-    <!--保存模组配置修改-->
+    <!--  保存模组配置修改  -->
     <Sys:String x:Key="SAVE_MOD_PACK_MODIFY">保存</Sys:String>
-    <!--取消模组配置修改-->
+    <!--  取消模组配置修改  -->
     <Sys:String x:Key="CANCEL_MOD_PACK_MODIFY">取消</Sys:String>
 </ResourceDictionary>

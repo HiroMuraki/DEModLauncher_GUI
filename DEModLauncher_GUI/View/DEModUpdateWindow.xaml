@@ -1,43 +1,66 @@
-﻿<Window x:Class="DEModLauncher_GUI.View.DEModUpdateWindow"
-        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:DEModLauncher_GUI.View"
-        xmlns:ViewModel="clr-namespace:DEModLauncher_GUI.ViewModel"
-        DataContext="{Binding RelativeSource={RelativeSource Mode=Self}}"
-        WindowStartupLocation="CenterOwner"
-        Title="" Height="600" Width="500">
+﻿<Window
+    x:Class="DEModLauncher_GUI.View.DEModUpdateWindow"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:vm="clr-namespace:DEModLauncher_GUI.ViewModel"
+    Title=""
+    Width="500"
+    Height="600"
+    DataContext="{Binding RelativeSource={RelativeSource Mode=Self}}"
+    WindowStartupLocation="CenterOwner">
     <WindowChrome.WindowChrome>
-        <WindowChrome UseAeroCaptionButtons="False" CaptionHeight="0"/>
+        <WindowChrome CaptionHeight="0" UseAeroCaptionButtons="False" />
     </WindowChrome.WindowChrome>
-    <Border Background="{StaticResource MainColor}" BorderBrush="{StaticResource BorderColor}" BorderThickness="1">
+    <Border
+        Background="{StaticResource MainColor}"
+        BorderBrush="{StaticResource BorderColor}"
+        BorderThickness="1">
         <Grid>
             <Grid.RowDefinitions>
-                <RowDefinition Height="40"/>
-                <RowDefinition/>
-                <RowDefinition Height="40"/>
+                <RowDefinition Height="40" />
+                <RowDefinition />
+                <RowDefinition Height="40" />
             </Grid.RowDefinitions>
             <Grid Grid.Row="0">
-                <Border Background="{StaticResource AccentColor}" MouseLeftButtonDown="Window_Move"/>
-                <Label Content="{StaticResource ADVANCED_OPTION_UPDATE_MOD_FILE_TITLE}" FontSize="14" Foreground="{StaticResource TextColor}" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" IsHitTestVisible="False"/>
-                <Button Grid.Column="1" Content="&#x2573;" Width="40" FontSize="18" Style="{StaticResource GButtonTitle}" BorderThickness="0" HorizontalAlignment="Right" Click="Window_Close"/>
+                <Border Background="{StaticResource AccentColor}" MouseLeftButtonDown="Window_Move" />
+                <Label
+                    HorizontalContentAlignment="Center"
+                    VerticalContentAlignment="Center"
+                    Content="{StaticResource ADVANCED_OPTION_UPDATE_MOD_FILE_TITLE}"
+                    FontSize="14"
+                    Foreground="{StaticResource TextColor}"
+                    IsHitTestVisible="False" />
+                <Button
+                    Grid.Column="1"
+                    Width="40"
+                    HorizontalAlignment="Right"
+                    BorderThickness="0"
+                    Click="Window_Close"
+                    Content="&#x2573;"
+                    FontSize="18"
+                    Style="{StaticResource GButtonTitle}" />
             </Grid>
             <Grid Grid.Row="1">
                 <ScrollViewer VerticalScrollBarVisibility="Auto">
-                    <ItemsControl ItemsSource="{Binding ModManager.UsedModResources}" Margin="10,5">
+                    <ItemsControl Margin="10,5" ItemsSource="{Binding ModManager.UsedModResources}">
                         <ItemsControl.ItemTemplate>
-                            <DataTemplate DataType="{x:Type ViewModel:DEModResource}">
+                            <DataTemplate DataType="{x:Type vm:DEModResourceViewModel}">
                                 <Grid>
-                                    <Button Content="{Binding Name}" ToolTip="{Binding Information}" Tag="{Binding}" Style="{StaticResource AGButton}" HorizontalContentAlignment="Left" Height="40" Padding="10,0" Click="UpdateMod_Click"/>
+                                    <Button
+                                        Height="40"
+                                        Padding="10,0"
+                                        HorizontalContentAlignment="Left"
+                                        Click="UpdateMod_Click"
+                                        Content="{Binding Name}"
+                                        Style="{StaticResource AGButton}"
+                                        Tag="{Binding}"
+                                        ToolTip="{Binding Information}" />
                                 </Grid>
                             </DataTemplate>
                         </ItemsControl.ItemTemplate>
                         <ItemsControl.ItemsPanel>
                             <ItemsPanelTemplate>
-                                <StackPanel>
-
-                                </StackPanel>
+                                <StackPanel />
                             </ItemsPanelTemplate>
                         </ItemsControl.ItemsPanel>
                     </ItemsControl>

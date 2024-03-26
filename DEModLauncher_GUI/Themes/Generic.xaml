@@ -6,37 +6,38 @@
 
     <Style x:Key="Simple" TargetType="{x:Type ScrollViewer}">
         <Style.Resources>
-            <!-- Simple ScrollRepeatButton Style - This RepeatButton is used above and below the Thumb in the Scrollbar. They are set to transparent si that they do not show over the scrollbar -->
+            <!--  Simple ScrollRepeatButton Style - This RepeatButton is used above and below the Thumb in the Scrollbar. They are set to transparent si that they do not show over the scrollbar  -->
             <Style TargetType="{x:Type RepeatButton}">
-                <Setter Property="Background" Value="Transparent"/>
-                <Setter Property="BorderBrush" Value="Transparent"/>
-                <Setter Property="IsTabStop" Value="false"/>
-                <Setter Property="Focusable" Value="false"/>
+                <Setter Property="Background" Value="Transparent" />
+                <Setter Property="BorderBrush" Value="Transparent" />
+                <Setter Property="IsTabStop" Value="false" />
+                <Setter Property="Focusable" Value="false" />
                 <Setter Property="Template">
                     <Setter.Value>
                         <ControlTemplate TargetType="{x:Type RepeatButton}">
                             <Grid>
-                                <Rectangle Fill="Transparent"/>
+                                <Rectangle Fill="Transparent" />
                             </Grid>
                         </ControlTemplate>
                     </Setter.Value>
                 </Setter>
             </Style>
-            <!-- Simple Thumb - The Thumb is the draggable part of the Scrollbar -->
-            <Style TargetType="{x:Type Thumb}" BasedOn="{x:Null}">
+            <!--  Simple Thumb - The Thumb is the draggable part of the Scrollbar  -->
+            <Style BasedOn="{x:Null}" TargetType="{x:Type Thumb}">
                 <Setter Property="Opacity" Value="0.75" />
                 <Setter Property="Template">
                     <Setter.Value>
                         <ControlTemplate TargetType="{x:Type Thumb}">
                             <Grid>
-                                <Rectangle HorizontalAlignment="Stretch"
-                                   VerticalAlignment="Stretch"
-                                   x:Name="Rectangle"
-                                   Width="7"
-                                   Height="Auto"
-                                   RadiusX="2"
-                                   RadiusY="2"
-                                   Fill="White"/>
+                                <Rectangle
+                                    x:Name="Rectangle"
+                                    Width="7"
+                                    Height="Auto"
+                                    HorizontalAlignment="Stretch"
+                                    VerticalAlignment="Stretch"
+                                    Fill="White"
+                                    RadiusX="2"
+                                    RadiusY="2" />
                             </Grid>
                             <ControlTemplate.Triggers>
                                 <Trigger Property="IsMouseOver" Value="True">
@@ -47,32 +48,43 @@
                     </Setter.Value>
                 </Setter>
             </Style>
-            <!-- Simple ScrollBar  This makes use of SimpleThumb, SimpleRepeatButton and SimpleScrollRepeatButton -->
+            <!--  Simple ScrollBar  This makes use of SimpleThumb, SimpleRepeatButton and SimpleScrollRepeatButton  -->
             <Style x:Key="SimpleScrollBar" TargetType="{x:Type ScrollBar}">
-                <Setter Property="Foreground" Value="#FFFFFF"/>
+                <Setter Property="Foreground" Value="#FFFFFF" />
                 <Setter Property="Template">
                     <Setter.Value>
                         <ControlTemplate TargetType="{x:Type ScrollBar}">
-                            <Grid x:Name="GridRoot" Width="10" Background="Transparent">
+                            <Grid
+                                x:Name="GridRoot"
+                                Width="10"
+                                Background="Transparent">
                                 <Grid.RowDefinitions>
-                                    <RowDefinition MaxHeight="2"/>
-                                    <RowDefinition Height="*"/>
-                                    <RowDefinition MaxHeight="2"/>
+                                    <RowDefinition MaxHeight="2" />
+                                    <RowDefinition Height="*" />
+                                    <RowDefinition MaxHeight="2" />
                                 </Grid.RowDefinitions>
-                                <RepeatButton Grid.Row="0" x:Name="DecreaseRepeat" 
-                                      Command="ScrollBar.LineUpCommand"/>
-                                <RepeatButton Grid.Row="2" x:Name="IncreaseRepeat" 
-                                      Command="ScrollBar.LineDownCommand"/>
-                                <!-- Track is a special layout container which sizes the thumb and the repeat button which do jump scrolling either side of it -->
-                                <Track Grid.Row="1" x:Name="PART_Track" Orientation="Vertical" IsDirectionReversed="true">
+                                <RepeatButton
+                                    x:Name="DecreaseRepeat"
+                                    Grid.Row="0"
+                                    Command="ScrollBar.LineUpCommand" />
+                                <RepeatButton
+                                    x:Name="IncreaseRepeat"
+                                    Grid.Row="2"
+                                    Command="ScrollBar.LineDownCommand" />
+                                <!--  Track is a special layout container which sizes the thumb and the repeat button which do jump scrolling either side of it  -->
+                                <Track
+                                    x:Name="PART_Track"
+                                    Grid.Row="1"
+                                    IsDirectionReversed="true"
+                                    Orientation="Vertical">
                                     <Track.IncreaseRepeatButton>
-                                        <RepeatButton x:Name="PageUp" Command="ScrollBar.PageDownCommand"/>
+                                        <RepeatButton x:Name="PageUp" Command="ScrollBar.PageDownCommand" />
                                     </Track.IncreaseRepeatButton>
                                     <Track.Thumb>
-                                        <Thumb/>
+                                        <Thumb />
                                     </Track.Thumb>
                                     <Track.DecreaseRepeatButton>
-                                        <RepeatButton x:Name="PageDown" Command="ScrollBar.PageUpCommand"/>
+                                        <RepeatButton x:Name="PageDown" Command="ScrollBar.PageUpCommand" />
                                     </Track.DecreaseRepeatButton>
                                 </Track>
                             </Grid>
@@ -86,32 +98,44 @@
                 <ControlTemplate TargetType="{x:Type ScrollViewer}">
                     <Grid Background="{TemplateBinding Background}">
                         <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="5"/>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="5" />
                         </Grid.ColumnDefinitions>
                         <Grid.RowDefinitions>
-                            <RowDefinition Height="*"/>
-                            <RowDefinition Height="5"/>
+                            <RowDefinition Height="*" />
+                            <RowDefinition Height="5" />
                         </Grid.RowDefinitions>
-                        <ScrollContentPresenter Grid.Column="0" Grid.Row="0" Content="{TemplateBinding Content}" 
-                                                ContentTemplate="{TemplateBinding ContentTemplate}" 
-                                                CanContentScroll="{TemplateBinding CanContentScroll}"/>
+                        <ScrollContentPresenter
+                            Grid.Row="0"
+                            Grid.Column="0"
+                            CanContentScroll="{TemplateBinding CanContentScroll}"
+                            Content="{TemplateBinding Content}"
+                            ContentTemplate="{TemplateBinding ContentTemplate}" />
 
-                        <!-- The visibility of the ScrollBars is controlled by the implementation fo the control -->
-                        <ScrollBar Visibility="{TemplateBinding ComputedHorizontalScrollBarVisibility}" 
-                                   Grid.Column="1" Grid.Row="1" x:Name="PART_HorizontalScrollBar" 
-                                   Style="{StaticResource SimpleScrollBar}" Orientation="Horizontal" 
-                                   Value="{Binding Path=HorizontalOffset, Mode=OneWay, RelativeSource={RelativeSource TemplatedParent}}" 
-                                   ViewportSize="{TemplateBinding ViewportWidth}" 
-                                   Minimum="0" 
-                                   Maximum="{TemplateBinding ScrollableWidth}"/>
-                        <ScrollBar Visibility="{TemplateBinding ComputedVerticalScrollBarVisibility}" 
-                                   Grid.Column="1" Grid.Row="0" x:Name="PART_VerticalScrollBar" 
-                                   Style="{StaticResource SimpleScrollBar}" Orientation="Vertical" 
-                                   Value="{Binding Path=VerticalOffset, Mode=OneWay, RelativeSource={RelativeSource TemplatedParent}}" 
-                                   ViewportSize="{TemplateBinding ViewportHeight}" 
-                                   Minimum="0" Margin="-10,0,0,0"
-                                   Maximum="{TemplateBinding ScrollableHeight}" />
+                        <!--  The visibility of the ScrollBars is controlled by the implementation fo the control  -->
+                        <ScrollBar
+                            x:Name="PART_HorizontalScrollBar"
+                            Grid.Row="1"
+                            Grid.Column="1"
+                            Maximum="{TemplateBinding ScrollableWidth}"
+                            Minimum="0"
+                            Orientation="Horizontal"
+                            Style="{StaticResource SimpleScrollBar}"
+                            ViewportSize="{TemplateBinding ViewportWidth}"
+                            Visibility="{TemplateBinding ComputedHorizontalScrollBarVisibility}"
+                            Value="{Binding Path=HorizontalOffset, Mode=OneWay, RelativeSource={RelativeSource TemplatedParent}}" />
+                        <ScrollBar
+                            x:Name="PART_VerticalScrollBar"
+                            Grid.Row="0"
+                            Grid.Column="1"
+                            Margin="-10,0,0,0"
+                            Maximum="{TemplateBinding ScrollableHeight}"
+                            Minimum="0"
+                            Orientation="Vertical"
+                            Style="{StaticResource SimpleScrollBar}"
+                            ViewportSize="{TemplateBinding ViewportHeight}"
+                            Visibility="{TemplateBinding ComputedVerticalScrollBarVisibility}"
+                            Value="{Binding Path=VerticalOffset, Mode=OneWay, RelativeSource={RelativeSource TemplatedParent}}" />
                     </Grid>
                 </ControlTemplate>
             </Setter.Value>
